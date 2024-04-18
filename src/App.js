@@ -1,25 +1,110 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './components/Login';
+import JobseekerMainPage from './jobseeker/JobseekerMainPage';
+import JobDescription from './jobseeker/JobDescription';
+import JobCreationPage from './employeer/JobCreationPage';
+// import { Tabs, Tab, TextField, Button, Typography, Box, Container, Paper } from '@mui/material';
 
-function App() {
+// const validationSchema = Yup.object().shape({
+//   email: Yup.string().email('Invalid email').required('Email is required'),
+//   password: Yup.string().required('Password is required'),
+// });
+import EmployeerMainPage from './employeer/EmployeerMainPage';
+ const App = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <div>
+    <Router>
+    
+    <Routes>
+    <Route path="/" element={<Login/>} />
+      <Route path="/jobseeker" element={<JobseekerMainPage/>} />
+      <Route path="/jobdescription" element={<JobDescription/>} />
+      <Route path="/employeer" element={<EmployeerMainPage/>} />
+      <Route path="/jobcreate" element={<JobCreationPage/>} />
+    </Routes>
+  </Router>
+  </div>
   );
-}
+  
+
+//   const [value, setValue] = useState(0);
+
+//   const handleChange = (event, newValue) => {
+//     setValue(newValue);
+//   };
+//   const roles = {
+//     0:'Employeer',
+//     1:'Job Seeker',
+//     2:'Admin'
+//   }
+//   const formik = useFormik({
+//     initialValues: {
+//       email: '',
+//       password: '',
+//     },
+//     validationSchema: validationSchema,
+//     onSubmit: values => {
+//      alert(JSON.stringify({...values, 'role':roles[value]},null,2));
+//     },
+//   });
+
+//   return (
+//     <Container maxWidth="sm" sx={{p : 4}}>
+//       <Tabs
+//         value={value}
+//         onChange={handleChange}
+//         indicatorColor="primary"
+//         textColor="primary"
+//         variant="fullWidth"
+//         aria-label="login tabs"
+//       >
+//         <Tab label="Employer" />
+//         <Tab label="Job Seeker" />
+//         <Tab label="Admin" />
+//       </Tabs>
+//       <Box mt={3} sx={{display : "flex", alignItems : 'center', justifyContent : 'center'}}  >
+//         <Paper elevation={5} sx={{p  :2, width : '80%', py : 4}}>
+//           <form onSubmit={formik.handleSubmit}>
+//           <TextField
+//             fullWidth
+//             id="email"
+//             name="email"
+//             label="Email"
+//             type="email"
+//             // value={formik.values.email}
+//             onChange={formik.handleChange}
+//             // onBlur={formik.handleBlur}
+//             error={formik.touched.email && Boolean(formik.errors.email)}
+//             helperText={formik.touched.email && formik.errors.email}
+//             margin="normal"
+//           />
+//           <TextField
+//             fullWidth
+//             id="password"
+//             name="password"
+//             label="Password"
+//             type="password"
+//             value={formik.values.password}
+//             onChange={formik.handleChange}
+//             onBlur={formik.handleBlur}
+//             error={formik.touched.password && Boolean(formik.errors.password)}
+//             helperText={formik.touched.password && formik.errors.password}
+//             margin="normal"
+//           />
+//           <Button color="primary" variant="contained" fullWidth type="submit">
+//             Submit
+//           </Button>
+//         </form>
+
+//         </Paper>
+        
+//       </Box>
+//     </Container>
+//   );
+};
 
 export default App;
