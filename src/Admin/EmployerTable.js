@@ -4,7 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell,{ tableCellClasses } from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
@@ -16,9 +16,9 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { Button, Stack, TableHead, Typography } from "@mui/material";
-import { ArrowBack, MailOutline, RemoveRedEye } from "@mui/icons-material";
+import { ArrowBack, CheckCircleSharp, Error, MailOutline, RemoveRedEye } from "@mui/icons-material";
 import { blue, indigo } from "@mui/material/colors";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -93,38 +93,25 @@ function createData(name, calories, fat) {
   return { name, calories, fat };
 }
 
-const jobseekerRow = [
-  createData("Olivia", "Orion Technologies", "ID-014"),
-  createData("Noah", "NetPro Innovations", "ID-015"),
-  createData("Sophia", "Swift Systems Ltd.", "ID-016"),
-  createData("Liam", "Lunar Labs Inc.", "ID-017"),
-  createData("Ava", "AlphaTech Solutions", "ID-018"),
-  createData("William", "WebWizards Ltd.", "ID-019"),
-  createData("Isabella", "Infinite IT Innovations", "ID-020"),
-  createData("James", "Jupiter Software", "ID-021"),
-  createData("Charlotte", "CloudCom Systems", "ID-022"),
-  createData("Ethan", "EagleEye Technologies", "ID-023"),
-  createData("Amelia", "Apex Solutions", "ID-024"),
-  createData("Michael", "MegaByte Innovations", "ID-025"),
-  createData("Emma", "Endless Systems Corp.", "ID-026"),
-]
-const rows =  [
-  createData("Software Developer", 746, 583),
-  createData("Data Analyst", 932, 214),
-  createData("System Administrator", 518, 397),
-  createData("Network Engineer", 625, 378),
-  createData("UX Designer", 802, 141),
-  createData("Product Manager", 453, 267),
-  createData("Cybersecurity Specialist", 859, 697),
-  createData("DevOps Engineer", 675, 329),
-  createData("Quality Assurance Tester", 976, 501),
-  createData("Business Analyst", 833, 185),
-  createData("Project Manager", 602, 417),
-  createData("IT Support Specialist", 739, 365),
-  createData("Cloud Architect", 720, 278),
-]
+const rows = 
+[
+    createData("Alice", "Acme Technologies", "ID-001"),
+    createData("Bob", "Binary Solutions", "ID-002"),
+    createData("Charlie", "Cyber Innovations", "ID-003"),
+    createData("David", "DataWorks Inc.", "ID-004"),
+    createData("Emily", "E-Tech Enterprises", "ID-005"),
+    createData("Frank", "Future Systems Corp.", "ID-006"),
+    createData("Grace", "Global IT Solutions", "ID-007"),
+    createData("Henry", "HyperTech Labs", "ID-008"),
+    createData("Ivy", "Infinity Software", "ID-009"),
+    createData("Jack", "Java Wizards Ltd.", "ID-010"),
+    createData("Kelly", "KeyTech Innovations", "ID-011"),
+    createData("Liam", "Logic Innovations Inc.", "ID-012"),
+    createData("Mia", "MetaTech Solutions", "ID-013"),
+  ]
 
-export default function ActiveJobs() {
+
+export default function EmployerTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [jobSeekers, setJobseekers] = React.useState(null);
@@ -153,118 +140,23 @@ export default function ActiveJobs() {
     },
   }));
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
+    "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
     },
     // hide last border
-    '&:last-child td, &:last-child th': {
+    "&:last-child td, &:last-child th": {
       border: 0,
     },
   }));
   return (
     <>
       <Stack direction={"column"}>
-        {!job && (
-          <TableContainer component={Paper}>
+        
+          <TableContainer component={Paper} sx={{  }}>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                  <StyledTableCell align="right">Calories</StyledTableCell>
-                  <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                  <StyledTableCell align="right">
-                   Action
-                  </StyledTableCell>
-                </TableRow>
-              </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
                   ? rows.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : rows
-                ).map((row) => (
-                  <TableRow key={row.name}>
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="right">
-                      {row.calories}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="right">
-                      {row.fat}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="right">
-                      <Button
-                        variant="contained"
-                        onClick={() => {
-                          setJob(row.name);
-                          setJobseekers(true);
-                        }}
-                      >
-                        <Typography variant="h6">Proceed</Typography>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    rowsPerPageOptions={[
-                      5,
-                      10,
-                      25,
-                      { label: "All", value: -1 },
-                    ]}
-                    colSpan={3}
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    slotProps={{
-                      select: {
-                        inputProps: {
-                          "aria-label": "rows per page",
-                        },
-                        native: true,
-                      },
-                    }}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    ActionsComponent={TablePaginationActions}
-                  />
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
-        )}
-      </Stack>
-      <Stack direction={"column"}>
-        {jobSeekers && (
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => {
-              setJobseekers(false);
-              setJob(false);
-            }}
-            startIcon={<ArrowBack />}
-          >
-            Back
-          </Button>
-        )}
-        {jobSeekers && (
-          <TableContainer component={Paper} sx={{ backgroundColor: blue[100] }}>
-            <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-              <TableBody>
-                {(rowsPerPage > 0
-                  ? jobseekerRow.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
@@ -286,14 +178,21 @@ export default function ActiveJobs() {
                         sx={{ backgroundColor: "warning.main" }}
                         startIcon={<RemoveRedEye />}
                       >
-                        Start Review
+                        View
                       </Button>
                       <Button
                         variant="contained"
                         sx={{ backgroundColor: "success.main" }}
-                        startIcon={<MailOutline />}
+                        startIcon={<CheckCircleSharp />}
                       >
-                        Send Mail
+                       Approve
+                      </Button>
+                      <Button
+                        variant="contained"
+                        sx={{ backgroundColor: "error.main" }}
+                        startIcon={<Error />}
+                      >
+                       Reject
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -333,7 +232,7 @@ export default function ActiveJobs() {
               </TableFooter>
             </Table>
           </TableContainer>
-        )}
+        
       </Stack>
     </>
   );
