@@ -14,17 +14,20 @@ import JobCreationPage from "./employeer/JobCreationPage";
 // });
 import EmployeerMainPage from "./employeer/EmployeerMainPage";
 import EmployerTable from "./Admin/EmployerTable";
+import Layout from "./components/Layout";
 const App = () => {
   return (
     <div>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/jobseeker" element={<JobseekerMainPage />} />
-          <Route path="/jobdescription" element={<JobDescription />} />
-          <Route path="/employeer" element={<EmployeerMainPage />} />
-          <Route path="/jobcreate" element={<JobCreationPage />} />
-          <Route path="/admin" element={<EmployerTable />} />
+          <Route path="/" element={<Layout />}>
+            <Route path="login" element={<Login />} />
+            <Route path="jobseeker" element={<JobseekerMainPage />} />
+            <Route path="jobdescription" element={<JobDescription />} />
+            <Route path="employeer" element={<EmployeerMainPage />} />
+            <Route path="jobcreate" element={<JobCreationPage />} />
+            <Route path="admin" element={<EmployerTable />} />
+          </Route>
         </Routes>
       </Router>
     </div>

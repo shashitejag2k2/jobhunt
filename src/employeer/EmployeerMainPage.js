@@ -4,10 +4,7 @@ import PageBody from './PageBody'
 const EmployeerMainPage = () => {
   return (
     <div>    
-        <div><Header/></div>
-        <PageBody/>
-       
-
+      <PageBody/>
 </div>
 
   )

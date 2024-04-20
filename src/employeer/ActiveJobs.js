@@ -15,8 +15,24 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import { Button, Stack, TableHead, Typography } from "@mui/material";
-import { ArrowBack, MailOutline, RemoveRedEye } from "@mui/icons-material";
+import {
+  Button,
+  Grid,
+  Icon,
+  Modal,
+  Stack,
+  TableHead,
+  TextField,
+  Typography,
+} from "@mui/material";
+import {
+  ArrowBack,
+  Close,
+  Forward,
+  MailOutline,
+  RemoveRedEye,
+  Update,
+} from "@mui/icons-material";
 import { blue, indigo } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
 import { useEffect } from "react";
@@ -126,11 +142,34 @@ const rows = [
   createData("Cloud Architect", 720, 278),
 ];
 
+const initialValues = {
+  employeeType: "",
+  jobDescription: "",
+  keySkills: "",
+  workExperience: "",
+  location: "",
+  educationalQualification: "",
+  companyName: "",
+  salary: "",
+  jobTitle: "",
+};
 export default function ActiveJobs() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [jobSeekers, setJobseekers] = React.useState(null);
   const [job, setJob] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const [formValues, setFormValues] = React.useState(initialValues);
+  const [openCloseJobModal, setOpenCloseJobModal] = React.useState(false);
+
+  const handleOpenCloseJobModal = () => setOpenCloseJobModal(true);
+  const handleCloseCloseJobModal = () => setOpenCloseJobModal(false);
+
+  const handleConfirmCloseJob = () => {
+    // Add logic to confirm closing the job
+    console.log("Job closed");
+    handleCloseCloseJobModal();
+  };
   const [seekerDetails, setSeekerDetails] = React.useState("");
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -139,6 +178,22 @@ export default function ActiveJobs() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = () => {
+    console.log("Form submitted:", formValues);
+    // You can add your logic to submit the form data
+    handleClose(); // Close the modal after submission
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -175,17 +230,175 @@ export default function ActiveJobs() {
   }));
 
   return (
-    <>
+    <Box
+      sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+    >
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            maxWidth: 600,
+          }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="employeeType"
+                label="Employee Type"
+                value={formValues.employeeType}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="jobDescription"
+                label="Job Description"
+                value={formValues.jobDescription}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="keySkills"
+                label="Key Skills"
+                value={formValues.keySkills}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="workExperience"
+                label="Work Experience"
+                value={formValues.workExperience}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="location"
+                label="Location"
+                value={formValues.location}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="educationalQualification"
+                label="Educational Qualification"
+                value={formValues.educationalQualification}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="companyName"
+                label="Company Name"
+                value={formValues.companyName}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="salary"
+                label="Salary"
+                value={formValues.salary}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="jobTitle"
+                label="Job Title"
+                value={formValues.jobTitle}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+          </Grid>
+          <Button onClick={handleSubmit} variant="contained" sx={{ mt: 2 }}>
+            Update
+          </Button>
+        </Box>
+      </Modal>
+      <Modal
+        open={openCloseJobModal}
+        onClose={handleCloseCloseJobModal}
+        aria-labelledby="close-job-modal-title"
+        aria-describedby="close-job-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 10,
+            border: "4px solid black",
+          }}
+        >
+          <h2 id="close-job-modal-title">Confirm Close Job</h2>
+          <p id="close-job-modal-description">
+            Are you sure you want to close this job?
+          </p>
+          <Button
+            onClick={handleConfirmCloseJob}
+            variant="contained"
+            sx={{ mr: 2 }}
+          >
+            Confirm
+          </Button>
+          <Button
+            onClick={handleCloseCloseJobModal}
+            variant="contained"
+            color="error"
+          >
+            Cancel
+          </Button>
+        </Box>
+      </Modal>
       <Stack direction={"column"}>
         {!job && (
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                  <StyledTableCell align="right">Calories</StyledTableCell>
-                  <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                  <StyledTableCell align="right">Action</StyledTableCell>
+                  <StyledTableCell>Job Title</StyledTableCell>
+                  <StyledTableCell>Number of Applicants</StyledTableCell>
+                  <StyledTableCell>Number of Rejected</StyledTableCell>
+                  <StyledTableCell align="center">Proceed</StyledTableCell>
+                  <StyledTableCell align="center">Update</StyledTableCell>
+                  <StyledTableCell align="center">Close</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -200,21 +413,40 @@ export default function ActiveJobs() {
                     <TableCell component="th" scope="row">
                       {row.name}
                     </TableCell>
-                    <TableCell style={{ width: 160 }} align="right">
-                      {row.calories}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="right">
-                      {row.fat}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="right">
+                    <TableCell style={{ width: 160 }}>{row.calories}</TableCell>
+                    <TableCell style={{ width: 160 }}>{row.fat}</TableCell>
+                    <TableCell style={{ width: 160 }}>
                       <Button
                         variant="contained"
                         onClick={() => {
                           setJob(row.name);
                           setJobseekers(true);
                         }}
+                        startIcon={<Forward />}
                       >
                         <Typography variant="h6">Proceed</Typography>
+                      </Button>
+                    </TableCell>
+                    <TableCell style={{ width: 160 }}>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          handleOpen();
+                        }}
+                        sx={{ backgroundColor: "warning.main" }}
+                        startIcon={<Update />}
+                      >
+                        <Typography variant="h6">Update</Typography>
+                      </Button>
+                    </TableCell>
+                    <TableCell style={{ width: 160 }}>
+                      <Button
+                        variant="contained"
+                        onClick={handleOpenCloseJobModal}
+                        startIcon={<Close />}
+                        sx={{ backgroundColor: "error.main" }}
+                      >
+                        <Typography variant="h6">Close</Typography>
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -265,6 +497,7 @@ export default function ActiveJobs() {
               setJobseekers(false);
               setJob(false);
             }}
+            sx={{ width: 35, m: 3 }}
             startIcon={<ArrowBack />}
           >
             Back
@@ -273,6 +506,15 @@ export default function ActiveJobs() {
         {jobSeekers && (
           <TableContainer component={Paper} sx={{ backgroundColor: blue[100] }}>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Job Seeker</StyledTableCell>
+                  <StyledTableCell align="center">Company</StyledTableCell>
+                  <StyledTableCell align="center">Company ID</StyledTableCell>
+                  <StyledTableCell align="center">Review</StyledTableCell>
+                  <StyledTableCell align="center">Mail</StyledTableCell>
+                </TableRow>
+              </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
                   ? jobseekerRow.slice(
@@ -285,26 +527,30 @@ export default function ActiveJobs() {
                     <TableCell component="th" scope="row">
                       {row.name}
                     </TableCell>
-                    <TableCell style={{ width: 160 }} align="right">
+                    <TableCell style={{ width: 160 }} align="center">
                       {row.calories}
                     </TableCell>
-                    <TableCell style={{ width: 160 }} align="right">
+                    <TableCell style={{ width: 160 }} align="center">
                       {row.fat}
                     </TableCell>
                     <TableCell>
                       <Button
                         variant="contained"
-                        sx={{ backgroundColor: "warning.main" }}
-                        startIcon={<RemoveRedEye />}
+                        sx={{ backgroundColor: "warning.main", p: 2 }}
                       >
-                        Start Review
+                        <Icon>
+                          <RemoveRedEye />
+                        </Icon>
                       </Button>
+                    </TableCell>
+                    <TableCell>
                       <Button
                         variant="contained"
-                        sx={{ backgroundColor: "success.main" }}
-                        startIcon={<MailOutline />}
+                        sx={{ backgroundColor: "success.main", p: 2 }}
                       >
-                        Send Mail
+                        <Icon>
+                          <MailOutline />
+                        </Icon>
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -346,6 +592,6 @@ export default function ActiveJobs() {
           </TableContainer>
         )}
       </Stack>
-    </>
+    </Box>
   );
 }
