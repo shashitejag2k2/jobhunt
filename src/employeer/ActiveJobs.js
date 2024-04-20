@@ -4,7 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell,{ tableCellClasses } from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
@@ -18,7 +18,9 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 import { Button, Stack, TableHead, Typography } from "@mui/material";
 import { ArrowBack, MailOutline, RemoveRedEye } from "@mui/icons-material";
 import { blue, indigo } from "@mui/material/colors";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
+import { useEffect } from "react";
+import axios from "axios";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -107,8 +109,8 @@ const jobseekerRow = [
   createData("Amelia", "Apex Solutions", "ID-024"),
   createData("Michael", "MegaByte Innovations", "ID-025"),
   createData("Emma", "Endless Systems Corp.", "ID-026"),
-]
-const rows =  [
+];
+const rows = [
   createData("Software Developer", 746, 583),
   createData("Data Analyst", 932, 214),
   createData("System Administrator", 518, 397),
@@ -122,7 +124,7 @@ const rows =  [
   createData("Project Manager", 602, 417),
   createData("IT Support Specialist", 739, 365),
   createData("Cloud Architect", 720, 278),
-]
+];
 
 export default function ActiveJobs() {
   const [page, setPage] = React.useState(0);
@@ -137,7 +139,17 @@ export default function ActiveJobs() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/getAllJobs`);
+        console.log("Response for getting jobs", response);
+      } catch (error) {
+        console.log("error getting jobs", error);
+      }
+    };
+    fetchData();
+  }, []);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -153,14 +165,15 @@ export default function ActiveJobs() {
     },
   }));
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
+    "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
     },
     // hide last border
-    '&:last-child td, &:last-child th': {
+    "&:last-child td, &:last-child th": {
       border: 0,
     },
   }));
+
   return (
     <>
       <Stack direction={"column"}>
@@ -172,9 +185,7 @@ export default function ActiveJobs() {
                   <StyledTableCell>Dessert (100g serving)</StyledTableCell>
                   <StyledTableCell align="right">Calories</StyledTableCell>
                   <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                  <StyledTableCell align="right">
-                   Action
-                  </StyledTableCell>
+                  <StyledTableCell align="right">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
