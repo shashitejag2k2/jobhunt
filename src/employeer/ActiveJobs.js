@@ -32,6 +32,7 @@ import {
   MailOutline,
   RemoveRedEye,
   Update,
+  ViewAgenda,
 } from "@mui/icons-material";
 import { blue, indigo } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
@@ -107,9 +108,44 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(name, calories, fat) {
-  return { name, calories, fat };
+function createData(jobDetails) {
+  const {
+    jobId,
+    jobTitle,
+    jobPositioning,
+    employeeType,
+    jobDescription,
+    keySkills,
+    minimumWorkExperience,
+    maximumWorkExperience,
+    location,
+    jobMode,
+    educationalQualification,
+    companyName,
+    minimumSalary,
+    maximumSalary,
+    postedBy
+  } = jobDetails;
+  
+  return {
+    jobId,
+    jobTitle,
+    jobPositioning,
+    employeeType,
+    jobDescription,
+    keySkills,
+    minimumWorkExperience,
+    maximumWorkExperience,
+    location,
+    jobMode,
+    educationalQualification,
+    companyName,
+    minimumSalary,
+    maximumSalary,
+    postedBy
+  };
 }
+
 
 const jobseekerRow = [
   createData("Olivia", "Orion Technologies", "ID-014"),
@@ -126,32 +162,144 @@ const jobseekerRow = [
   createData("Michael", "MegaByte Innovations", "ID-025"),
   createData("Emma", "Endless Systems Corp.", "ID-026"),
 ];
-const rows = [
-  createData("Software Developer", 746, 583),
-  createData("Data Analyst", 932, 214),
-  createData("System Administrator", 518, 397),
-  createData("Network Engineer", 625, 378),
-  createData("UX Designer", 802, 141),
-  createData("Product Manager", 453, 267),
-  createData("Cybersecurity Specialist", 859, 697),
-  createData("DevOps Engineer", 675, 329),
-  createData("Quality Assurance Tester", 976, 501),
-  createData("Business Analyst", 833, 185),
-  createData("Project Manager", 602, 417),
-  createData("IT Support Specialist", 739, 365),
-  createData("Cloud Architect", 720, 278),
-];
+const jobs = [
+  {
+      "jobId": 1,
+      "jobTitle": "Software Engineer",
+      "jobPositioning": null,
+      "employeeType": "Full-time",
+      "jobDescription": "Developing software applications",
+      "keySkills": "Java, Spring Boot, Hibernate",
+      "minimumWorkExperience": 0,
+      "maximumWorkExperience": 5,
+      "location": "Hyderabad",
+      "jobMode": "On-site",
+      "educationalQualification": "Bachelor's degree",
+      "companyName": "Hitachi Vantara",
+      "minimumSalary": 6.5,
+      "maximumSalary": 7.5,
+      "postedBy": null
+  },
+  {
+      "jobId": 2,
+      "jobTitle": "Full Stack Developer",
+      "jobPositioning": "Normal",
+      "employeeType": "Full-time",
+      "jobDescription": "This is a Full Stack Developer position.",
+      "keySkills": "Java, JavaScript, React",
+      "minimumWorkExperience": 10,
+      "maximumWorkExperience": 15,
+      "location": "New York",
+      "jobMode": "Remote",
+      "educationalQualification": "Bachelor's Degree",
+      "companyName": "Example Company",
+      "minimumSalary": 25.0,
+      "maximumSalary": 30.0,
+      "postedBy": null
+  },
+  {
+      "jobId": 3,
+      "jobTitle": "Full Stack Developer",
+      "jobPositioning": "Normal",
+      "employeeType": "Full-time",
+      "jobDescription": "This is a Full Stack Developer position.",
+      "keySkills": "Java, JavaScript, React",
+      "minimumWorkExperience": 10,
+      "maximumWorkExperience": 15,
+      "location": "New York",
+      "jobMode": "Remote",
+      "educationalQualification": "Bachelor's Degree",
+      "companyName": "capgemini Company",
+      "minimumSalary": 20.0,
+      "maximumSalary": 35.0,
+      "postedBy": null
+  },
+  {
+      "jobId": 4,
+      "jobTitle": "Java Developer",
+      "jobPositioning": "Normal",
+      "employeeType": "Full-time",
+      "jobDescription": "This is a Full Stack Developer position.",
+      "keySkills": "Java, JavaScript, React",
+      "minimumWorkExperience": 10,
+      "maximumWorkExperience": 15,
+      "location": "New York",
+      "jobMode": "Remote",
+      "educationalQualification": "Bachelor's Degree",
+      "companyName": "capgemini Company",
+      "minimumSalary": 35.0,
+      "maximumSalary": 40.0,
+      "postedBy": null
+  },
+  {
+      "jobId": 5,
+      "jobTitle": "AI Developer",
+      "jobPositioning": "Normal",
+      "employeeType": "Internship",
+      "jobDescription": "This is a Full Stack Developer position.",
+      "keySkills": "Java, JavaScript, React",
+      "minimumWorkExperience": 10,
+      "maximumWorkExperience": 15,
+      "location": "New York",
+      "jobMode": "Remote",
+      "educationalQualification": "Bachelor's Degree",
+      "companyName": "Cognizent Company",
+      "minimumSalary": 50.0,
+      "maximumSalary": 55.0,
+      "postedBy": "shashitejjag2k2@gmail.com"
+  },
+  {
+      "jobId": 6,
+      "jobTitle": "Frontend Developer",
+      "jobPositioning": "Normal",
+      "employeeType": "Full-time",
+      "jobDescription": "This is a Full Stack Developer position.",
+      "keySkills": "Java, JavaScript, React",
+      "minimumWorkExperience": 2,
+      "maximumWorkExperience": 5,
+      "location": "Pune",
+      "jobMode": "Remote",
+      "educationalQualification": "Bachelor's Degree",
+      "companyName": "Cognizent Company",
+      "minimumSalary": 7.5,
+      "maximumSalary": 8.5,
+      "postedBy": null
+  },
+  {
+      "jobId": 7,
+      "jobTitle": "Systems Engineer ",
+      "jobPositioning": null,
+      "employeeType": "Internship",
+      "jobDescription": "Role",
+      "keySkills": "Linux, Networking",
+      "minimumWorkExperience": 0,
+      "maximumWorkExperience": 0,
+      "location": "HYDERABAD",
+      "jobMode": null,
+      "educationalQualification": "Bachelor's Degree",
+      "companyName": "Hitachi Vantara",
+      "minimumSalary": 0.0,
+      "maximumSalary": 0.0,
+      "postedBy": null
+  }
+]
+
+
 
 const initialValues = {
   employeeType: "",
   jobDescription: "",
   keySkills: "",
-  workExperience: "",
+  minimumWorkExperience: "",
+  maximumWorkExperience:"",
   location: "",
   educationalQualification: "",
   companyName: "",
   salary: "",
   jobTitle: "",
+  minimumSalary : "",
+  maximumSalary : "",
+  jobMode  : ""
 };
 export default function ActiveJobs() {
   const [page, setPage] = React.useState(0);
@@ -161,15 +309,37 @@ export default function ActiveJobs() {
   const [open, setOpen] = React.useState(false);
   const [formValues, setFormValues] = React.useState(initialValues);
   const [openCloseJobModal, setOpenCloseJobModal] = React.useState(false);
-
+  const [jobs,setJobs] = React.useState([])
+const [isOpen,setIsOpen] = React.useState(false);
+const [jobDetails,setJobDetails] = React.useState({});
+const [dummy,setDummy] = React.useState(false)
   const handleOpenCloseJobModal = () => setOpenCloseJobModal(true);
   const handleCloseCloseJobModal = () => setOpenCloseJobModal(false);
 
-  const handleConfirmCloseJob = () => {
+  const handleConfirmCloseJob = async() => {
     // Add logic to confirm closing the job
+    try {
+      const response = await axios.put(`http://localhost:8080/updateJobApplicationStatus?jobId=${jobDetails.jobId}`)
+      console.log('closed application',response)
+    } catch (error) {
+      console.log(error)
+    }
     console.log("Job closed");
     handleCloseCloseJobModal();
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/getalljobs?postedBy=${'shashiteja@gmail.com'}`);
+        console.log("Response for getting jobs", response);
+        setJobs(response.data)
+      } catch (error) {
+        console.log("error getting jobs", error);
+      }
+    };
+    fetchData();
+  }, [dummy]);
+  const rows = jobs.map((job)=>createData(job));
   const [seekerDetails, setSeekerDetails] = React.useState("");
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -179,7 +349,7 @@ export default function ActiveJobs() {
     setPage(newPage);
   };
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {setOpen(false); setIsOpen(false)}
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -188,27 +358,23 @@ export default function ActiveJobs() {
       [name]: value,
     }));
   };
-  const handleSubmit = () => {
+  const handleSubmit =async () => {
     console.log("Form submitted:", formValues);
-    // You can add your logic to submit the form data
+    try {
+      const response= await axios.put(`http://localhost:8080/updateJob`, formValues);
+      console.log('the job is upated', response)
+      setDummy(!dummy)
+    } catch (error) {
+     console.log('error while updating job', error) 
+    }
     handleClose(); // Close the modal after submission
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8080/getAllJobs`);
-        console.log("Response for getting jobs", response);
-      } catch (error) {
-        console.log("error getting jobs", error);
-      }
-    };
-    fetchData();
-  }, []);
+ 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
+  }; 
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -282,12 +448,22 @@ export default function ActiveJobs() {
                 sx={{ mb: 2 }}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={3}>
               <TextField
                 fullWidth
-                name="workExperience"
+                name="minimumWorkExperience"
                 label="Work Experience"
-                value={formValues.workExperience}
+                value={formValues.minimumWorkExperience}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                fullWidth
+                name="maximumWorkExperience"
+                label="Work Experience"
+                value={formValues.maximumWorkExperience}
                 onChange={handleChange}
                 sx={{ mb: 2 }}
               />
@@ -322,12 +498,22 @@ export default function ActiveJobs() {
                 sx={{ mb: 2 }}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={3}>
               <TextField
                 fullWidth
-                name="salary"
+                name="minimumSalary"
                 label="Salary"
-                value={formValues.salary}
+                value={formValues.minimumSalary}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                fullWidth
+                name="maximumSalary"
+                label="Salary"
+                value={formValues.maximumSalary}
                 onChange={handleChange}
                 sx={{ mb: 2 }}
               />
@@ -338,6 +524,16 @@ export default function ActiveJobs() {
                 name="jobTitle"
                 label="Job Title"
                 value={formValues.jobTitle}
+                onChange={handleChange}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="jobMode"
+                label="Job Mode"
+                value={formValues.jobMode}
                 onChange={handleChange}
                 sx={{ mb: 2 }}
               />
@@ -387,15 +583,110 @@ export default function ActiveJobs() {
           </Button>
         </Box>
       </Modal>
+      <Modal
+      open={isOpen}
+      onClose={handleClose}
+      aria-labelledby="job-modal-title"
+      aria-describedby="job-modal-description"
+    >
+      <Grid
+        container
+        spacing={2}
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding : 3,  }}
+      >
+        <Grid item>
+          <Typography variant="h5" id="job-modal-title" gutterBottom>
+            Job Details 
+          </Typography>
+         
+        </Grid>
+        <Grid item >
+          <Grid container direction="column" spacing={1} >
+           <Grid
+                container
+                spacing={2}
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+                style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor : blue[100], paddingBlock : 20 }}
+              >
+                <Grid item >
+                  <Stack direction={'row'} spacing={2}>
+                  <Typography variant="h5" id="job-modal-title" gutterBottom >
+                    Job Details 
+                  </Typography>
+                  <Button  onClick={()=>{setIsOpen(false)}} variant="outlined" sx={{borderRadius : 20}}>
+                    <Icon  sx={{display : 'flex', justifyContent:'center', alignItems : "center"}}>
+                      <Close/>
+                    </Icon>
+                  </Button>
+                  </Stack>
+                  
+                </Grid>
+                <Grid item>
+                  <Grid container direction="column" spacing={1}>
+                    <Typography variant="body1">
+                      <strong>Job ID:</strong> {jobDetails.jobId}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Job Title:</strong> {jobDetails.jobTitle}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Employee Type:</strong> {jobDetails.employeeType}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Job Description:</strong> {jobDetails.jobDescription}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Key Skills:</strong> {jobDetails.keySkills}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Minimum Work Experience:</strong> {jobDetails.minimumWorkExperience}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Maximum Work Experience:</strong> {jobDetails.maximumWorkExperience}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Location:</strong> {jobDetails.location}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Job Mode:</strong> {jobDetails.jobMode}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Educational Qualification:</strong> {jobDetails.educationalQualification}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Company Name:</strong> {jobDetails.companyName}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Minimum Salary:</strong> {jobDetails.minimumSalary}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Maximum Salary:</strong> {jobDetails.maximumSalary}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+
+    </Modal>
       <Stack direction={"column"}>
         {!job && (
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
+                  <StyledTableCell>Job ID</StyledTableCell>
                   <StyledTableCell>Job Title</StyledTableCell>
-                  <StyledTableCell>Number of Applicants</StyledTableCell>
-                  <StyledTableCell>Number of Rejected</StyledTableCell>
+
+                  <StyledTableCell>Job Type</StyledTableCell>
+                  <StyledTableCell>Job Location</StyledTableCell>
+                  <StyledTableCell align="center">View</StyledTableCell>
                   <StyledTableCell align="center">Proceed</StyledTableCell>
                   <StyledTableCell align="center">Update</StyledTableCell>
                   <StyledTableCell align="center">Close</StyledTableCell>
@@ -410,16 +701,29 @@ export default function ActiveJobs() {
                   : rows
                 ).map((row) => (
                   <TableRow key={row.name}>
+                     <TableCell style={{ width: 160 }}>{row.jobId}</TableCell>
                     <TableCell component="th" scope="row">
-                      {row.name}
+                      {row.jobTitle}
                     </TableCell>
-                    <TableCell style={{ width: 160 }}>{row.calories}</TableCell>
-                    <TableCell style={{ width: 160 }}>{row.fat}</TableCell>
+                    <TableCell style={{ width: 160 }}>{row.employeeType}</TableCell>
+                    <TableCell style={{ width: 160 }}>{row.location}</TableCell>
                     <TableCell style={{ width: 160 }}>
                       <Button
                         variant="contained"
                         onClick={() => {
-                          setJob(row.name);
+                          setJobDetails(row)
+                          setIsOpen(true)
+                        }}
+                        startIcon={<ViewAgenda />}
+                      >
+                        <Typography variant="h6">view</Typography>
+                      </Button>
+                    </TableCell>
+                    <TableCell style={{ width: 160 }}>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          setJob(row.jobTitle);
                           setJobseekers(true);
                         }}
                         startIcon={<Forward />}
@@ -432,6 +736,8 @@ export default function ActiveJobs() {
                         variant="contained"
                         onClick={() => {
                           handleOpen();
+                          setJobDetails(row);
+                          setFormValues(row)
                         }}
                         sx={{ backgroundColor: "warning.main" }}
                         startIcon={<Update />}
@@ -442,7 +748,7 @@ export default function ActiveJobs() {
                     <TableCell style={{ width: 160 }}>
                       <Button
                         variant="contained"
-                        onClick={handleOpenCloseJobModal}
+                        onClick={()=>{handleOpenCloseJobModal(); setJobDetails(row);}}
                         startIcon={<Close />}
                         sx={{ backgroundColor: "error.main" }}
                       >
