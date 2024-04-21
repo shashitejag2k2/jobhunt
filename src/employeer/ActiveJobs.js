@@ -330,7 +330,7 @@ const [dummy,setDummy] = React.useState(false)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getalljobs?postedBy=${'shashiteja@gmail.com'}`);
+        const response = await axios.get(`http://localhost:8080/getalljobs?postedBy=${localStorage.getItem('email')}`);
         console.log("Response for getting jobs", response);
         setJobs(response.data)
       } catch (error) {

@@ -47,9 +47,12 @@ const Login = () => {
       if (roles[value] === "Job Seeker") {
         const email = values.email;
 
-        console.log(values.email);
+        console.log("setting email",values.email);
+        localStorage.setItem("email",values.email)
         navigate("/jobseeker", { state: { email } });
       } else if (roles[value] === "Employeer") {
+        console.log("setting email",values.email);
+        localStorage.setItem("email",values.email)
         navigate("/employeer");
       }
     },

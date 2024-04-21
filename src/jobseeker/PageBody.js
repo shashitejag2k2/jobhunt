@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -10,8 +10,9 @@ import { useNavigate } from "react-router-dom";
 import ButtonBase from "@mui/material/ButtonBase";
 import { useState } from "react";
 import { useTheme } from "@emotion/react";
-import { Button, Card, CardContent, CardMedia, Stack } from "@mui/material";
+import { Button, Card, CardContent, CardMedia, Icon, Modal, Stack } from "@mui/material";
 import {
+  Close,
   PlayArrow,
   Search,
   SkipNext,
@@ -22,6 +23,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { blue, indigo } from "@mui/material/colors";
+import axios from "axios";
 
 const cardData = [
   {
@@ -32,62 +34,12 @@ const cardData = [
   // Add more card data as needed
 ];
 
-// const Carousel = ({ items }) => {
-//   const settings = {
-//     dots: true,
-//     infinite: true,
-//     speed: 500,
-//     slidesToShow: 3,
-//     slidesToScroll: 1,
-//     autoplay: true,
-//     autoplaySpeed: 1000,
-//     centerMode: true,
-//     responsive: [
-//       {
-//         breakpoint: 768,
-//         settings: {
-//           slidesToShow: 1,
-//         },
-//       },
-//     ],
-//   };
 
-//   return (
-//     <div className="carousel-container">
-//       <Slider {...settings}>
-//         {items.map((item, index) => (
-//           <div key={index}>
-//             <div className="carousel-item" color="black">
-//               {item}
-//             </div>
-//           </div>
-//         ))}
-//       </Slider>
-//     </div>
-//   );
-// };
 const Carousel = ({ items }) => {
   const [autoplay, setAutoplay] = useState(true);
   const sliderRef = useRef(null);
 
-  // const settings = {
-  //   dots: false,
-  //   infinite: false,
-  //   speed: 500,
-  //   slidesToShow: 3,
-  //   slidesToScroll: 1,
-  //   autoplay: autoplay,
-  //   autoplaySpeed: 2000,
-  //   centerMode: true,
-  //   responsive: [
-  //     {
-  //       breakpoint: 768,
-  //       settings: {
-  //         slidesToShow: 1,
-  //       },
-  //     },
-  //   ],
-  // };
+ 
   const settings = {
     dots: true,
     infinite: true,
@@ -195,7 +147,53 @@ const jobs = [
     description: "Provide exceptional customer service and support to our valued customers.",
   },
 ];
-const items = jobs.map((job) => (
+
+
+const PageBody = (props) => {
+  const navigate = useNavigate();
+  const [fetchedJobs,setFetchedJobs] = useState([])
+  const [fetchedHighJobs,setFetchedHighJobs] = useState([])
+
+const [isOpen,setIsOpen] = React.useState(false);
+const handleClose = () => {setIsOpen(false)}
+const [jobDetails,setJobDetails] = React.useState({});
+
+const handleSubmit = async()=>{
+  try {
+    const response = await axios.post(`http://localhost:8080/applyJob`,{...jobDetails, appliedBy : localStorage.getItem("email")});
+    console.log('applied job', response)
+  } catch (error) {
+    console.log('error appllying', error)
+  }
+}
+useEffect(()=>{
+  const fetchJobs= async ()=>{
+    try {
+      const response = await axios.get(`http://localhost:8080/getAlljobs`)
+      console.log('all jobs', response.data)
+      setFetchedJobs(response.data?.map((job)=>({title : job.jobTitle, experience : `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`, description : job.jobDescription, ...job})))
+    } catch (error) {
+      console.log('error',error)
+    }
+  }
+  fetchJobs()
+},[])
+
+useEffect(()=>{
+  const getHightJob = async()=>{
+    try {
+      const response = await axios.get(`http://localhost:8080/getHighPayingJobs`)
+      console.log("hight paying jobs", response.data)
+      setFetchedHighJobs(response.data?.map((job)=>({title : job.jobTitle, experience : `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`, description : job.jobDescription, ...job})))
+    } catch (error) {
+      console.log(
+        'error while fetching high paying jobs',error
+      )
+    }
+  }
+  getHightJob()
+},[])
+const items = fetchedJobs?.map((job) => (
   <Card sx={{ display: "flex", m: 2, py : 6 }}>
     <Box sx={{ display: "flex", flexDirection: "column", justifyContent : 'space-between' }}>
       <CardContent sx={{ flex: "1 0 auto" }}>
@@ -210,17 +208,129 @@ const items = jobs.map((job) => (
         </Typography>
       </CardContent>
     </Box>
-    <Button sx={{mx : 3, my : 5}} variant="contained" size="small">
+    <Button sx={{mx : 3, my : 5}} variant="contained" size="small" onClick={()=>{setJobDetails(job); setIsOpen(true)}}>
       Apply
     </Button>
   </Card>
 ));
-
-const PageBody = (props) => {
-  const navigate = useNavigate();
-
+const highItems = fetchedHighJobs?.map((job) => (
+  <Card sx={{ display: "flex", m: 2, py : 6 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", justifyContent : 'space-between' }}>
+      <CardContent sx={{ flex: "1 0 auto" }}>
+        <Typography component="div" variant="h5">
+          {job.title}
+        </Typography>
+        <Typography variant="subtitle1" color="text.secondary" component="div">
+          Exp : {job.experience}
+        </Typography>
+        <Typography variant="body2">
+          {job.description}
+        </Typography>
+      </CardContent>
+    </Box>
+    <Button sx={{mx : 3, my : 5}} variant="contained" size="small" onClick={()=>{setJobDetails(job); setIsOpen(true)}}>
+      Apply
+    </Button>
+  </Card>
+));
   return (
     <div>
+      <Modal
+      open={isOpen}
+      onClose={handleClose}
+      aria-labelledby="job-modal-title"
+      aria-describedby="job-modal-description"
+    >
+      <Grid
+        container
+        spacing={2}
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding : 3,  }}
+      >
+        <Grid item>
+          <Typography variant="h5" id="job-modal-title" gutterBottom>
+            Job Details 
+          </Typography>
+         
+        </Grid>
+        <Grid item >
+          <Grid container direction="column" spacing={1} >
+           <Grid
+                container
+                spacing={2}
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+                style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor : blue[100], paddingBlock : 20 }}
+              >
+                <Grid item >
+                  <Stack direction={'row'} spacing={2}>
+                  <Typography variant="h5" id="job-modal-title" gutterBottom >
+                    Job Details 
+                  </Typography>
+                  <Button  onClick={()=>{setIsOpen(false)}} variant="outlined" sx={{borderRadius : 20}}>
+                    <Icon  sx={{display : 'flex', justifyContent:'center', alignItems : "center"}}>
+                      <Close/>
+                    </Icon>
+                  </Button>
+                  </Stack>
+                  
+                </Grid>
+                <Grid item>
+                  <Grid container direction="column" spacing={1}>
+                    <Typography variant="body1">
+                      <strong>Job ID:</strong> {jobDetails.jobId}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Job Title:</strong> {jobDetails.jobTitle}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Employee Type:</strong> {jobDetails.employeeType}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Job Description:</strong> {jobDetails.jobDescription}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Key Skills:</strong> {jobDetails.keySkills}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Minimum Work Experience:</strong> {jobDetails.minimumWorkExperience}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Maximum Work Experience:</strong> {jobDetails.maximumWorkExperience}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Location:</strong> {jobDetails.location}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Job Mode:</strong> {jobDetails.jobMode}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Educational Qualification:</strong> {jobDetails.educationalQualification}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Company Name:</strong> {jobDetails.companyName}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Minimum Salary:</strong> {jobDetails.minimumSalary}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Maximum Salary:</strong> {jobDetails.maximumSalary}
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Button onClick={handleSubmit} variant='contained'>
+         Confirm Apply
+        </Button>
+              </Grid>
+          </Grid>
+        </Grid>
+       
+      </Grid>
+
+    </Modal>
       <div style={{ display: "flex", alignItems: "center", marginTop: "20px" }}>
         <TextField
           variant="outlined"
@@ -243,14 +353,14 @@ const PageBody = (props) => {
         </Stack>
        
       </div>
-      <Typography variant="h5" fontWeight={600}>Trending Jobs</Typography>
+      {/* <Typography variant="h5" fontWeight={600}>Trending Jobs</Typography> */}
       <Box sx={{ backgroundColor: indigo[300] }}>
         <Carousel items={items} />
       </Box>
 
       <Typography variant="h5" fontWeight={600}>High Paying Jobs</Typography>
       <Box sx={{ backgroundColor: blue[300] }}>
-        <Carousel items={items} />
+        <Carousel items={highItems} />
       </Box>
     </div>
   );

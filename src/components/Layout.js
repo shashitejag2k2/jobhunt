@@ -15,7 +15,7 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Logout, PersonAdd, Settings } from "@mui/icons-material";
+import { Logout, PersonAdd, Settings, TrackChanges } from "@mui/icons-material";
 
 const Layout = () => {
   const location = useLocation();
@@ -43,7 +43,7 @@ const Layout = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Job Hunt
           </Typography>
-          <Stack direction={"row"} spacing={2}>
+          {localStorage.getItem('email') && <Stack direction={"row"} spacing={2}>
             <Tooltip title="Account settings">
               <IconButton
                 onClick={handleClick}
@@ -53,7 +53,7 @@ const Layout = () => {
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                <Avatar sx={{ width: 32, height: 32 }} alt={localStorage.getItem('email')}/>
               </IconButton>
             </Tooltip>
             <Menu
@@ -94,27 +94,12 @@ const Layout = () => {
               <MenuItem onClick={handleClose}>
                 <Avatar /> Profile
               </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Avatar /> My account
-              </MenuItem>
               <Divider />
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
-                  <PersonAdd fontSize="small" />
+                  <TrackChanges fontSize="small" />
                 </ListItemIcon>
-                Add another account
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <Settings fontSize="small" />
-                </ListItemIcon>
-                Settings
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <Logout fontSize="small" />
-                </ListItemIcon>
-                Logout
+                Track Applications
               </MenuItem>
             </Menu>
             <Button
@@ -122,11 +107,12 @@ const Layout = () => {
               color="warning"
               onClick={() => {
                 navigate("/login");
+                localStorage.removeItem('email')
               }}
             >
               Logout
             </Button>
-          </Stack>
+          </Stack>}
         </Toolbar>
       </AppBar>
       <Outlet />
