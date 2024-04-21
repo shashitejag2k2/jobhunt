@@ -38,6 +38,7 @@ import { blue, indigo } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
 import { useEffect } from "react";
 import axios from "axios";
+import { useState } from "react";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -124,9 +125,9 @@ function createData(jobDetails) {
     companyName,
     minimumSalary,
     maximumSalary,
-    postedBy
+    postedBy,
   } = jobDetails;
-  
+
   return {
     jobId,
     jobTitle,
@@ -142,164 +143,40 @@ function createData(jobDetails) {
     companyName,
     minimumSalary,
     maximumSalary,
-    postedBy
+    postedBy,
   };
 }
 
-
-const jobseekerRow = [
-  createData("Olivia", "Orion Technologies", "ID-014"),
-  createData("Noah", "NetPro Innovations", "ID-015"),
-  createData("Sophia", "Swift Systems Ltd.", "ID-016"),
-  createData("Liam", "Lunar Labs Inc.", "ID-017"),
-  createData("Ava", "AlphaTech Solutions", "ID-018"),
-  createData("William", "WebWizards Ltd.", "ID-019"),
-  createData("Isabella", "Infinite IT Innovations", "ID-020"),
-  createData("James", "Jupiter Software", "ID-021"),
-  createData("Charlotte", "CloudCom Systems", "ID-022"),
-  createData("Ethan", "EagleEye Technologies", "ID-023"),
-  createData("Amelia", "Apex Solutions", "ID-024"),
-  createData("Michael", "MegaByte Innovations", "ID-025"),
-  createData("Emma", "Endless Systems Corp.", "ID-026"),
-];
-const jobs = [
-  {
-      "jobId": 1,
-      "jobTitle": "Software Engineer",
-      "jobPositioning": null,
-      "employeeType": "Full-time",
-      "jobDescription": "Developing software applications",
-      "keySkills": "Java, Spring Boot, Hibernate",
-      "minimumWorkExperience": 0,
-      "maximumWorkExperience": 5,
-      "location": "Hyderabad",
-      "jobMode": "On-site",
-      "educationalQualification": "Bachelor's degree",
-      "companyName": "Hitachi Vantara",
-      "minimumSalary": 6.5,
-      "maximumSalary": 7.5,
-      "postedBy": null
-  },
-  {
-      "jobId": 2,
-      "jobTitle": "Full Stack Developer",
-      "jobPositioning": "Normal",
-      "employeeType": "Full-time",
-      "jobDescription": "This is a Full Stack Developer position.",
-      "keySkills": "Java, JavaScript, React",
-      "minimumWorkExperience": 10,
-      "maximumWorkExperience": 15,
-      "location": "New York",
-      "jobMode": "Remote",
-      "educationalQualification": "Bachelor's Degree",
-      "companyName": "Example Company",
-      "minimumSalary": 25.0,
-      "maximumSalary": 30.0,
-      "postedBy": null
-  },
-  {
-      "jobId": 3,
-      "jobTitle": "Full Stack Developer",
-      "jobPositioning": "Normal",
-      "employeeType": "Full-time",
-      "jobDescription": "This is a Full Stack Developer position.",
-      "keySkills": "Java, JavaScript, React",
-      "minimumWorkExperience": 10,
-      "maximumWorkExperience": 15,
-      "location": "New York",
-      "jobMode": "Remote",
-      "educationalQualification": "Bachelor's Degree",
-      "companyName": "capgemini Company",
-      "minimumSalary": 20.0,
-      "maximumSalary": 35.0,
-      "postedBy": null
-  },
-  {
-      "jobId": 4,
-      "jobTitle": "Java Developer",
-      "jobPositioning": "Normal",
-      "employeeType": "Full-time",
-      "jobDescription": "This is a Full Stack Developer position.",
-      "keySkills": "Java, JavaScript, React",
-      "minimumWorkExperience": 10,
-      "maximumWorkExperience": 15,
-      "location": "New York",
-      "jobMode": "Remote",
-      "educationalQualification": "Bachelor's Degree",
-      "companyName": "capgemini Company",
-      "minimumSalary": 35.0,
-      "maximumSalary": 40.0,
-      "postedBy": null
-  },
-  {
-      "jobId": 5,
-      "jobTitle": "AI Developer",
-      "jobPositioning": "Normal",
-      "employeeType": "Internship",
-      "jobDescription": "This is a Full Stack Developer position.",
-      "keySkills": "Java, JavaScript, React",
-      "minimumWorkExperience": 10,
-      "maximumWorkExperience": 15,
-      "location": "New York",
-      "jobMode": "Remote",
-      "educationalQualification": "Bachelor's Degree",
-      "companyName": "Cognizent Company",
-      "minimumSalary": 50.0,
-      "maximumSalary": 55.0,
-      "postedBy": "shashitejjag2k2@gmail.com"
-  },
-  {
-      "jobId": 6,
-      "jobTitle": "Frontend Developer",
-      "jobPositioning": "Normal",
-      "employeeType": "Full-time",
-      "jobDescription": "This is a Full Stack Developer position.",
-      "keySkills": "Java, JavaScript, React",
-      "minimumWorkExperience": 2,
-      "maximumWorkExperience": 5,
-      "location": "Pune",
-      "jobMode": "Remote",
-      "educationalQualification": "Bachelor's Degree",
-      "companyName": "Cognizent Company",
-      "minimumSalary": 7.5,
-      "maximumSalary": 8.5,
-      "postedBy": null
-  },
-  {
-      "jobId": 7,
-      "jobTitle": "Systems Engineer ",
-      "jobPositioning": null,
-      "employeeType": "Internship",
-      "jobDescription": "Role",
-      "keySkills": "Linux, Networking",
-      "minimumWorkExperience": 0,
-      "maximumWorkExperience": 0,
-      "location": "HYDERABAD",
-      "jobMode": null,
-      "educationalQualification": "Bachelor's Degree",
-      "companyName": "Hitachi Vantara",
-      "minimumSalary": 0.0,
-      "maximumSalary": 0.0,
-      "postedBy": null
-  }
-]
-
-
+// const jobseekerRow = [
+//   createData("Olivia", "Orion Technologies", "ID-014"),
+//   createData("Noah", "NetPro Innovations", "ID-015"),
+//   createData("Sophia", "Swift Systems Ltd.", "ID-016"),
+//   createData("Liam", "Lunar Labs Inc.", "ID-017"),
+//   createData("Ava", "AlphaTech Solutions", "ID-018"),
+//   createData("William", "WebWizards Ltd.", "ID-019"),
+//   createData("Isabella", "Infinite IT Innovations", "ID-020"),
+//   createData("James", "Jupiter Software", "ID-021"),
+//   createData("Charlotte", "CloudCom Systems", "ID-022"),
+//   createData("Ethan", "EagleEye Technologies", "ID-023"),
+//   createData("Amelia", "Apex Solutions", "ID-024"),
+//   createData("Michael", "MegaByte Innovations", "ID-025"),
+//   createData("Emma", "Endless Systems Corp.", "ID-026"),
+// ];
 
 const initialValues = {
   employeeType: "",
   jobDescription: "",
   keySkills: "",
   minimumWorkExperience: "",
-  maximumWorkExperience:"",
+  maximumWorkExperience: "",
   location: "",
   educationalQualification: "",
   companyName: "",
   salary: "",
   jobTitle: "",
-  minimumSalary : "",
-  maximumSalary : "",
-  jobMode  : ""
+  minimumSalary: "",
+  maximumSalary: "",
+  jobMode: "",
 };
 export default function ActiveJobs() {
   const [page, setPage] = React.useState(0);
@@ -309,20 +186,23 @@ export default function ActiveJobs() {
   const [open, setOpen] = React.useState(false);
   const [formValues, setFormValues] = React.useState(initialValues);
   const [openCloseJobModal, setOpenCloseJobModal] = React.useState(false);
-  const [jobs,setJobs] = React.useState([])
-const [isOpen,setIsOpen] = React.useState(false);
-const [jobDetails,setJobDetails] = React.useState({});
-const [dummy,setDummy] = React.useState(false)
+  const [jobs, setJobs] = React.useState([]);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [jobDetails, setJobDetails] = React.useState({});
+  const [dummy, setDummy] = React.useState(false);
+  const [jobseekerRow, setJobSeekerRow] = useState([]);
   const handleOpenCloseJobModal = () => setOpenCloseJobModal(true);
   const handleCloseCloseJobModal = () => setOpenCloseJobModal(false);
 
-  const handleConfirmCloseJob = async() => {
+  const handleConfirmCloseJob = async () => {
     // Add logic to confirm closing the job
     try {
-      const response = await axios.put(`http://localhost:8080/updateJobApplicationStatus?jobId=${jobDetails.jobId}`)
-      console.log('closed application',response)
+      const response = await axios.put(
+        `http://localhost:8080/updateJobApplicationStatus?jobId=${jobDetails.jobId}`
+      );
+      console.log("closed application", response);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
     console.log("Job closed");
     handleCloseCloseJobModal();
@@ -330,16 +210,39 @@ const [dummy,setDummy] = React.useState(false)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getalljobs?postedBy=${localStorage.getItem('email')}`);
+        const response = await axios.get(
+          `http://localhost:8080/getalljobs?postedBy=${localStorage.getItem(
+            "email"
+          )}`
+        );
         console.log("Response for getting jobs", response);
-        setJobs(response.data)
+        setJobs(response.data);
       } catch (error) {
         console.log("error getting jobs", error);
       }
     };
     fetchData();
   }, [dummy]);
-  const rows = jobs.map((job)=>createData(job));
+
+  useEffect(() => {
+    const getJobseekers = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/getSeekersByJobs?email=${localStorage.getItem(
+            "email"
+          )}&jobId=${job}`
+        );
+        console.log("response of job seekers", response.data);
+        setJobSeekerRow(response.data);
+      } catch (error) {
+        console.log("error while job seekers", error);
+      }
+    };
+    if (jobSeekers) {
+      getJobseekers();
+    }
+  }, [jobSeekers]);
+  const rows = jobs.map((job) => createData(job));
   const [seekerDetails, setSeekerDetails] = React.useState("");
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -349,7 +252,10 @@ const [dummy,setDummy] = React.useState(false)
     setPage(newPage);
   };
   const handleOpen = () => setOpen(true);
-  const handleClose = () => {setOpen(false); setIsOpen(false)}
+  const handleClose = () => {
+    setOpen(false);
+    setIsOpen(false);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -358,23 +264,25 @@ const [dummy,setDummy] = React.useState(false)
       [name]: value,
     }));
   };
-  const handleSubmit =async () => {
+  const handleSubmit = async () => {
     console.log("Form submitted:", formValues);
     try {
-      const response= await axios.put(`http://localhost:8080/updateJob`, formValues);
-      console.log('the job is upated', response)
-      setDummy(!dummy)
+      const response = await axios.put(
+        `http://localhost:8080/updateJob`,
+        formValues
+      );
+      console.log("the job is upated", response);
+      setDummy(!dummy);
     } catch (error) {
-     console.log('error while updating job', error) 
+      console.log("error while updating job", error);
     }
     handleClose(); // Close the modal after submission
   };
 
- 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  }; 
+  };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -584,47 +492,70 @@ const [dummy,setDummy] = React.useState(false)
         </Box>
       </Modal>
       <Modal
-      open={isOpen}
-      onClose={handleClose}
-      aria-labelledby="job-modal-title"
-      aria-describedby="job-modal-description"
-    >
-      <Grid
-        container
-        spacing={2}
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding : 3,  }}
+        open={isOpen}
+        onClose={handleClose}
+        aria-labelledby="job-modal-title"
+        aria-describedby="job-modal-description"
       >
-        <Grid item>
-          <Typography variant="h5" id="job-modal-title" gutterBottom>
-            Job Details 
-          </Typography>
-         
-        </Grid>
-        <Grid item >
-          <Grid container direction="column" spacing={1} >
-           <Grid
+        <Grid
+          container
+          spacing={2}
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            padding: 3,
+          }}
+        >
+          <Grid item>
+            <Typography variant="h5" id="job-modal-title" gutterBottom>
+              Job Details
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Grid container direction="column" spacing={1}>
+              <Grid
                 container
                 spacing={2}
                 direction="column"
                 justifyContent="center"
                 alignItems="center"
-                style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor : blue[100], paddingBlock : 20 }}
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: blue[100],
+                  paddingBlock: 20,
+                }}
               >
-                <Grid item >
-                  <Stack direction={'row'} spacing={2}>
-                  <Typography variant="h5" id="job-modal-title" gutterBottom >
-                    Job Details 
-                  </Typography>
-                  <Button  onClick={()=>{setIsOpen(false)}} variant="outlined" sx={{borderRadius : 20}}>
-                    <Icon  sx={{display : 'flex', justifyContent:'center', alignItems : "center"}}>
-                      <Close/>
-                    </Icon>
-                  </Button>
+                <Grid item>
+                  <Stack direction={"row"} spacing={2}>
+                    <Typography variant="h5" id="job-modal-title" gutterBottom>
+                      Job Details
+                    </Typography>
+                    <Button
+                      onClick={() => {
+                        setIsOpen(false);
+                      }}
+                      variant="outlined"
+                      sx={{ borderRadius: 20 }}
+                    >
+                      <Icon
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Close />
+                      </Icon>
+                    </Button>
                   </Stack>
-                  
                 </Grid>
                 <Grid item>
                   <Grid container direction="column" spacing={1}>
@@ -638,16 +569,19 @@ const [dummy,setDummy] = React.useState(false)
                       <strong>Employee Type:</strong> {jobDetails.employeeType}
                     </Typography>
                     <Typography variant="body1">
-                      <strong>Job Description:</strong> {jobDetails.jobDescription}
+                      <strong>Job Description:</strong>{" "}
+                      {jobDetails.jobDescription}
                     </Typography>
                     <Typography variant="body1">
                       <strong>Key Skills:</strong> {jobDetails.keySkills}
                     </Typography>
                     <Typography variant="body1">
-                      <strong>Minimum Work Experience:</strong> {jobDetails.minimumWorkExperience}
+                      <strong>Minimum Work Experience:</strong>{" "}
+                      {jobDetails.minimumWorkExperience}
                     </Typography>
                     <Typography variant="body1">
-                      <strong>Maximum Work Experience:</strong> {jobDetails.maximumWorkExperience}
+                      <strong>Maximum Work Experience:</strong>{" "}
+                      {jobDetails.maximumWorkExperience}
                     </Typography>
                     <Typography variant="body1">
                       <strong>Location:</strong> {jobDetails.location}
@@ -656,25 +590,27 @@ const [dummy,setDummy] = React.useState(false)
                       <strong>Job Mode:</strong> {jobDetails.jobMode}
                     </Typography>
                     <Typography variant="body1">
-                      <strong>Educational Qualification:</strong> {jobDetails.educationalQualification}
+                      <strong>Educational Qualification:</strong>{" "}
+                      {jobDetails.educationalQualification}
                     </Typography>
                     <Typography variant="body1">
                       <strong>Company Name:</strong> {jobDetails.companyName}
                     </Typography>
                     <Typography variant="body1">
-                      <strong>Minimum Salary:</strong> {jobDetails.minimumSalary}
+                      <strong>Minimum Salary:</strong>{" "}
+                      {jobDetails.minimumSalary}
                     </Typography>
                     <Typography variant="body1">
-                      <strong>Maximum Salary:</strong> {jobDetails.maximumSalary}
+                      <strong>Maximum Salary:</strong>{" "}
+                      {jobDetails.maximumSalary}
                     </Typography>
                   </Grid>
                 </Grid>
               </Grid>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-
-    </Modal>
+      </Modal>
       <Stack direction={"column"}>
         {!job && (
           <TableContainer component={Paper}>
@@ -701,18 +637,20 @@ const [dummy,setDummy] = React.useState(false)
                   : rows
                 ).map((row) => (
                   <TableRow key={row.name}>
-                     <TableCell style={{ width: 160 }}>{row.jobId}</TableCell>
+                    <TableCell style={{ width: 160 }}>{row.jobId}</TableCell>
                     <TableCell component="th" scope="row">
                       {row.jobTitle}
                     </TableCell>
-                    <TableCell style={{ width: 160 }}>{row.employeeType}</TableCell>
+                    <TableCell style={{ width: 160 }}>
+                      {row.employeeType}
+                    </TableCell>
                     <TableCell style={{ width: 160 }}>{row.location}</TableCell>
                     <TableCell style={{ width: 160 }}>
                       <Button
                         variant="contained"
                         onClick={() => {
-                          setJobDetails(row)
-                          setIsOpen(true)
+                          setJobDetails(row);
+                          setIsOpen(true);
                         }}
                         startIcon={<ViewAgenda />}
                       >
@@ -723,7 +661,7 @@ const [dummy,setDummy] = React.useState(false)
                       <Button
                         variant="contained"
                         onClick={() => {
-                          setJob(row.jobTitle);
+                          setJob(row.jobId);
                           setJobseekers(true);
                         }}
                         startIcon={<Forward />}
@@ -737,7 +675,7 @@ const [dummy,setDummy] = React.useState(false)
                         onClick={() => {
                           handleOpen();
                           setJobDetails(row);
-                          setFormValues(row)
+                          setFormValues(row);
                         }}
                         sx={{ backgroundColor: "warning.main" }}
                         startIcon={<Update />}
@@ -748,7 +686,10 @@ const [dummy,setDummy] = React.useState(false)
                     <TableCell style={{ width: 160 }}>
                       <Button
                         variant="contained"
-                        onClick={()=>{handleOpenCloseJobModal(); setJobDetails(row);}}
+                        onClick={() => {
+                          handleOpenCloseJobModal();
+                          setJobDetails(row);
+                        }}
                         startIcon={<Close />}
                         sx={{ backgroundColor: "error.main" }}
                       >
@@ -809,16 +750,26 @@ const [dummy,setDummy] = React.useState(false)
             Back
           </Button>
         )}
+        {/* {
+        "jobSeekerId": 1,
+        "name": "Shashi Teja",
+        "emailId": "shashiteja@gmail.com",
+        "password": "12345",
+        "collegeName": "CMR",
+        "experience": 2,
+        "skills": "java,react,springboot,aws"
+    }, */}
         {jobSeekers && (
           <TableContainer component={Paper} sx={{ backgroundColor: blue[100] }}>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>Job Seeker</StyledTableCell>
-                  <StyledTableCell align="center">Company</StyledTableCell>
-                  <StyledTableCell align="center">Company ID</StyledTableCell>
-                  <StyledTableCell align="center">Review</StyledTableCell>
-                  <StyledTableCell align="center">Mail</StyledTableCell>
+                  <StyledTableCell>Job Seeker ID</StyledTableCell>
+                  <StyledTableCell align="center">name</StyledTableCell>
+                  <StyledTableCell align="center">Email ID</StyledTableCell>
+                  <StyledTableCell align="center">College Name</StyledTableCell>
+                  <StyledTableCell align="center">Experience</StyledTableCell>
+                  <StyledTableCell align="center">Skills</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -831,13 +782,22 @@ const [dummy,setDummy] = React.useState(false)
                 ).map((row) => (
                   <TableRow key={row.name}>
                     <TableCell component="th" scope="row">
+                      {row.jobSeekerId}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="center">
                       {row.name}
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="center">
-                      {row.calories}
+                      {row.emailId}
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="center">
-                      {row.fat}
+                      {row.collegeName}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="center">
+                      {row.experience}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="center">
+                      {row.skills}
                     </TableCell>
                     <TableCell>
                       <Button
