@@ -57,7 +57,7 @@ const PageBody = () => {
           </CustomPaper>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <CustomPaper onClick={handleChnage} gradientColor={orange[300]}>
+          <CustomPaper gradientColor={orange[300]}>
             <Typography
               gutterBottom
               variant="h5"
@@ -77,7 +77,7 @@ const PageBody = () => {
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <CustomPaper onClick={handleChnage} gradientColor={indigo[200]}>
+          <CustomPaper  gradientColor={indigo[200]}>
             <Typography
               gutterBottom
               variant="h5"

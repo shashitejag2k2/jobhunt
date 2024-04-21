@@ -55,6 +55,11 @@ const Login = () => {
         localStorage.setItem("email",values.email)
         navigate("/employeer");
       }
+      else if (roles[value] === "Admin") {
+        console.log("setting email",values.email);
+        localStorage.setItem("email",values.email)
+        navigate("/admin");
+      }
     },
   });
 
