@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import Register from "../employeer/Register";
 import RegisterSeeker from "../jobseeker/RegisterSeeker";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
+import axios from "axios";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -41,24 +42,43 @@ const Login = () => {
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async(values) => {
       JSON.stringify({ ...values, role: roles[value] }, null, 2);
       console.log(roles[value]);
       if (roles[value] === "Job Seeker") {
         const email = values.email;
+        try {
+          const response = await axios.post(`http://localhost:8080/jobSeekerLogin`, values)
+          console.log("setting email",values.email);
+          localStorage.setItem("email",values.email)
+          navigate("/jobseeker", { state: { email } });
+        } catch (error) {
+          console.log('error login', error)
+          alert("error",error)
+        }
 
-        console.log("setting email",values.email);
-        localStorage.setItem("email",values.email)
-        navigate("/jobseeker", { state: { email } });
+
       } else if (roles[value] === "Employeer") {
-        console.log("setting email",values.email);
-        localStorage.setItem("email",values.email)
-        navigate("/employeer");
+        try {
+          const response = await axios.post(`http://localhost:8080/employeerLogin`, values)
+          console.log("setting email",values.email);
+          localStorage.setItem("email",values.email)
+          navigate("/employeer");
+        } catch (error) {
+          console.log('error login', error)
+          alert("error",error)
+        }
       }
       else if (roles[value] === "Admin") {
-        console.log("setting email",values.email);
-        localStorage.setItem("email",values.email)
-        navigate("/admin");
+        try {
+          const response = await axios.post(`http://localhost:8080/adminLogin`, values)
+          console.log("setting email",values.email);
+          localStorage.setItem("email",values.email)
+          navigate("/admin");
+        } catch (error) {
+          console.log('error login', error)
+          alert("error",error)
+        }
       }
     },
   });

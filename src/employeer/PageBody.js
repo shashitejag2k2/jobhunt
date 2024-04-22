@@ -37,7 +37,9 @@ const PageBody = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
-
+const [totalCount, setTotalCount] = useState(0);
+const [mySubscription, setMySubscription] = useState()
+const [onGoing,setOgoing] = useState(56)
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleCardSelect = (card) => setSelectedCard(card);
@@ -69,6 +71,23 @@ const PageBody = () => {
       console.log("error while upgrading", error);
     }
   };
+  useState(()=>{
+    const fetchStat = async()=>{
+      try {
+        const response = await axios.get(`http://localhost:8080/getApplicationCount?employeerMail=${localStorage.getItem('email')}`)
+        const response2 = await axios.get(`http://localhost:8080/getSubscription?employeerMail=${localStorage.getItem('email')}`)
+        console.log("succesfully fetched stats", response.data)
+        console.log("succesfully fetched subs", response2.data)
+
+        setTotalCount(response.data.jobCount)
+        setMySubscription(response2.data)
+      } catch (error) {
+        console.log("error fetching stats",error)
+      }
+    }
+  
+  fetchStat()
+  },[])
   return (
     <div>
       <Modal
@@ -95,7 +114,7 @@ const PageBody = () => {
           >
             <CardContent>
               {
-                <Typography variant="h5" component="h2">
+                 mySubscription==='Basic' && <Typography variant="h5" component="h2">
                   Current Plan{" "}
                   <Icon>
                     <AutoAwesome />
@@ -106,13 +125,13 @@ const PageBody = () => {
                 Basic
               </Typography>
               <Typography color="textSecondary">Jobs Limit : {10}</Typography>
-              <Typography color="textSecondary">
+              {mySubscription==='Basic' && <Typography color="textSecondary">
                 Subscription Date : {"10-02-2024"}
-              </Typography>
+              </Typography>}
               <Typography color="textSecondary">
                 Duration : {3} Months
               </Typography>
-              {selectedCard == 1 && (
+              {selectedCard == 1 && mySubscription!=='Basic' && (
                 <Button onClick={handleSubmit} variant="outlined">
                   Upgrade
                 </Button>
@@ -129,7 +148,7 @@ const PageBody = () => {
           >
             <CardContent>
             {
-                <Typography variant="h5" component="h2">
+                 mySubscription=='Standard' && <Typography variant="h5" component="h2">
                   Current Plan{" "}
                   <Icon>
                     <AutoAwesome />
@@ -143,7 +162,7 @@ const PageBody = () => {
               <Typography color="textSecondary">
                 Duration : {10} Months
               </Typography>
-              {selectedCard == 2 && (
+              {selectedCard == 2&& mySubscription!=='Standard'  && (
                 <Button onClick={handleSubmit} variant="outlined">
                   Upgrade
                 </Button>
@@ -160,7 +179,7 @@ const PageBody = () => {
           >
             <CardContent>
             {
-                <Typography variant="h5" component="h2">
+                mySubscription==='Premium' && <Typography variant="h5" component="h2">
                   Current Plan{" "}
                   <Icon>
                     <AutoAwesome />
@@ -172,7 +191,7 @@ const PageBody = () => {
               </Typography>
               <Typography color="textSecondary">Jobs Limit : {100}</Typography>
               <Typography color="textSecondary">Duration : {20} Months</Typography>
-              {selectedCard == 3 && (
+              {selectedCard == 3&& mySubscription!=='Premium'  && (
                 <Button onClick={handleSubmit} variant="outlined">
                   Upgrade
                 </Button>
@@ -217,7 +236,7 @@ const PageBody = () => {
               </Icon>
             </Typography>
             <Typography variant="h3" color="text.secondary">
-              {347}
+              {totalCount}
             </Typography>
           </CustomPaper>
         </Grid>
@@ -255,7 +274,7 @@ const PageBody = () => {
                 <AutoAwesome />
               </Icon>
             </Typography>
-            <Typography variant="h4">{"Basic"}</Typography>
+            <Typography variant="h4">{mySubscription}</Typography>
           </CustomPaper>
         </Grid>
       </Grid>

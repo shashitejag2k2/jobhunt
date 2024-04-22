@@ -2,10 +2,11 @@ import React from 'react';
 import { TextField, Button, Typography, Container } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
-  email: Yup.string().email('Invalid email address').required('Email is required'),
+  emailId: Yup.string().email('Invalid email address').required('Email is required'),
   password: Yup.string().required('Password is required').min(8, 'Password must be at least 8 characters'),
 });
 
@@ -13,12 +14,19 @@ const RegisterSeeker = () => {
   const formik = useFormik({
     initialValues: {
       name: '',
-      email: '',
+      emailId: '',
       password: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async(values) => {
       alert(JSON.stringify(values, null, 2));
+try {
+  const response = await axios.post(`http://localhost:8080/jobSeekerRegister`,values)
+  console.log("succesfully registered",response);
+  alert("Succesfully registered")
+} catch (error) {
+  console.log('error while register', error)
+}
     },
   });
 
@@ -42,12 +50,12 @@ const RegisterSeeker = () => {
         <TextField
           fullWidth
           id="email"
-          name="email"
+          name="emailId"
           label="Email"
-          value={formik.values.email}
+          value={formik.values.emailId}
           onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
+          error={formik.touched.emailId && Boolean(formik.errors.emailId)}
+          helperText={formik.touched.emailId && formik.errors.emailId}
           margin="normal"
         />
         <TextField
