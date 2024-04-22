@@ -19,9 +19,9 @@ const Profile = () => {
   const navigate = useNavigate();
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
-    jobseeker_id: Yup.string().required("Jobseeker ID is required"),
-    email_id: Yup.string().email("Invalid email").required("Email is required"),
-    college: Yup.string().required("College name is required"),
+    jobSeekerId: Yup.string().required("Jobseeker ID is required"),
+    emailId: Yup.string().email("Invalid email").required("Email is required"),
+    collegeName: Yup.string().required("College name is required"),
     skills: Yup.string().required("Skills are required"),
     experience: Yup.string().required("Experience is required"),
   });
@@ -29,9 +29,9 @@ const Profile = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      jobseeker_id: "",
-      email_id: "",
-      college: "",
+      jobSeekerId: "",
+      emailId: "",
+      collegeName: "",
       skills: "",
       experience: "",
     },
@@ -40,7 +40,7 @@ const Profile = () => {
       console.log(values);
       try {
         const response = await axios.put(
-          `http://localhost:/8080/updateProfile`,
+          `http://localhost:8080/updateProfile`,
           values
         );
         console.log("upadte successfiuull", response);
@@ -58,10 +58,10 @@ const Profile = () => {
           )}`
         );
         console.log("response from backend", response);
-        formik.setFieldValue("jobseeker_id", response.data.jobseeker_id);
+        formik.setFieldValue("jobSeekerId", response.data.jobSeekerId);
         formik.setFieldValue("name", response.data.name);
-        formik.setFieldValue("email_id", response.data.email_id);
-        formik.setFieldValue("college", response.data.college);
+        formik.setFieldValue("emailId", response.data.emailId);
+        formik.setFieldValue("collegeName", response.data.collegeName);
         formik.setFieldValue("skills", response.data.skills);
         formik.setFieldValue("experience", response.data.experience);
       } catch (error) {
@@ -112,50 +112,51 @@ const Profile = () => {
             <hr />
             <Typography>
               <TextField
-                name="jobseeker_id"
+                name="jobSeekerId"
                 label="Jobseeker ID"
                 variant="outlined"
                 fullWidth
-                value={formik.values.jobseeker_id}
+                value={formik.values.jobSeekerId}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
+                disabled
                 error={
-                  formik.touched.jobseeker_id &&
-                  Boolean(formik.errors.jobseeker_id)
+                  formik.touched.jobSeekerId &&
+                  Boolean(formik.errors.jobSeekerId)
                 }
                 helperText={
-                  formik.touched.jobseeker_id && formik.errors.jobseeker_id
+                  formik.touched.jobSeekerId && formik.errors.jobSeekerId
                 }
               />
             </Typography>
             <hr />
             <Typography>
               <TextField
-                name="email_id"
+                name="emailId"
                 label="Email ID"
                 variant="outlined"
                 fullWidth
-                value={formik.values.email_id}
+                value={formik.values.emailId}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={
-                  formik.touched.email_id && Boolean(formik.errors.email_id)
+                  formik.touched.emailId && Boolean(formik.errors.emailId)
                 }
-                helperText={formik.touched.email_id && formik.errors.email_id}
+                helperText={formik.touched.emailId && formik.errors.emailId}
               />
             </Typography>
             <hr />
             <Typography>
               <TextField
-                name="college"
+                name="collegeName"
                 label="College Name"
                 variant="outlined"
                 fullWidth
-                value={formik.values.college}
+                value={formik.values.collegeName}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.college && Boolean(formik.errors.college)}
-                helperText={formik.touched.college && formik.errors.college}
+                error={formik.touched.collegeName && Boolean(formik.errors.collegeName)}
+                helperText={formik.touched.collegeName && formik.errors.collegeName}
               />
             </Typography>
             <hr />

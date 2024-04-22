@@ -46,7 +46,7 @@ const TrackApplications = () => {
     const fetchMyJobs = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/myJobs?email=${localStorage.getItem("email")}`
+          `http://localhost:8080/getAllJobsAppliedByJobSeeker?email=${localStorage.getItem("email")}`
         );
         console.log("fetched my jobs", response.data);
         setAllMyJobs(response.data);
@@ -191,7 +191,7 @@ const TrackApplications = () => {
               <StyledTableCell>Posted By</StyledTableCell>
               <StyledTableCell>Applied By</StyledTableCell>
               <StyledTableCell>Status</StyledTableCell>
-              <StyledTableCell align="center">Job ID</StyledTableCell>
+              <StyledTableCell >Job ID</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -202,14 +202,14 @@ const TrackApplications = () => {
                 )
               : rows
             ).map((row) => (
-              <TableRow key={row.job_id}>
+              <TableRow key={row.jobId}>
                 <TableCell component="th" scope="row">
-                  {row.job_title}
+                  {row.jobTitle}
                 </TableCell>
-                <TableCell style={{ width: 160 }}>{row.posted_by}</TableCell>
-                <TableCell style={{ width: 160 }}>{row.applied_by}</TableCell>
-                <TableCell style={{ width: 160 }}>{row.status}</TableCell>
-                <TableCell style={{ width: 160 }}>{row.job_id}</TableCell>
+                <TableCell style={{ width: 160 }}>{row.postedBy}</TableCell>
+                <TableCell style={{ width: 160 }}>{row.appliedBy}</TableCell>
+                <TableCell style={{ width: 160 }}>{row.status || 'not reviewed'}</TableCell>
+                <TableCell style={{ width: 160 }}>{row.jobId}</TableCell>
               </TableRow>
             ))}
             {emptyRows > 0 && (

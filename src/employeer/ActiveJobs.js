@@ -228,7 +228,7 @@ export default function ActiveJobs() {
     const getJobseekers = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/getSeekersByJobs?email=${localStorage.getItem(
+          `http://localhost:8080/getSeekersByJobs?employeerMail=${localStorage.getItem(
             "email"
           )}&jobId=${job}`
         );
