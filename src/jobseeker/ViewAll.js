@@ -34,66 +34,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { blue, indigo } from "@mui/material/colors";
 import axios from "axios";
 
-const Carousel = ({ items }) => {
-  const [autoplay, setAutoplay] = useState(true);
-  const sliderRef = useRef(null);
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-  };
-  const handlePauseAutoplay = () => {
-    setAutoplay(false);
-  };
-
-  const handleGoToNextSlide = () => {
-    sliderRef.current.slickNext();
-  };
-
-  const handleGoToPrevSlide = () => {
-    sliderRef.current.slickPrev();
-  };
-
-  const handleMoreJobs = () => {
-    // Your logic to handle "More Jobs" button click
-    alert("More jobs!");
-  };
-
-  return (
-    <div className="carousel-container">
-      <Slider {...settings} ref={sliderRef}>
-        {items.map((item, index) => (
-          <div key={index}>
-            <div className="carousel-item">{item}</div>
-            {index === 10 && (
-              <div className="more-jobs-button">
-                <button onClick={handleMoreJobs}>More Jobs</button>
-              </div>
-            )}
-          </div>
-        ))}
-      </Slider>
-      <div className="carousel-navigation">
-        <button className="prev-button" onClick={handleGoToPrevSlide}>
-          <i className="fas fa-chevron-left"></i>
-        </button>
-        <button className="next-button" onClick={handleGoToNextSlide}>
-          <i className="fas fa-chevron-right"></i>
-        </button>
-        <button className="pause-button" onClick={handlePauseAutoplay}>
-          <i className="fas fa-pause"></i>
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const PageBody = (props) => {
+const ViewAll = () => {
   const navigate = useNavigate();
   const [fetchedJobs, setFetchedJobs] = useState([]);
   const [fetchedHighJobs, setFetchedHighJobs] = useState([]);
@@ -136,27 +77,6 @@ const PageBody = (props) => {
     fetchJobs();
   }, []);
 
-  useEffect(() => {
-    const getHightJob = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/getHighPayingJobs`
-        );
-        console.log("hight paying jobs", response.data);
-        setFetchedHighJobs(
-          response.data?.map((job) => ({
-            title: job.jobTitle,
-            experience: `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`,
-            description: job.jobDescription,
-            ...job,
-          }))
-        );
-      } catch (error) {
-        console.log("error while fetching high paying jobs", error);
-      }
-    };
-    getHightJob();
-  }, []);
   const items = fetchedJobs?.map((job) => (
     <Card sx={{ display: "flex", m: 2, py: 6 }}>
       <Box
@@ -193,44 +113,8 @@ const PageBody = (props) => {
       </Button>
     </Card>
   ));
-  const highItems = fetchedHighJobs?.map((job) => (
-    <Card sx={{ display: "flex", m: 2, py: 6 }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
-      >
-        <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography component="div" variant="h5">
-            {job.title}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            component="div"
-          >
-            Exp : {job.experience}
-          </Typography>
-          <Typography variant="body2">{job.description}</Typography>
-        </CardContent>
-      </Box>
-      <Button
-        sx={{ mx: 3, my: 5 }}
-        variant="contained"
-        size="small"
-        onClick={() => {
-          setJobDetails(job);
-          setIsOpen(true);
-        }}
-      >
-        Apply
-      </Button>
-    </Card>
-  ));
   return (
-    <div>
+    <>
       <Modal
         open={isOpen}
         onClose={handleClose}
@@ -354,68 +238,12 @@ const PageBody = (props) => {
           </Grid>
         </Grid>
       </Modal>
-      <div style={{ display: "flex", alignItems: "center", marginTop: "20px" }}>
-        <TextField
-          variant="outlined"
-          width="50%"
-          placeholder="Search..."
-          fullWidth
-          size="small"
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-          }}
-          sx={{ width: "50%", marginLeft: 40, display: "inline-block" }}
-          InputProps={{
-            endAdornment: (
-              <IconButton sx={{ backgroundColor: "whitesmoke" }}>
-                <Search />
-              </IconButton>
-            ),
-          }}
-        />
-        <Stack direction={"row"} spacing={2}>
-          <Button variant="contained" onClick={() => {}}>
-            Search
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              navigate("/viewAll");
-            }}
-          >
-            View All
-          </Button>
-          <Button
-            onClick={() => {
-              navigate("/trackApplications");
-            }}
-            startIcon={<TrackChanges />}
-            variant="contained"
-            size="small"
-            sx={{ py: 0 }}
-          >
-            Track Applications
-          </Button>
-        </Stack>
-      </div>
-      {/* <Typography variant="h5" fontWeight={600}>Trending Jobs</Typography> */}
-      {!isSearching && (
-        <>
-          <Box sx={{ backgroundColor: indigo[300] }}>
-            <Carousel items={items} />
-          </Box>
+      <Box>
 
-          <Typography variant="h5" fontWeight={600}>
-            High Paying Jobs
-          </Typography>
-          <Box sx={{ backgroundColor: blue[300] }}>
-            <Carousel items={highItems} />
-          </Box>
-        </>
-      )}
-      {isSearching && <></>}
-    </div>
+        {items.length>0 ? items.map((item) => item): <Typography variant="h2">No Data</Typography>}
+        </Box>
+    </>
   );
 };
 
-export default PageBody;
+export default ViewAll;

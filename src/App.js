@@ -15,6 +15,9 @@ import JobCreationPage from "./employeer/JobCreationPage";
 import EmployeerMainPage from "./employeer/EmployeerMainPage";
 import EmployerTable from "./Admin/EmployerTable";
 import Layout from "./components/Layout";
+import Profile from "./jobseeker/Profile";
+import ViewAll from "./jobseeker/ViewAll";
+import TrackApplications from "./jobseeker/TrackApplications";
 const App = () => {
   return (
     <div>
@@ -24,6 +27,9 @@ const App = () => {
             <Route path="/" element={<Login />} />
             <Route path="login" element={<Login />} />
             <Route path="jobseeker" element={<JobseekerMainPage />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="viewAll" element={<ViewAll />} />
+            <Route path="trackApplications" element={<TrackApplications />} />
             <Route path="jobdescription" element={<JobDescription />} />
             <Route path="employeer" element={<EmployeerMainPage />} />
             <Route path="jobcreate" element={<JobCreationPage />} />
