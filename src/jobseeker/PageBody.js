@@ -97,6 +97,7 @@ const PageBody = (props) => {
   const navigate = useNavigate();
   const [fetchedJobs, setFetchedJobs] = useState([]);
   const [fetchedHighJobs, setFetchedHighJobs] = useState([]);
+  const [searchedJobs, setSearchedJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = React.useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -121,7 +122,7 @@ const PageBody = (props) => {
       try {
         const response = await axios.get(`http://localhost:8080/getAlljobs`);
         console.log("all jobs", response.data);
-        setFetchedJobs(
+        setSearchedJobs(
           response.data?.map((job) => ({
             title: job.jobTitle,
             experience: `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`,
@@ -157,6 +158,23 @@ const PageBody = (props) => {
     };
     getHightJob();
   }, []);
+  const searchJobs = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/searchJobListings?keyword=${searchTerm}`
+      );
+      console.log("response ffrom serach", response.data);
+      setIsSearching(true);
+      setFetchedJobs(
+        response.data?.map((job) => ({
+          title: job.jobTitle,
+          experience: `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`,
+          description: job.jobDescription,
+          ...job,
+        }))
+      );
+    } catch (error) {}
+  };
   const items = fetchedJobs?.map((job) => (
     <Card sx={{ display: "flex", m: 2, py: 6 }}>
       <Box
@@ -229,6 +247,43 @@ const PageBody = (props) => {
       </Button>
     </Card>
   ));
+  const searchItems = searchedJobs?.map((job) => (
+    <Card sx={{ display: "flex", m: 2, py: 6 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <CardContent sx={{ flex: "1 0 auto" }}>
+          <Typography component="div" variant="h5">
+            {job.title}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            color="text.secondary"
+            component="div"
+          >
+            Exp : {job.experience}
+          </Typography>
+          <Typography variant="body2">{job.description}</Typography>
+        </CardContent>
+      </Box>
+      <Button
+        sx={{ mx: 3, my: 5 }}
+        variant="contained"
+        size="small"
+        onClick={() => {
+          setJobDetails(job);
+          setIsOpen(true);
+        }}
+      >
+        Apply
+      </Button>
+    </Card>
+  ));
+
   return (
     <div>
       <Modal
@@ -374,7 +429,12 @@ const PageBody = (props) => {
           }}
         />
         <Stack direction={"row"} spacing={2}>
-          <Button variant="contained" onClick={() => {}}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              searchJobs();
+            }}
+          >
             Search
           </Button>
           <Button
@@ -413,7 +473,15 @@ const PageBody = (props) => {
           </Box>
         </>
       )}
-      {isSearching && <></>}
+      {isSearching && (
+        <>
+          {searchItems.length > 0 ? (
+            searchItems.map((item) => item)
+          ) : (
+            <Typography variant="h2">No Data</Typography>
+          )}
+        </>
+      )}
     </div>
   );
 };
