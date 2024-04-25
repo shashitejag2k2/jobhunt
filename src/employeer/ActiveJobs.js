@@ -193,6 +193,7 @@ export default function ActiveJobs() {
   const [jobDetails, setJobDetails] = React.useState({});
   const [dummy, setDummy] = React.useState(false);
   const [jobseekerRow, setJobSeekerRow] = useState([]);
+  const [jobTitle, setJobTitle] = useState("");
   const [state, setState] = useState({
     open: false,
     message: "",
@@ -724,6 +725,7 @@ export default function ActiveJobs() {
                         onClick={() => {
                           setJob(row.jobId);
                           setJobseekers(true);
+                          setJobTitle(row.jobTitle);
                         }}
                         startIcon={<Forward />}
                       >
@@ -822,6 +824,7 @@ export default function ActiveJobs() {
     }, */}
         {jobSeekers && (
           <TableContainer component={Paper} sx={{ backgroundColor: blue[100] }}>
+            <Typography variant="h4">{jobTitle}</Typography>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
