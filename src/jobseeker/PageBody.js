@@ -11,12 +11,14 @@ import ButtonBase from "@mui/material/ButtonBase";
 import { useState } from "react";
 import { useTheme } from "@emotion/react";
 import {
+  Alert,
   Button,
   Card,
   CardContent,
   CardMedia,
   Icon,
   Modal,
+  Snackbar,
   Stack,
 } from "@mui/material";
 import {
@@ -101,9 +103,23 @@ const PageBody = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = React.useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [state, setState] = useState({
+    open: false,
+    message: "",
+    severity: "error",
+  });
+
   const handleClose = () => {
     setIsOpen(false);
   };
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setState((prev) => ({ ...prev, message: "", open: false }));
+  };
+
   const [jobDetails, setJobDetails] = React.useState({});
 
   const handleSubmit = async () => {
@@ -113,8 +129,18 @@ const PageBody = (props) => {
         appliedBy: localStorage.getItem("email"),
       });
       console.log("applied job", response);
+      setState({
+        severity: "success",
+        open: true,
+        message: "Applied to Job Successfully!",
+      });
     } catch (error) {
       console.log("error appllying", error);
+      setState({
+        severity: "error",
+        open: true,
+        message: "Error while applying job",
+      });
     }
   };
   useEffect(() => {
@@ -122,6 +148,7 @@ const PageBody = (props) => {
       try {
         const response = await axios.get(`http://localhost:8080/getAlljobs`);
         console.log("all jobs", response.data);
+
         setSearchedJobs(
           response.data?.map((job) => ({
             title: job.jobTitle,
@@ -132,6 +159,11 @@ const PageBody = (props) => {
         );
       } catch (error) {
         console.log("error", error);
+        setState({
+          severity: "error",
+          open: true,
+          message: "Error while fetching jobs",
+        });
       }
     };
     fetchJobs();
@@ -154,6 +186,11 @@ const PageBody = (props) => {
         );
       } catch (error) {
         console.log("error while fetching high paying jobs", error);
+        setState({
+          severity: "error",
+          open: true,
+          message: "Error while fetching high paying jobs",
+        });
       }
     };
     getHightJob();
@@ -164,6 +201,11 @@ const PageBody = (props) => {
         `http://localhost:8080/searchJobListings?keyword=${searchTerm}`
       );
       console.log("response ffrom serach", response.data);
+      setState({
+        severity: "success",
+        open: true,
+        message: "Found Jobs",
+      });
       setIsSearching(true);
       setFetchedJobs(
         response.data?.map((job) => ({
@@ -173,7 +215,14 @@ const PageBody = (props) => {
           ...job,
         }))
       );
-    } catch (error) {}
+    } catch (error) {
+      console.log("error while searching", error);
+      setState({
+        severity: "error",
+        open: true,
+        message: error.code,
+      });
+    }
   };
   const items = fetchedJobs?.map((job) => (
     <Card sx={{ display: "flex", m: 2, py: 6 }}>
@@ -409,6 +458,16 @@ const PageBody = (props) => {
           </Grid>
         </Grid>
       </Modal>
+      <Snackbar open={state.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={state.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {state.message}
+        </Alert>
+      </Snackbar>
       <div style={{ display: "flex", alignItems: "center", marginTop: "20px" }}>
         <TextField
           variant="outlined"

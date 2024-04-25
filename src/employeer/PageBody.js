@@ -3,7 +3,15 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
-import { CardActionArea, Grid, Icon, Paper, styled } from "@mui/material";
+import {
+  Alert,
+  CardActionArea,
+  Grid,
+  Icon,
+  Paper,
+  Snackbar,
+  styled,
+} from "@mui/material";
 import ActiveJobs from "./ActiveJobs";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { blue, green, indigo, orange, red } from "@mui/material/colors";
@@ -37,14 +45,26 @@ const PageBody = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
-const [totalCount, setTotalCount] = useState(0);
-const [mySubscription, setMySubscription] = useState()
-const [onGoing,setOgoing] = useState(56)
+  const [totalCount, setTotalCount] = useState(0);
+  const [mySubscription, setMySubscription] = useState(false);
+  const [state, setState] = useState({
+    open: false,
+    message: "",
+    severity: "error",
+  });
+  const [onGoing, setOgoing] = useState(56);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleCardSelect = (card) => setSelectedCard(card);
   const handleChnage = (e) => {
     navigate("/jobcreate");
+  };
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setState((prev) => ({ ...prev, message: "", open: false }));
   };
   const CustomPaper = styled(Paper)(({ theme, gradientColor }) => ({
     // maxWidth: 200,
@@ -66,28 +86,51 @@ const [onGoing,setOgoing] = useState(56)
         subscription: subs[selectedCard],
       });
       console.log("sucesfully upgraded", response);
+      setState({
+        severity: "success",
+        open: true,
+        message: "Sucesfully upgraded",
+      });
       setOpen(false);
     } catch (error) {
+      setState({
+        severity: "error",
+        open: true,
+        message: error.code,
+      });
       console.log("error while upgrading", error);
     }
   };
-  useState(()=>{
-    const fetchStat = async()=>{
+  useState(() => {
+    const fetchStat = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getApplicationCount?employeerMail=${localStorage.getItem('email')}`)
-        const response2 = await axios.get(`http://localhost:8080/getSubscription?employeerMail=${localStorage.getItem('email')}`)
-        console.log("succesfully fetched stats", response.data)
-        console.log("succesfully fetched subs", response2.data)
+        const response = await axios.get(
+          `http://localhost:8080/getApplicationCount?employeerMail=${localStorage.getItem(
+            "email"
+          )}`
+        );
+        const response2 = await axios.get(
+          `http://localhost:8080/getSubscription?employeerMail=${localStorage.getItem(
+            "email"
+          )}`
+        );
+        console.log("succesfully fetched stats", response.data);
+        console.log("succesfully fetched subs", response2.data);
 
-        setTotalCount(response.data.jobCount)
-        setMySubscription(response2.data)
+        setTotalCount(response.data.jobCount);
+        setMySubscription(response2.data);
       } catch (error) {
-        console.log("error fetching stats",error)
+        console.log("error fetching stats", error);
+        setState({
+          severity: "error",
+          open: true,
+          message: error.code,
+        });
       }
-    }
-  
-  fetchStat()
-  },[])
+    };
+
+    fetchStat();
+  }, []);
   return (
     <div>
       <Modal
@@ -113,25 +156,27 @@ const [onGoing,setOgoing] = useState(56)
             }}
           >
             <CardContent>
-              {
-                 mySubscription==='Basic' && <Typography variant="h5" component="h2">
+              {mySubscription === "Basic" && (
+                <Typography variant="h5" component="h2">
                   Current Plan{" "}
                   <Icon>
                     <AutoAwesome />
                   </Icon>
                 </Typography>
-              }
+              )}
               <Typography variant="h5" component="h2">
                 Basic
               </Typography>
               <Typography color="textSecondary">Jobs Limit : {10}</Typography>
-              {mySubscription==='Basic' && <Typography color="textSecondary">
-                Subscription Date : {"10-02-2024"}
-              </Typography>}
+              {mySubscription === "Basic" && (
+                <Typography color="textSecondary">
+                  Subscription Date : {"10-02-2024"}
+                </Typography>
+              )}
               <Typography color="textSecondary">
                 Duration : {3} Months
               </Typography>
-              {selectedCard == 1 && mySubscription!=='Basic' && (
+              {selectedCard == 1 && mySubscription !== "Basic" && !!mySubscription && (
                 <Button onClick={handleSubmit} variant="outlined">
                   Upgrade
                 </Button>
@@ -147,14 +192,14 @@ const [onGoing,setOgoing] = useState(56)
             }}
           >
             <CardContent>
-            {
-                 mySubscription=='Standard' && <Typography variant="h5" component="h2">
+              {mySubscription == "Standard" && (
+                <Typography variant="h5" component="h2">
                   Current Plan{" "}
                   <Icon>
                     <AutoAwesome />
                   </Icon>
                 </Typography>
-              }
+              )}
               <Typography variant="h5" component="h2">
                 Standard
               </Typography>
@@ -162,7 +207,7 @@ const [onGoing,setOgoing] = useState(56)
               <Typography color="textSecondary">
                 Duration : {10} Months
               </Typography>
-              {selectedCard == 2&& mySubscription!=='Standard'  && (
+              {selectedCard == 2 && mySubscription !== "Standard" && !!mySubscription && (
                 <Button onClick={handleSubmit} variant="outlined">
                   Upgrade
                 </Button>
@@ -178,20 +223,22 @@ const [onGoing,setOgoing] = useState(56)
             }}
           >
             <CardContent>
-            {
-                mySubscription==='Premium' && <Typography variant="h5" component="h2">
+              {mySubscription === "Premium" && (
+                <Typography variant="h5" component="h2">
                   Current Plan{" "}
                   <Icon>
                     <AutoAwesome />
                   </Icon>
                 </Typography>
-              }
+              )}
               <Typography variant="h5" component="h2">
                 Premium
               </Typography>
               <Typography color="textSecondary">Jobs Limit : {100}</Typography>
-              <Typography color="textSecondary">Duration : {20} Months</Typography>
-              {selectedCard == 3&& mySubscription!=='Premium'  && (
+              <Typography color="textSecondary">
+                Duration : {20} Months
+              </Typography>
+              {selectedCard == 3 && mySubscription !== "Premium" && !!mySubscription && (
                 <Button onClick={handleSubmit} variant="outlined">
                   Upgrade
                 </Button>
@@ -200,6 +247,20 @@ const [onGoing,setOgoing] = useState(56)
           </Card>
         </div>
       </Modal>
+      <Snackbar
+        open={state.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={state.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {state.message}
+        </Alert>
+      </Snackbar>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={3}>
           <CustomPaper onClick={handleChnage} gradientColor={blue[300]}>

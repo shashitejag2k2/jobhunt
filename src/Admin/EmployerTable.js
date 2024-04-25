@@ -16,6 +16,7 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import {
+  Alert,
   Button,
   Card,
   CardContent,
@@ -24,6 +25,7 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
+  Snackbar,
   Stack,
   TableHead,
   TextField,
@@ -229,6 +231,11 @@ export default function EmployerTable() {
       subscriptionExprirationDate: "2025-01-30T17:30:00.000+00:00",
     },
   ]);
+  const [state, setState] = useState({
+    open: false,
+    message: "",
+    severity: "error",
+  });
   const [subscriptions, setSubscriptions] = React.useState([]);
   const [field1, setField1] = useState("");
   const [field2, setField2] = useState("");
@@ -243,6 +250,13 @@ export default function EmployerTable() {
   };
   const onClose = () => {
     setOpen(false);
+  };
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setState((prev) => ({ ...prev, message: "", open: false }));
   };
   const handleSubmit = () => {
     // Handle form submission here
@@ -269,6 +283,11 @@ export default function EmployerTable() {
         // },
       } catch (error) {
         console.log("error", error);
+        setState({
+          severity: "error",
+          open: true,
+          message: error.code,
+        });
       }
     };
     fetchEmployers();
@@ -280,6 +299,11 @@ export default function EmployerTable() {
         setSubscriptions(response.data);
       } catch (error) {
         console.log("error while fetching subs", error);
+        setState({
+          severity: "error",
+          open: true,
+          message: error.code,
+        });
       }
     };
     fetchSubs();
@@ -310,7 +334,26 @@ export default function EmployerTable() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const handleStatus = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/updateEmployerStatus`
+      );
+      console.log("Successfully updated status", response.data);
+      setState({
+        severity: "success",
+        open: true,
+        message: "Succesfully updated!",
+      });
+    } catch (error) {
+      console.log("error while updating", error);
+      setState({
+        severity: "error",
+        open: true,
+        message: error.code,
+      });
+    }
+  };
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -331,10 +374,22 @@ export default function EmployerTable() {
   }));
   return (
     <>
-  
+      <Snackbar
+        open={state.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={state.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {state.message}
+        </Alert>
+      </Snackbar>
       <Grid container spacing={2} direction="row">
         {/* Card for Editing Subscription */}
-
 
         {subscriptions.map((sub, index) => (
           <Grid item xs={3} key={index}>
@@ -409,6 +464,9 @@ export default function EmployerTable() {
                       variant="contained"
                       sx={{ backgroundColor: "success.main" }}
                       startIcon={<CheckCircleSharp />}
+                      onClick={() => {
+                        handleStatus("approve");
+                      }}
                     >
                       Approve
                     </Button>
@@ -418,6 +476,9 @@ export default function EmployerTable() {
                       variant="contained"
                       sx={{ backgroundColor: "error.main" }}
                       startIcon={<Error />}
+                      onClick={() => {
+                        handleStatus("reject");
+                      }}
                     >
                       Reject
                     </Button>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -9,6 +9,8 @@ import {
   Grid,
   Paper,
   Button,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
@@ -17,6 +19,11 @@ import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const [state, setState] = useState({
+    open: false,
+    message: "",
+    severity: "error",
+  });
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     jobSeekerId: Yup.string().required("Jobseeker ID is required"),
@@ -25,7 +32,13 @@ const Profile = () => {
     skills: Yup.string().required("Skills are required"),
     experience: Yup.string().required("Experience is required"),
   });
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
+    setState((prev) => ({ ...prev, message: "", open: false }));
+  };
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -44,8 +57,18 @@ const Profile = () => {
           values
         );
         console.log("upadte successfiuull", response);
+        setState({
+          severity: "success",
+          open: true,
+          message: "Succesfully Updated profile",
+        });
       } catch (error) {
         console.log("error while updating", error);
+        setState({
+          severity: "error",
+          open: true,
+          message: 'Error while updating profile',
+        });
       }
     },
   });
@@ -66,12 +89,28 @@ const Profile = () => {
         formik.setFieldValue("experience", response.data.experience);
       } catch (error) {
         console.log("error fetching profile", error);
+        setState({
+          severity: "error",
+          open: true,
+          message: error.code,
+        });
       }
     };
     fetchProfile();
   }, []);
   return (
-    <Paper
+    <>
+     <Snackbar open={state.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={state.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {state.message}
+        </Alert>
+      </Snackbar>
+      <Paper
       elevation={3}
       style={{
         padding: "20px",
@@ -201,6 +240,8 @@ const Profile = () => {
         </Grid>
       </Grid>
     </Paper>
+    </>
+   
   );
 };
 

@@ -11,6 +11,7 @@ import ButtonBase from "@mui/material/ButtonBase";
 import { useState } from "react";
 import { useTheme } from "@emotion/react";
 import {
+  Alert,
   Button,
   Card,
   CardContent,
@@ -21,6 +22,7 @@ import {
   MenuItem,
   Modal,
   Select,
+  Snackbar,
   Stack,
 } from "@mui/material";
 import {
@@ -57,7 +59,11 @@ const ViewAll = () => {
   const [salaryFrom, setSalaryFrom] = useState("");
   const [salaryTo, setSalaryTo] = useState("");
   const [jobMode, setJobMode] = useState([]);
-
+  const [state, setState] = useState({
+    open: false,
+    message: "",
+    severity: "error",
+  });
   const handleApplyFilters = () => {
     const filters = {
       experience: { from: experienceFrom, to: experienceTo },
@@ -112,7 +118,13 @@ const ViewAll = () => {
     // Update filtered jobs state
     setFetchedJobs(filteredResult);
   };
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
+    setState((prev) => ({ ...prev, message: "", open: false }));
+  };
   const handleSubmit = async () => {
     try {
       const response = await axios.post(`http://localhost:8080/applyJob`, {
@@ -139,6 +151,11 @@ const ViewAll = () => {
         );
       } catch (error) {
         console.log("error", error);
+        setState({
+          severity: "error",
+          open: true,
+          message: error.code,
+        });
       }
     };
     fetchJobs();
@@ -306,6 +323,16 @@ const ViewAll = () => {
           </Grid>
         </Grid>
       </Modal>
+      <Snackbar open={state.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={state.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {state.message}
+        </Alert>
+      </Snackbar>
       <Stack direction={"row"} spacing={2}>
         <div style={{ backgroundColor: blue[100], height: "100vh" }}>
           <Button

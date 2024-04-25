@@ -193,6 +193,11 @@ export default function ActiveJobs() {
   const [jobDetails, setJobDetails] = React.useState({});
   const [dummy, setDummy] = React.useState(false);
   const [jobseekerRow, setJobSeekerRow] = useState([]);
+  const [state, setState] = useState({
+    open: false,
+    message: "",
+    severity: "error",
+  });
   const handleOpenCloseJobModal = () => setOpenCloseJobModal(true);
   const handleCloseCloseJobModal = () => setOpenCloseJobModal(false);
 
@@ -205,6 +210,11 @@ export default function ActiveJobs() {
       console.log("closed application", response);
     } catch (error) {
       console.log(error);
+      setState({
+        severity: "error",
+        open: true,
+        message: error.code,
+      });
     }
     console.log("Job closed");
     handleCloseCloseJobModal();
@@ -221,6 +231,11 @@ export default function ActiveJobs() {
         setJobs(response.data);
       } catch (error) {
         console.log("error getting jobs", error);
+        setState({
+          severity: "error",
+          open: true,
+          message: error.code,
+        });
       }
     };
     fetchData();
@@ -238,6 +253,11 @@ export default function ActiveJobs() {
         setJobSeekerRow(response.data);
       } catch (error) {
         console.log("error while job seekers", error);
+        setState({
+          severity: "error",
+          open: true,
+          message: error.code,
+        });
       }
     };
     if (jobSeekers) {
@@ -274,9 +294,19 @@ export default function ActiveJobs() {
         formValues
       );
       console.log("the job is upated", response);
+      setState({
+        severity: "success",
+        open: true,
+        message: "Job updated Succesfully",
+      });
       setDummy(!dummy);
     } catch (error) {
       console.log("error while updating job", error);
+      setState({
+        severity: "error",
+        open: true,
+        message: error.code,
+      });
     }
     handleClose(); // Close the modal after submission
   };
@@ -304,16 +334,36 @@ export default function ActiveJobs() {
       border: 0,
     },
   }));
-const handleMail = async(obj)=>{
-try {
-  const response = await axios.post(`http://localhost:8080/Mail?employeerEmailId=${localStorage.getItem('email')}&jobseekerMailId=${obj.emailId}&username=${obj.name}&status=${obj.status}&jobId=${job}`)
-  const response2 = await axios.post(`http://localhost:8080/updateStatus`,{appliedBy : obj.emailId, jobId : job, status : obj.status})
-  console.log("status updated",response2.data)
-  console.log("mail sent succesfully",response.data)
-} catch (error) {
-  console.log("Error while sending mail",error)
-}
-}
+  const handleMail = async (obj) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/Mail?employeerEmailId=${localStorage.getItem(
+          "email"
+        )}&jobseekerMailId=${obj.emailId}&username=${obj.name}&status=${
+          obj.status
+        }&jobId=${job}`
+      );
+      const response2 = await axios.post(`http://localhost:8080/updateStatus`, {
+        appliedBy: obj.emailId,
+        jobId: job,
+        status: obj.status,
+      });
+      console.log("status updated", response2.data);
+      console.log("mail sent succesfully", response.data);
+      setState({
+        severity: "success",
+        open: true,
+        message: "Mail Sent",
+      });
+    } catch (error) {
+      console.log("Error while sending mail", error);
+      setState({
+        severity: "error",
+        open: true,
+        message: error.code,
+      });
+    }
+  };
   return (
     <Box
       sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
@@ -784,7 +834,6 @@ try {
                   <StyledTableCell align="center">Review</StyledTableCell>
                   <StyledTableCell align="center">Approve</StyledTableCell>
                   <StyledTableCell align="center">Reject</StyledTableCell>
-
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -818,7 +867,7 @@ try {
                       <Button
                         variant="contained"
                         sx={{ backgroundColor: "warning.main", p: 2 }}
-                        onClick={()=>handleMail({ status : "review", ...row })}
+                        onClick={() => handleMail({ status: "review", ...row })}
                       >
                         <Icon>
                           <RemoveRedEye />
@@ -829,7 +878,9 @@ try {
                       <Button
                         variant="contained"
                         sx={{ backgroundColor: "success.main", p: 2 }}
-                        onClick={()=>handleMail({ status : "approve", ...row })}
+                        onClick={() =>
+                          handleMail({ status: "approve", ...row })
+                        }
                       >
                         <Icon>
                           <DoneAllRounded />
@@ -840,7 +891,7 @@ try {
                       <Button
                         variant="contained"
                         sx={{ backgroundColor: "error.main", p: 2 }}
-                        onClick={()=>handleMail({ status : "reject", ...row })}
+                        onClick={() => handleMail({ status: "reject", ...row })}
                       >
                         <Icon>
                           <Error />

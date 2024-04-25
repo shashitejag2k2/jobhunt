@@ -3,10 +3,13 @@ import Header from "./Header";
 import PageBody from "./PageBody";
 import { useState } from "react";
 import {
+  Alert,
   Box,
   Button,
+  Chip,
   IconButton,
   Paper,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -35,26 +38,44 @@ import PropTypes from "prop-types";
 import { useTheme } from "@emotion/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { blue, green, orange, red } from "@mui/material/colors";
+const statusColors = {
+  Review: orange[400],
+  Pending: blue[300],
+  Rejected: red[300],
+  Approved: green[300],
+};
 const TrackApplications = () => {
   const [showTable, setShowTable] = useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [allMyJobs, setAllMyJobs] = useState([]);
+  const [state, setState] = useState({
+    open: false,
+    message: "",
+    severity: "error",
+  });
   const navigate = useNavigate();
   useState(() => {
     const fetchMyJobs = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/getAllJobsAppliedByJobSeeker?email=${localStorage.getItem("email")}`
+          `http://localhost:8080/getAllJobsAppliedByJobSeeker?email=${localStorage.getItem(
+            "email"
+          )}`
         );
         console.log("fetched my jobs", response.data);
         setAllMyJobs(response.data);
       } catch (error) {
         console.log("error fetching your jobs", error);
+        setState({
+          severity: "error",
+          open: true,
+          message: error.code,
+        });
       }
     };
-      fetchMyJobs();
+    fetchMyJobs();
   }, []);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -82,7 +103,13 @@ const TrackApplications = () => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
+    setState((prev) => ({ ...prev, message: "", open: false }));
+  };
   const rows = [
     createData("Software Developer", 7, 583),
     createData("Data Analyst", 9, 214),
@@ -160,7 +187,7 @@ const TrackApplications = () => {
     );
   }
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - allMyJobs.length) : 0;
   function createData(name, calories, fat) {
     return { name, calories, fat };
   }
@@ -173,6 +200,16 @@ const TrackApplications = () => {
 
   return (
     <div>
+      <Snackbar open={state.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={state.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {state.message}
+        </Alert>
+      </Snackbar>
       <Button
         variant="contained"
         onClick={() => {
@@ -191,7 +228,7 @@ const TrackApplications = () => {
               <StyledTableCell>Posted By</StyledTableCell>
               <StyledTableCell>Applied By</StyledTableCell>
               <StyledTableCell>Status</StyledTableCell>
-              <StyledTableCell >Job ID</StyledTableCell>
+              <StyledTableCell>Job ID</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -200,7 +237,7 @@ const TrackApplications = () => {
                   page * rowsPerPage,
                   page * rowsPerPage + rowsPerPage
                 )
-              : rows
+              : allMyJobs
             ).map((row) => (
               <TableRow key={row.jobId}>
                 <TableCell component="th" scope="row">
@@ -208,7 +245,16 @@ const TrackApplications = () => {
                 </TableCell>
                 <TableCell style={{ width: 160 }}>{row.postedBy}</TableCell>
                 <TableCell style={{ width: 160 }}>{row.appliedBy}</TableCell>
-                <TableCell style={{ width: 160 }}>{row.status || 'not reviewed'}</TableCell>
+                <TableCell style={{ width: 160 }}>
+                  <Chip
+                    size="medium"
+                    sx={{
+                      p: 2,
+                      backgroundColor: statusColors[row.status],
+                    }}
+                    label={row.status || "not reviewed"}
+                  />
+                </TableCell>
                 <TableCell style={{ width: 160 }}>{row.jobId}</TableCell>
               </TableRow>
             ))}
@@ -223,7 +269,7 @@ const TrackApplications = () => {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={rows.length}
+                count={allMyJobs.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 slotProps={{
