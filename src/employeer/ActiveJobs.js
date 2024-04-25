@@ -16,10 +16,12 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import {
+  Alert,
   Button,
   Grid,
   Icon,
   Modal,
+  Snackbar,
   Stack,
   TableHead,
   TextField,
@@ -128,6 +130,7 @@ function createData(jobDetails) {
     minimumSalary,
     maximumSalary,
     postedBy,
+    jobApplicationStatus
   } = jobDetails;
 
   return {
@@ -146,6 +149,7 @@ function createData(jobDetails) {
     minimumSalary,
     maximumSalary,
     postedBy,
+    jobApplicationStatus
   };
 }
 
@@ -194,6 +198,7 @@ export default function ActiveJobs() {
   const [dummy, setDummy] = React.useState(false);
   const [jobseekerRow, setJobSeekerRow] = useState([]);
   const [jobTitle, setJobTitle] = useState("");
+  const [jobClose,setJobClose] = useState('')
   const [state, setState] = useState({
     open: false,
     message: "",
@@ -287,6 +292,26 @@ export default function ActiveJobs() {
       [name]: value,
     }));
   };
+  const handleApplicationCLose = async()=>{
+    try {
+     const response = await axios.put(`http://localhost:8080/updateJobApplicationStatus?jobId=${jobClose}`);
+     console.log('updated succesfully',response)
+     setState({
+      severity: "success",
+      open: true,
+      message: "Job updated Succesfully",
+    });
+    setDummy(!dummy)
+    handleCloseCloseJobModal();
+    } catch (error) {
+      console.log("error while updating",error)
+      setState({
+        severity: "error",
+        open: true,
+        message: error.code,
+      });
+    }
+  }
   const handleSubmit = async () => {
     console.log("Form submitted:", formValues);
     try {
@@ -364,6 +389,13 @@ export default function ActiveJobs() {
         message: error.code,
       });
     }
+  };
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setState((prev) => ({ ...prev, message: "", open: false }));
   };
   return (
     <Box
@@ -538,7 +570,7 @@ export default function ActiveJobs() {
             Are you sure you want to close this job?
           </p>
           <Button
-            onClick={handleConfirmCloseJob}
+            onClick={handleApplicationCLose}
             variant="contained"
             sx={{ mr: 2 }}
           >
@@ -673,6 +705,16 @@ export default function ActiveJobs() {
           </Grid>
         </Grid>
       </Modal>
+      <Snackbar open={state.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={state.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {state.message}
+        </Alert>
+      </Snackbar>
       <Stack direction={"column"}>
         {!job && (
           <TableContainer component={Paper}>
@@ -752,7 +794,9 @@ export default function ActiveJobs() {
                         onClick={() => {
                           handleOpenCloseJobModal();
                           setJobDetails(row);
+                          setJobClose(row.jobId)
                         }}
+                        disabled={row.jobApplicationStatus == 'closed'}
                         startIcon={<Close />}
                         sx={{ backgroundColor: "error.main" }}
                       >

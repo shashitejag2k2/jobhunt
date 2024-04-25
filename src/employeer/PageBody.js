@@ -47,6 +47,7 @@ const PageBody = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [totalCount, setTotalCount] = useState(0);
   const [mySubscription, setMySubscription] = useState(false);
+  const [expriryDate, setExpiryDate] = useState('')
   const [state, setState] = useState({
     open: false,
     message: "",
@@ -82,7 +83,7 @@ const PageBody = () => {
   }));
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(`http://localhost:8080/upgradeSub`, {
+      const response = await axios.post(`http://localhost:8080/updateSubscription`, {
         subscription: subs[selectedCard],
       });
       console.log("sucesfully upgraded", response);
@@ -118,7 +119,8 @@ const PageBody = () => {
         console.log("succesfully fetched subs", response2.data);
 
         setTotalCount(response.data.jobCount);
-        setMySubscription(response2.data);
+        setMySubscription(response2.data)
+        setExpiryDate(response.data.SubscriptionExprirationDate)
       } catch (error) {
         console.log("error fetching stats", error);
         setState({
@@ -336,6 +338,7 @@ const PageBody = () => {
               </Icon>
             </Typography>
             <Typography variant="h4">{mySubscription}</Typography>
+            <Typography variant="h6" color="black">{expriryDate}</Typography>
           </CustomPaper>
         </Grid>
       </Grid>
