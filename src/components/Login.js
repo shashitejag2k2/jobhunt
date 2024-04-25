@@ -20,7 +20,7 @@ import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import axios from "axios";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Email is required"),
+  emailId: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string().required("Password is required"),
 });
 const Login = () => {
@@ -38,7 +38,7 @@ const Login = () => {
   };
   const formik = useFormik({
     initialValues: {
-      email: "",
+      emailId: "",
       password: "",
     },
     validationSchema: validationSchema,
@@ -46,11 +46,11 @@ const Login = () => {
       JSON.stringify({ ...values, role: roles[value] }, null, 2);
       console.log(roles[value]);
       if (roles[value] === "Job Seeker") {
-        const email = values.email;
+        const email = values.emailId;
         try {
           const response = await axios.post(`http://localhost:8080/jobSeekerLogin`, values)
-          console.log("setting email",values.email);
-          localStorage.setItem("email",values.email)
+          console.log("setting email",values.emailId);
+          localStorage.setItem("email",values.emailId)
           navigate("/jobseeker", { state: { email } });
         } catch (error) {
           console.log('error login', error)
@@ -61,8 +61,8 @@ const Login = () => {
       } else if (roles[value] === "Employeer") {
         try {
           const response = await axios.post(`http://localhost:8080/employeerLogin`, values)
-          console.log("setting email",values.email);
-          localStorage.setItem("email",values.email)
+          console.log("setting email",values.emailId);
+          localStorage.setItem("email",values.emailId)
           navigate("/employeer");
         } catch (error) {
           console.log('error login', error)
@@ -72,8 +72,8 @@ const Login = () => {
       else if (roles[value] === "Admin") {
         try {
           const response = await axios.post(`http://localhost:8080/adminLogin`, values)
-          console.log("setting email",values.email);
-          localStorage.setItem("email",values.email)
+          console.log("setting email",values.emailId);
+          localStorage.setItem("email",values.emailId)
           navigate("/admin");
         } catch (error) {
           console.log('error login', error)
@@ -107,14 +107,14 @@ const Login = () => {
               <TextField
                 fullWidth
                 id="email"
-                name="email"
+                name="emailId"
                 label="Email"
                 type="email"
-                value={formik.values.email}
+                value={formik.values.emailId}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
+                error={formik.touched.emailId && Boolean(formik.errors.emailId)}
+                helperText={formik.touched.emailId && formik.errors.emailId}
                 margin="normal"
               />
               <TextField

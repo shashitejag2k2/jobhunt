@@ -40,7 +40,7 @@ const Layout = () => {
             aria-label="menu"
             sx={{ mr: 2 }}
           ></IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 2 }}>
             Job Hunt
           </Typography>
           {localStorage.getItem('email') && <Stack direction={"row"} spacing={2}>

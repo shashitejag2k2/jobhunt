@@ -28,6 +28,8 @@ import {
 import {
   ArrowBack,
   Close,
+  DoneAllRounded,
+  Error,
   Forward,
   MailOutline,
   RemoveRedEye,
@@ -228,7 +230,7 @@ export default function ActiveJobs() {
     const getJobseekers = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/getSeekersByJobs?employeerMail=${localStorage.getItem(
+          `http://localhost:8080/getSeekersByJob?employeerMail=${localStorage.getItem(
             "email"
           )}&jobId=${job}`
         );
@@ -302,7 +304,16 @@ export default function ActiveJobs() {
       border: 0,
     },
   }));
-
+const handleMail = async(obj)=>{
+try {
+  const response = await axios.post(`http://localhost:8080/Mail?employeerEmailId=${localStorage.getItem('email')}&jobseekerMailId=${obj.emailId}&username=${obj.name}&status=${obj.status}&jobId=${job}`)
+  const response2 = await axios.post(`http://localhost:8080/updateStatus`,{appliedBy : obj.emailId, jobId : job, status : obj.status})
+  console.log("status updated",response2.data)
+  console.log("mail sent succesfully",response.data)
+} catch (error) {
+  console.log("Error while sending mail",error)
+}
+}
   return (
     <Box
       sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
@@ -770,6 +781,10 @@ export default function ActiveJobs() {
                   <StyledTableCell align="center">College Name</StyledTableCell>
                   <StyledTableCell align="center">Experience</StyledTableCell>
                   <StyledTableCell align="center">Skills</StyledTableCell>
+                  <StyledTableCell align="center">Review</StyledTableCell>
+                  <StyledTableCell align="center">Approve</StyledTableCell>
+                  <StyledTableCell align="center">Reject</StyledTableCell>
+
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -803,6 +818,7 @@ export default function ActiveJobs() {
                       <Button
                         variant="contained"
                         sx={{ backgroundColor: "warning.main", p: 2 }}
+                        onClick={()=>handleMail({ status : "review", ...row })}
                       >
                         <Icon>
                           <RemoveRedEye />
@@ -813,9 +829,21 @@ export default function ActiveJobs() {
                       <Button
                         variant="contained"
                         sx={{ backgroundColor: "success.main", p: 2 }}
+                        onClick={()=>handleMail({ status : "approve", ...row })}
                       >
                         <Icon>
-                          <MailOutline />
+                          <DoneAllRounded />
+                        </Icon>
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        sx={{ backgroundColor: "error.main", p: 2 }}
+                        onClick={()=>handleMail({ status : "reject", ...row })}
+                      >
+                        <Icon>
+                          <Error />
                         </Icon>
                       </Button>
                     </TableCell>
