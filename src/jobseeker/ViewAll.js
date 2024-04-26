@@ -42,11 +42,354 @@ import axios from "axios";
 
 const ViewAll = () => {
   const navigate = useNavigate();
-  const [fetchedJobs, setFetchedJobs] = useState([]);
+  const [fetchedJobs, setFetchedJobs] = useState([
+    {
+      title: "Software Engineer",
+      experience: "0yrs-5yrs",
+      description: "Developing software applications",
+      jobId: 1,
+      jobTitle: "Software Engineer",
+      jobPositioning: null,
+      employeeType: "Full-time",
+      jobDescription: "Developing software applications",
+      keySkills: "Java, Spring Boot, Hibernate",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 5,
+      location: "Pune",
+      jobMode: "On-site",
+      educationalQualification: "Bachelor's degree",
+      companyName: "Hitachi Vantara",
+      minimumSalary: 6.5,
+      maximumSalary: 7.5,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "Full Stack Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 2,
+      jobTitle: "Full Stack Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "On-Site",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Example Company",
+      minimumSalary: 25,
+      maximumSalary: 30,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Full Stack Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 3,
+      jobTitle: "Full Stack Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "capgemini Company",
+      minimumSalary: 20,
+      maximumSalary: 35,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Java Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 4,
+      jobTitle: "Java Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "capgemini Company",
+      minimumSalary: 35,
+      maximumSalary: 40,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "AI Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 5,
+      jobTitle: "AI Developer",
+      jobPositioning: "Normal",
+      employeeType: "Internship",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "On-site",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Cognizent Company",
+      minimumSalary: 50,
+      maximumSalary: 55,
+      postedBy: "shashitejjag2k2@gmail.com",
+      jobApplicationStatus: null,
+    },
+    {
+      title: "Frontend Developer",
+      experience: "2yrs-5yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 6,
+      jobTitle: "Frontend Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 2,
+      maximumWorkExperience: 5,
+      location: "Pune",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Cognizent Company",
+      minimumSalary: 7.5,
+      maximumSalary: 8.5,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Systems Engineer ",
+      experience: "0yrs-0yrs",
+      description: "Role",
+      jobId: 7,
+      jobTitle: "Systems Engineer ",
+      jobPositioning: null,
+      employeeType: "Internship",
+      jobDescription: "Role",
+      keySkills: "Linux, Networking",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 0,
+      location: "HYDERABAD",
+      jobMode: "Hybrid",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Hitachi Vantara",
+      minimumSalary: 0,
+      maximumSalary: 0,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "Network engineer",
+      experience: "0yrs-0yrs",
+      description:
+        "Minimum 3+ yrs experience in the field of on-premies servers.",
+      jobId: 9,
+      jobTitle: "Network engineer",
+      jobPositioning: null,
+      employeeType: "Full-time",
+      jobDescription:
+        "Minimum 3+ yrs experience in the field of on-premies servers.",
+      keySkills: "linux",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 0,
+      location: "Vizag",
+      jobMode: "Hybrid",
+      educationalQualification: "PhD",
+      companyName: "hitachi ds",
+      minimumSalary: 0,
+      maximumSalary: 0,
+      postedBy: null,
+      jobApplicationStatus: null,
+    },
+  ]);
   const [fetchedHighJobs, setFetchedHighJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = React.useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [filteredJobs, setFilteredJobs] = useState([
+    {
+      title: "Software Engineer",
+      experience: "0yrs-5yrs",
+      description: "Developing software applications",
+      jobId: 1,
+      jobTitle: "Software Engineer",
+      jobPositioning: null,
+      employeeType: "Full-time",
+      jobDescription: "Developing software applications",
+      keySkills: "Java, Spring Boot, Hibernate",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 5,
+      location: "Pune",
+      jobMode: "On-site",
+      educationalQualification: "Bachelor's degree",
+      companyName: "Hitachi Vantara",
+      minimumSalary: 6.5,
+      maximumSalary: 7.5,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "Full Stack Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 2,
+      jobTitle: "Full Stack Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "On-Site",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Example Company",
+      minimumSalary: 25,
+      maximumSalary: 30,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Full Stack Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 3,
+      jobTitle: "Full Stack Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "capgemini Company",
+      minimumSalary: 20,
+      maximumSalary: 35,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Java Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 4,
+      jobTitle: "Java Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "capgemini Company",
+      minimumSalary: 35,
+      maximumSalary: 40,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "AI Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 5,
+      jobTitle: "AI Developer",
+      jobPositioning: "Normal",
+      employeeType: "Internship",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "on-site",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Cognizent Company",
+      minimumSalary: 50,
+      maximumSalary: 55,
+      postedBy: "shashitejjag2k2@gmail.com",
+      jobApplicationStatus: null,
+    },
+    {
+      title: "Frontend Developer",
+      experience: "2yrs-5yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 6,
+      jobTitle: "Frontend Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 2,
+      maximumWorkExperience: 5,
+      location: "Pune",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Cognizent Company",
+      minimumSalary: 7.5,
+      maximumSalary: 8.5,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Systems Engineer ",
+      experience: "0yrs-0yrs",
+      description: "Role",
+      jobId: 7,
+      jobTitle: "Systems Engineer ",
+      jobPositioning: null,
+      employeeType: "Internship",
+      jobDescription: "Role",
+      keySkills: "Linux, Networking",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 0,
+      location: "HYDERABAD",
+      jobMode: null,
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Hitachi Vantara",
+      minimumSalary: 0,
+      maximumSalary: 0,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "Network engineer",
+      experience: "0yrs-0yrs",
+      description:
+        "Minimum 3+ yrs experience in the field of on-premies servers.",
+      jobId: 9,
+      jobTitle: "Network engineer",
+      jobPositioning: null,
+      employeeType: "Full-time",
+      jobDescription:
+        "Minimum 3+ yrs experience in the field of on-premies servers.",
+      keySkills: "linux",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 0,
+      location: "Vizag",
+      jobMode: null,
+      educationalQualification: "PhD",
+      companyName: "hitachi ds",
+      minimumSalary: 0,
+      maximumSalary: 0,
+      postedBy: null,
+      jobApplicationStatus: null,
+    },
+  ]);
   const handleClose = () => {
     setIsOpen(false);
   };
@@ -58,6 +401,368 @@ const ViewAll = () => {
   const [location, setLocation] = useState([]);
   const [salaryFrom, setSalaryFrom] = useState("");
   const [salaryTo, setSalaryTo] = useState("");
+  
+  const skillsArray = []
+  const locationJobs = []
+  const temp = [
+    {
+      title: "Software Engineer",
+      experience: "0yrs-5yrs",
+      description: "Developing software applications",
+      jobId: 1,
+      jobTitle: "Software Engineer",
+      jobPositioning: null,
+      employeeType: "Full-time",
+      jobDescription: "Developing software applications",
+      keySkills: "Java, Spring Boot, Hibernate",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 5,
+      location: "Pune",
+      jobMode: "On-site",
+      educationalQualification: "Bachelor's degree",
+      companyName: "Hitachi Vantara",
+      minimumSalary: 6.5,
+      maximumSalary: 7.5,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "Full Stack Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 2,
+      jobTitle: "Full Stack Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "On-Site",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Example Company",
+      minimumSalary: 25,
+      maximumSalary: 30,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Full Stack Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 3,
+      jobTitle: "Full Stack Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "capgemini Company",
+      minimumSalary: 20,
+      maximumSalary: 35,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Java Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 4,
+      jobTitle: "Java Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "capgemini Company",
+      minimumSalary: 35,
+      maximumSalary: 40,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "AI Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 5,
+      jobTitle: "AI Developer",
+      jobPositioning: "Normal",
+      employeeType: "Internship",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "On-site",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Cognizent Company",
+      minimumSalary: 50,
+      maximumSalary: 55,
+      postedBy: "shashitejjag2k2@gmail.com",
+      jobApplicationStatus: null,
+    },
+    {
+      title: "Frontend Developer",
+      experience: "2yrs-5yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 6,
+      jobTitle: "Frontend Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 2,
+      maximumWorkExperience: 5,
+      location: "Pune",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Cognizent Company",
+      minimumSalary: 7.5,
+      maximumSalary: 8.5,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Systems Engineer ",
+      experience: "0yrs-0yrs",
+      description: "Role",
+      jobId: 7,
+      jobTitle: "Systems Engineer ",
+      jobPositioning: null,
+      employeeType: "Internship",
+      jobDescription: "Role",
+      keySkills: "Linux, Networking",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 0,
+      location: "HYDERABAD",
+      jobMode: "Hybrid",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Hitachi Vantara",
+      minimumSalary: 0,
+      maximumSalary: 0,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "Network engineer",
+      experience: "0yrs-0yrs",
+      description:
+        "Minimum 3+ yrs experience in the field of on-premies servers.",
+      jobId: 9,
+      jobTitle: "Network engineer",
+      jobPositioning: null,
+      employeeType: "Full-time",
+      jobDescription:
+        "Minimum 3+ yrs experience in the field of on-premies servers.",
+      keySkills: "linux",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 0,
+      location: "Vizag",
+      jobMode: "Hybrid",
+      educationalQualification: "PhD",
+      companyName: "hitachi ds",
+      minimumSalary: 0,
+      maximumSalary: 0,
+      postedBy: null,
+      jobApplicationStatus: null,
+    },
+  ].map((job) => skillsArray.concat(job.keySkills.split(",")));
+  const tempLocation = [
+    {
+      title: "Software Engineer",
+      experience: "0yrs-5yrs",
+      description: "Developing software applications",
+      jobId: 1,
+      jobTitle: "Software Engineer",
+      jobPositioning: null,
+      employeeType: "Full-time",
+      jobDescription: "Developing software applications",
+      keySkills: "Java, Spring Boot, Hibernate",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 5,
+      location: "Pune",
+      jobMode: "On-site",
+      educationalQualification: "Bachelor's degree",
+      companyName: "Hitachi Vantara",
+      minimumSalary: 6.5,
+      maximumSalary: 7.5,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "Full Stack Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 2,
+      jobTitle: "Full Stack Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "On-Site",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Example Company",
+      minimumSalary: 25,
+      maximumSalary: 30,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Full Stack Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 3,
+      jobTitle: "Full Stack Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "capgemini Company",
+      minimumSalary: 20,
+      maximumSalary: 35,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Java Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 4,
+      jobTitle: "Java Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "capgemini Company",
+      minimumSalary: 35,
+      maximumSalary: 40,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "AI Developer",
+      experience: "10yrs-15yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 5,
+      jobTitle: "AI Developer",
+      jobPositioning: "Normal",
+      employeeType: "Internship",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 10,
+      maximumWorkExperience: 15,
+      location: "New York",
+      jobMode: "On-site",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Cognizent Company",
+      minimumSalary: 50,
+      maximumSalary: 55,
+      postedBy: "shashitejjag2k2@gmail.com",
+      jobApplicationStatus: null,
+    },
+    {
+      title: "Frontend Developer",
+      experience: "2yrs-5yrs",
+      description: "This is a Full Stack Developer position.",
+      jobId: 6,
+      jobTitle: "Frontend Developer",
+      jobPositioning: "Normal",
+      employeeType: "Full-time",
+      jobDescription: "This is a Full Stack Developer position.",
+      keySkills: "Java, JavaScript, React",
+      minimumWorkExperience: 2,
+      maximumWorkExperience: 5,
+      location: "Pune",
+      jobMode: "Remote",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Cognizent Company",
+      minimumSalary: 7.5,
+      maximumSalary: 8.5,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "closed",
+    },
+    {
+      title: "Systems Engineer ",
+      experience: "0yrs-0yrs",
+      description: "Role",
+      jobId: 7,
+      jobTitle: "Systems Engineer ",
+      jobPositioning: null,
+      employeeType: "Internship",
+      jobDescription: "Role",
+      keySkills: "Linux, Networking",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 0,
+      location: "HYDERABAD",
+      jobMode: "Hybrid",
+      educationalQualification: "Bachelor's Degree",
+      companyName: "Hitachi Vantara",
+      minimumSalary: 0,
+      maximumSalary: 0,
+      postedBy: "shashiteja@gmail.com",
+      jobApplicationStatus: "open",
+    },
+    {
+      title: "Network engineer",
+      experience: "0yrs-0yrs",
+      description:
+        "Minimum 3+ yrs experience in the field of on-premies servers.",
+      jobId: 9,
+      jobTitle: "Network engineer",
+      jobPositioning: null,
+      employeeType: "Full-time",
+      jobDescription:
+        "Minimum 3+ yrs experience in the field of on-premies servers.",
+      keySkills: "linux",
+      minimumWorkExperience: 0,
+      maximumWorkExperience: 0,
+      location: "Vizag",
+      jobMode: "Hybrid",
+      educationalQualification: "PhD",
+      companyName: "hitachi ds",
+      minimumSalary: 0,
+      maximumSalary: 0,
+      postedBy: null,
+      jobApplicationStatus: null,
+    },
+  ].map((job) => locationJobs.concat(job.location));
+  function flattenArray(arr) {
+    return arr.reduce(
+      (acc, val) =>
+        Array.isArray(val) ? acc.concat(flattenArray(val)) : acc.concat(val),
+      []
+    );
+  }
+
+  const uniqueSkills = [...new Set(flattenArray(temp))]
+  console.log("KeySkills",uniqueSkills);
+
+  const uniqueLocations = [...new Set(flattenArray(tempLocation))]
+  console.log("KeySkills",uniqueLocations);
+
+
   const [jobMode, setJobMode] = useState([]);
   const [state, setState] = useState({
     open: false,
@@ -73,50 +778,40 @@ const ViewAll = () => {
       salary: { from: salaryFrom, to: salaryTo },
       jobMode,
     };
-
+    console.log("filters", fetchedJobs, filters);
     // Apply filters to fetchedJobs
     const filteredResult = fetchedJobs.filter((job) => {
-      // Apply each filter condition
-      const isExperienceInRange =
-        (!filters.experience.from ||
-          parseFloat(job.experience) >= parseFloat(filters.experience.from)) &&
-        (!filters.experience.to ||
-          parseFloat(job.experience) <= parseFloat(filters.experience.to));
-
       const isEmployeeTypeMatch =
         filters.employeeType.length === 0 ||
         filters.employeeType.includes(job.employeeType);
 
       const isKeySkillsMatch =
         filters.keySkills.length === 0 ||
-        filters.keySkills.every((skill) => job.keySkills.includes(skill));
+        filters.keySkills.some((skill) =>
+          job.keySkills.split(",").includes(skill)
+        );
 
       const isLocationMatch =
         filters.location.length === 0 ||
         filters.location.includes(job.location);
-
-      const isSalaryInRange =
-        (!filters.salary.from ||
-          parseFloat(job.salary) >= parseFloat(filters.salary.from)) &&
-        (!filters.salary.to ||
-          parseFloat(job.salary) <= parseFloat(filters.salary.to));
 
       const isJobModeMatch =
         filters.jobMode.length === 0 || filters.jobMode.includes(job.jobMode);
 
       // Return true if all conditions are met
       return (
-        isExperienceInRange &&
+        // isExperienceInRange &&
         isEmployeeTypeMatch &&
         isKeySkillsMatch &&
         isLocationMatch &&
-        isSalaryInRange &&
         isJobModeMatch
+        // isLocationMatch &&
+        // isSalaryInRange &&
       );
     });
 
     // Update filtered jobs state
-    setFetchedJobs(filteredResult);
+    setFilteredJobs(filteredResult);
   };
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -141,6 +836,7 @@ const ViewAll = () => {
       try {
         const response = await axios.get(`http://localhost:8080/getAlljobs`);
         console.log("all jobs", response.data);
+
         setFetchedJobs(
           response.data?.map((job) => ({
             title: job.jobTitle,
@@ -149,6 +845,19 @@ const ViewAll = () => {
             ...job,
           }))
         );
+        console.log(
+          "uniqskils",
+          setKeySkills([
+            ...new Set(
+              flattenArray(
+                response.data.map((job) =>
+                  skillsArray.concat(job.keySkills.split(","))
+                )
+              )
+            ),
+          ])
+        );
+        // setUniqSkills();
       } catch (error) {
         console.log("error", error);
         setState({
@@ -161,7 +870,7 @@ const ViewAll = () => {
     fetchJobs();
   }, []);
 
-  const items = fetchedJobs?.map((job) => (
+  const items = filteredJobs?.map((job) => (
     <Card sx={{ display: "flex", m: 2, py: 6 }}>
       <Box
         sx={{
@@ -323,7 +1032,11 @@ const ViewAll = () => {
           </Grid>
         </Grid>
       </Modal>
-      <Snackbar open={state.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+      <Snackbar
+        open={state.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
         <Alert
           onClose={handleSnackbarClose}
           severity={state.severity}
@@ -334,7 +1047,9 @@ const ViewAll = () => {
         </Alert>
       </Snackbar>
       <Stack direction={"row"} spacing={2}>
-        <div style={{ backgroundColor: blue[100], height: "100vh" }}>
+        <div
+          style={{ backgroundColor: blue[100], height: "100vh", width: "30%" }}
+        >
           <Button
             variant="contained"
             onClick={handleApplyFilters}
@@ -343,7 +1058,7 @@ const ViewAll = () => {
             Apply Filters
           </Button>
           <Grid container spacing={2} direction={"column"}>
-            <Grid
+            {/* <Grid
               item
               xs={1}
               sx={{
@@ -369,7 +1084,7 @@ const ViewAll = () => {
                   onChange={(e) => setExperienceTo(e.target.value)}
                 />
               </Stack>
-            </Grid>
+            </Grid>*/}
             <Grid item xs={1}>
               <Typography sx={{ display: "inline-block" }}>
                 Job Type:{" "}
@@ -381,8 +1096,9 @@ const ViewAll = () => {
                 onChange={(e) => setEmployeeType(e.target.value)}
                 label="Employee Type"
               >
-                <MenuItem value="fulltime">Full-time</MenuItem>
-                <MenuItem value="parttime">Part-time</MenuItem>
+                <MenuItem value="Full-time">Full-time</MenuItem>
+                <MenuItem value="Part-time">Part-time</MenuItem>
+                <MenuItem value="Internship">Internship</MenuItem>
               </Select>
             </Grid>
             <Grid item xs={3}>
@@ -394,11 +1110,8 @@ const ViewAll = () => {
                 onChange={(e) => setKeySkills(e.target.value)}
                 label="Key Skills"
               >
-                <MenuItem value="nodejs">Node.js</MenuItem>
-                <MenuItem value="mern">MERN Stack</MenuItem>
-                <MenuItem value="react">React</MenuItem>
-                <MenuItem value="mongodb">MongoDB</MenuItem>
-                <MenuItem value="java">Java</MenuItem>
+                {uniqueSkills.map((skill,index)=><MenuItem key={index} value={skill}>{skill}
+                </MenuItem>)}
               </Select>
             </Grid>
             <Grid item xs={3}>
@@ -412,12 +1125,11 @@ const ViewAll = () => {
                 onChange={(e) => setLocation(e.target.value)}
                 label="Location"
               >
-                <MenuItem value="hyderabad">Hyderabad</MenuItem>
-                <MenuItem value="pune">Pune</MenuItem>
-                <MenuItem value="mumbai">Mumbai</MenuItem>
+                {uniqueLocations.map((location,index)=><MenuItem key={index} value={location}>{location}
+                </MenuItem>)}
               </Select>
             </Grid>
-            <Grid item xs={1}>
+            {/* <Grid item xs={1}>
               <Typography sx={{ display: "inline-block" }}>Salary: </Typography>
               <Stack spacing={2} direction={"row"}>
                 <TextField
@@ -435,7 +1147,7 @@ const ViewAll = () => {
                   onChange={(e) => setSalaryTo(e.target.value)}
                 />
               </Stack>
-            </Grid>
+            </Grid> */}
             <Grid item xs={2}>
               <Typography sx={{ display: "inline-block" }}>
                 Job Mode:{" "}
@@ -447,9 +1159,9 @@ const ViewAll = () => {
                 onChange={(e) => setJobMode(e.target.value)}
                 label="Job Mode"
               >
-                <MenuItem value="remote">Remote</MenuItem>
-                <MenuItem value="hybrid">Hybrid</MenuItem>
-                <MenuItem value="onsite">Onsite</MenuItem>
+                <MenuItem value="Remote">Remote</MenuItem>
+                <MenuItem value="Hybrid">Hybrid</MenuItem>
+                <MenuItem value="On-site">Onsite</MenuItem>
               </Select>
             </Grid>
           </Grid>
