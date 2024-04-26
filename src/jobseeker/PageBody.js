@@ -197,6 +197,7 @@ const PageBody = (props) => {
   }, []);
   const searchJobs = async () => {
     try {
+      console.log("key word", searchTerm)
       const response = await axios.get(
         `http://localhost:8080/searchJobListings?keyword=${searchTerm}`
       );
@@ -207,7 +208,7 @@ const PageBody = (props) => {
         message: "Found Jobs",
       });
       setIsSearching(true);
-      setFetchedJobs(
+      setSearchedJobs(
         response.data?.map((job) => ({
           title: job.jobTitle,
           experience: `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`,

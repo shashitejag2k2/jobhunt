@@ -40,10 +40,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { blue, green, orange, red } from "@mui/material/colors";
 const statusColors = {
-  Review: orange[400],
-  Pending: blue[300],
-  Rejected: red[300],
-  Approved: green[300],
+  review: orange[400],
+  pending: blue[300],
+  reject: red[300],
+  approve: green[400],
 };
 const TrackApplications = () => {
   const [showTable, setShowTable] = useState(false);
@@ -225,9 +225,9 @@ const TrackApplications = () => {
           <TableHead>
             <TableRow>
               <StyledTableCell>Job Title</StyledTableCell>
-              <StyledTableCell>Posted By</StyledTableCell>
-              <StyledTableCell>Applied By</StyledTableCell>
-              <StyledTableCell>Status</StyledTableCell>
+              <StyledTableCell align="center">Posted By</StyledTableCell>
+              <StyledTableCell align="center">Applied By</StyledTableCell>
+              <StyledTableCell align="center">Status</StyledTableCell>
               <StyledTableCell>Job ID</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -245,12 +245,13 @@ const TrackApplications = () => {
                 </TableCell>
                 <TableCell style={{ width: 160 }}>{row.postedBy}</TableCell>
                 <TableCell style={{ width: 160 }}>{row.appliedBy}</TableCell>
-                <TableCell style={{ width: 160 }}>
+                <TableCell align="center" style={{ width: 160 }}>
                   <Chip
                     size="medium"
                     sx={{
                       p: 2,
                       backgroundColor: statusColors[row.status],
+                      fontWeight : 600
                     }}
                     label={row.status || "not reviewed"}
                   />

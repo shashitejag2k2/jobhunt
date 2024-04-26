@@ -28,6 +28,7 @@ import {
 import {
   Close,
   PlayArrow,
+  Refresh,
   Search,
   SkipNext,
   SkipPrevious,
@@ -218,178 +219,7 @@ const ViewAll = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = React.useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [filteredJobs, setFilteredJobs] = useState([
-    {
-      title: "Software Engineer",
-      experience: "0yrs-5yrs",
-      description: "Developing software applications",
-      jobId: 1,
-      jobTitle: "Software Engineer",
-      jobPositioning: null,
-      employeeType: "Full-time",
-      jobDescription: "Developing software applications",
-      keySkills: "Java, Spring Boot, Hibernate",
-      minimumWorkExperience: 0,
-      maximumWorkExperience: 5,
-      location: "Pune",
-      jobMode: "On-site",
-      educationalQualification: "Bachelor's degree",
-      companyName: "Hitachi Vantara",
-      minimumSalary: 6.5,
-      maximumSalary: 7.5,
-      postedBy: "shashiteja@gmail.com",
-      jobApplicationStatus: "open",
-    },
-    {
-      title: "Full Stack Developer",
-      experience: "10yrs-15yrs",
-      description: "This is a Full Stack Developer position.",
-      jobId: 2,
-      jobTitle: "Full Stack Developer",
-      jobPositioning: "Normal",
-      employeeType: "Full-time",
-      jobDescription: "This is a Full Stack Developer position.",
-      keySkills: "Java, JavaScript, React",
-      minimumWorkExperience: 10,
-      maximumWorkExperience: 15,
-      location: "New York",
-      jobMode: "On-Site",
-      educationalQualification: "Bachelor's Degree",
-      companyName: "Example Company",
-      minimumSalary: 25,
-      maximumSalary: 30,
-      postedBy: "shashiteja@gmail.com",
-      jobApplicationStatus: "closed",
-    },
-    {
-      title: "Full Stack Developer",
-      experience: "10yrs-15yrs",
-      description: "This is a Full Stack Developer position.",
-      jobId: 3,
-      jobTitle: "Full Stack Developer",
-      jobPositioning: "Normal",
-      employeeType: "Full-time",
-      jobDescription: "This is a Full Stack Developer position.",
-      keySkills: "Java, JavaScript, React",
-      minimumWorkExperience: 10,
-      maximumWorkExperience: 15,
-      location: "New York",
-      jobMode: "Remote",
-      educationalQualification: "Bachelor's Degree",
-      companyName: "capgemini Company",
-      minimumSalary: 20,
-      maximumSalary: 35,
-      postedBy: "shashiteja@gmail.com",
-      jobApplicationStatus: "closed",
-    },
-    {
-      title: "Java Developer",
-      experience: "10yrs-15yrs",
-      description: "This is a Full Stack Developer position.",
-      jobId: 4,
-      jobTitle: "Java Developer",
-      jobPositioning: "Normal",
-      employeeType: "Full-time",
-      jobDescription: "This is a Full Stack Developer position.",
-      keySkills: "Java, JavaScript, React",
-      minimumWorkExperience: 10,
-      maximumWorkExperience: 15,
-      location: "New York",
-      jobMode: "Remote",
-      educationalQualification: "Bachelor's Degree",
-      companyName: "capgemini Company",
-      minimumSalary: 35,
-      maximumSalary: 40,
-      postedBy: "shashiteja@gmail.com",
-      jobApplicationStatus: "open",
-    },
-    {
-      title: "AI Developer",
-      experience: "10yrs-15yrs",
-      description: "This is a Full Stack Developer position.",
-      jobId: 5,
-      jobTitle: "AI Developer",
-      jobPositioning: "Normal",
-      employeeType: "Internship",
-      jobDescription: "This is a Full Stack Developer position.",
-      keySkills: "Java, JavaScript, React",
-      minimumWorkExperience: 10,
-      maximumWorkExperience: 15,
-      location: "New York",
-      jobMode: "on-site",
-      educationalQualification: "Bachelor's Degree",
-      companyName: "Cognizent Company",
-      minimumSalary: 50,
-      maximumSalary: 55,
-      postedBy: "shashitejjag2k2@gmail.com",
-      jobApplicationStatus: null,
-    },
-    {
-      title: "Frontend Developer",
-      experience: "2yrs-5yrs",
-      description: "This is a Full Stack Developer position.",
-      jobId: 6,
-      jobTitle: "Frontend Developer",
-      jobPositioning: "Normal",
-      employeeType: "Full-time",
-      jobDescription: "This is a Full Stack Developer position.",
-      keySkills: "Java, JavaScript, React",
-      minimumWorkExperience: 2,
-      maximumWorkExperience: 5,
-      location: "Pune",
-      jobMode: "Remote",
-      educationalQualification: "Bachelor's Degree",
-      companyName: "Cognizent Company",
-      minimumSalary: 7.5,
-      maximumSalary: 8.5,
-      postedBy: "shashiteja@gmail.com",
-      jobApplicationStatus: "closed",
-    },
-    {
-      title: "Systems Engineer ",
-      experience: "0yrs-0yrs",
-      description: "Role",
-      jobId: 7,
-      jobTitle: "Systems Engineer ",
-      jobPositioning: null,
-      employeeType: "Internship",
-      jobDescription: "Role",
-      keySkills: "Linux, Networking",
-      minimumWorkExperience: 0,
-      maximumWorkExperience: 0,
-      location: "HYDERABAD",
-      jobMode: null,
-      educationalQualification: "Bachelor's Degree",
-      companyName: "Hitachi Vantara",
-      minimumSalary: 0,
-      maximumSalary: 0,
-      postedBy: "shashiteja@gmail.com",
-      jobApplicationStatus: "open",
-    },
-    {
-      title: "Network engineer",
-      experience: "0yrs-0yrs",
-      description:
-        "Minimum 3+ yrs experience in the field of on-premies servers.",
-      jobId: 9,
-      jobTitle: "Network engineer",
-      jobPositioning: null,
-      employeeType: "Full-time",
-      jobDescription:
-        "Minimum 3+ yrs experience in the field of on-premies servers.",
-      keySkills: "linux",
-      minimumWorkExperience: 0,
-      maximumWorkExperience: 0,
-      location: "Vizag",
-      jobMode: null,
-      educationalQualification: "PhD",
-      companyName: "hitachi ds",
-      minimumSalary: 0,
-      maximumSalary: 0,
-      postedBy: null,
-      jobApplicationStatus: null,
-    },
-  ]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
   const handleClose = () => {
     setIsOpen(false);
   };
@@ -401,7 +231,8 @@ const ViewAll = () => {
   const [location, setLocation] = useState([]);
   const [salaryFrom, setSalaryFrom] = useState("");
   const [salaryTo, setSalaryTo] = useState("");
-  
+  const [uniqLocations, setUniqLocations] = useState([]);
+  const [uniqueSkills, setUniqSkills] = useState([])
   const skillsArray = []
   const locationJobs = []
   const temp = [
@@ -756,11 +587,11 @@ const ViewAll = () => {
     );
   }
 
-  const uniqueSkills = [...new Set(flattenArray(temp))]
-  console.log("KeySkills",uniqueSkills);
+  // const uniqueSkills = [...new Set(flattenArray(temp))]
+  // console.log("KeySkills",uniqueSkills);
 
-  const uniqueLocations = [...new Set(flattenArray(tempLocation))]
-  console.log("KeySkills",uniqueLocations);
+  // const uniqueLocations = [...new Set(flattenArray(tempLocation))]
+  // console.log("KeySkills",uniqueLocations);
 
 
   const [jobMode, setJobMode] = useState([]);
@@ -769,15 +600,33 @@ const ViewAll = () => {
     message: "",
     severity: "error",
   });
-  const handleApplyFilters = () => {
-    const filters = {
-      experience: { from: experienceFrom, to: experienceTo },
-      employeeType,
-      keySkills,
-      location,
-      salary: { from: salaryFrom, to: salaryTo },
-      jobMode,
-    };
+  const handleApplyFilters = (reset) => {
+    let filters
+    
+    if(reset=='reset'){
+      setEmployeeType([]);
+      setJobMode([])
+      setLocation([]);
+      setJobMode([])
+       filters = {
+        // experience: { from: experienceFrom, to: experienceTo },
+        employeeType : [],
+        keySkills : [],
+        location : [],
+        // salary: { from: salaryFrom, to: salaryTo },
+        jobMode : [],
+      };
+    }else {
+       filters = {
+        // experience: { from: experienceFrom, to: experienceTo },
+        employeeType,
+        keySkills,
+        location,
+        // salary: { from: salaryFrom, to: salaryTo },
+        jobMode,
+      };
+    }
+   
     console.log("filters", fetchedJobs, filters);
     // Apply filters to fetchedJobs
     const filteredResult = fetchedJobs.filter((job) => {
@@ -845,18 +694,22 @@ const ViewAll = () => {
             ...job,
           }))
         );
-        console.log(
-          "uniqskils",
-          setKeySkills([
-            ...new Set(
-              flattenArray(
-                response.data.map((job) =>
-                  skillsArray.concat(job.keySkills.split(","))
-                )
-              )
-            ),
-          ])
-        );
+        setFilteredJobs( response.data?.map((job) => ({
+          title: job.jobTitle,
+          experience: `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`,
+          description: job.jobDescription,
+          ...job,
+        })))
+        const temp = response.data.map((job) => skillsArray.concat(job.keySkills.split(",")));
+    
+  const uniqueSkills = [...new Set(flattenArray(temp))]
+  console.log("KeySkills",uniqueSkills);
+  setUniqSkills(uniqueSkills);
+const tempLocation = response.data.map((job) => locationJobs.concat(job.location));
+const uniqueLocations = [...new Set(flattenArray(tempLocation))]
+console.log("Locations",uniqueLocations);
+setUniqLocations(uniqueLocations)
+      
         // setUniqSkills();
       } catch (error) {
         console.log("error", error);
@@ -1057,6 +910,15 @@ const ViewAll = () => {
           >
             Apply Filters
           </Button>
+          <Button
+           variant="contained"
+           onClick={()=>handleApplyFilters("reset")}
+           sx={{ m: 2 }}
+          startIcon={<Refresh/>}
+          sx={{backgroundColor : 'warning.main'}}
+          >
+           Reset
+          </Button>
           <Grid container spacing={2} direction={"column"}>
             {/* <Grid
               item
@@ -1125,7 +987,7 @@ const ViewAll = () => {
                 onChange={(e) => setLocation(e.target.value)}
                 label="Location"
               >
-                {uniqueLocations.map((location,index)=><MenuItem key={index} value={location}>{location}
+                {uniqLocations.map((location,index)=><MenuItem key={index} value={location}>{location}
                 </MenuItem>)}
               </Select>
             </Grid>
