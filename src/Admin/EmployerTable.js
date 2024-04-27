@@ -295,7 +295,7 @@ export default function EmployerTable() {
   React.useEffect(() => {
     const fetchSubs = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getSubs`);
+        const response = await axios.get(`http://localhost:8080/getSubscriptions`);
         setSubscriptions(response.data);
       } catch (error) {
         console.log("error while fetching subs", error);

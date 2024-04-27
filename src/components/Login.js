@@ -50,7 +50,10 @@ const Login = () => {
         try {
           const response = await axios.post(`http://localhost:8080/jobSeekerLogin`, values)
           console.log("setting email",values.emailId);
-          localStorage.setItem("email",values.emailId)
+          localStorage.setItem("email",values.emailId);
+          localStorage.setItem("role","jobseeker");
+          console.log("response",response.data)
+          localStorage.setItem("user",JSON.stringify(response.data))
           navigate("/jobseeker", { state: { email } });
         } catch (error) {
           console.log('error login', error)
@@ -63,7 +66,10 @@ const Login = () => {
           const response = await axios.post(`http://localhost:8080/employeerLogin`, values)
           console.log("setting email",values.emailId);
           localStorage.setItem("email",values.emailId)
+          localStorage.setItem("role","employer");
+          localStorage.setItem("user",JSON.stringify(response.data))
           navigate("/employeer");
+          console.log("response",response.data)
         } catch (error) {
           console.log('error login', error)
           alert("error",error)
@@ -74,7 +80,10 @@ const Login = () => {
           const response = await axios.post(`http://localhost:8080/adminLogin`, values)
           console.log("setting email",values.emailId);
           localStorage.setItem("email",values.emailId)
+          localStorage.setItem("role","admin");
+          localStorage.setItem("user",JSON.stringify(response.data))
           navigate("/admin");
+          console.log("response",response.data)
         } catch (error) {
           console.log('error login', error)
           alert("error",error)

@@ -43,7 +43,8 @@ const Layout = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 2 }}>
             Job Hunt
           </Typography>
-          {localStorage.getItem('email') && <Stack direction={"row"} spacing={2}>
+          {localStorage.getItem('email') && 
+          <Stack direction={"row"} spacing={2}>
             <Tooltip title="Account settings">
               <IconButton
                 onClick={handleClick}
@@ -56,7 +57,7 @@ const Layout = () => {
                 <Avatar sx={{ width: 32, height: 32 }} alt={localStorage.getItem('email')}/>
               </IconButton>
             </Tooltip>
-            <Menu
+             {localStorage.getItem('role')=='jobseeker'&&<Menu
               anchorEl={anchorEl}
               id="account-menu"
               open={open}
@@ -101,7 +102,54 @@ const Layout = () => {
                 </ListItemIcon>
                 Track Applications
               </MenuItem> */}
-            </Menu>
+            </Menu>}
+            {localStorage.getItem('role')=='employer'&&<Menu
+              anchorEl={anchorEl}
+              id="account-menu"
+              open={open}
+              onClose={handleClose}
+              onClick={handleClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: "visible",
+                  filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                  mt: 1.5,
+                  p : 2,
+                  "& .MuiAvatar-root": {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  "&::before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "background.paper",
+                    transform: "translateY(-50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+<Typography>Username: {JSON.parse(localStorage.getItem('user')).name}</Typography>
+<Typography>Employee ID: {JSON.parse(localStorage.getItem('user')).employeeId}</Typography>
+
+<Typography>Email: {JSON.parse(localStorage.getItem('user')).emailId}</Typography>
+<Typography>Company: {JSON.parse(localStorage.getItem('user')).companyName}</Typography>
+
+<Typography>Subscription: {JSON.parse(localStorage.getItem('user')).subscriptionType}</Typography>
+
+
+            </Menu>}
+           
             <Button
               variant="contained"
               color="warning"

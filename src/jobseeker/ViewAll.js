@@ -913,9 +913,9 @@ setUniqLocations(uniqueLocations)
           <Button
            variant="contained"
            onClick={()=>handleApplyFilters("reset")}
-           sx={{ m: 2 }}
+      
           startIcon={<Refresh/>}
-          sx={{backgroundColor : 'warning.main'}}
+          sx={{backgroundColor : 'warning.main', m: 2}}
           >
            Reset
           </Button>
