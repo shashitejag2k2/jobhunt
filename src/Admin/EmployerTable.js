@@ -25,6 +25,7 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
+  Modal,
   Snackbar,
   Stack,
   TableHead,
@@ -42,6 +43,9 @@ import { blue, indigo, orange, yellow } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
 import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -130,107 +134,12 @@ function createData(
   };
 }
 
-// const rows = [
-//   createData("Alice", "Acme Technologies", "ID-001"),
-//   createData("Bob", "Binary Solutions", "ID-002"),
-//   createData("Charlie", "Cyber Innovations", "ID-003"),
-//   createData("David", "DataWorks Inc.", "ID-004"),
-//   createData("Emily", "E-Tech Enterprises", "ID-005"),
-//   createData("Frank", "Future Systems Corp.", "ID-006"),
-//   createData("Grace", "Global IT Solutions", "ID-007"),
-//   createData("Henry", "HyperTech Labs", "ID-008"),
-//   createData("Ivy", "Infinity Software", "ID-009"),
-//   createData("Jack", "Java Wizards Ltd.", "ID-010"),
-//   createData("Kelly", "KeyTech Innovations", "ID-011"),
-//   createData("Liam", "Logic Innovations Inc.", "ID-012"),
-//   createData("Mia", "MetaTech Solutions", "ID-013"),
-// ];
-
 export default function EmployerTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [rows, setRows] = React.useState([
-    {
-      employeeId: 709733,
-      name: "Shashi Teja",
-      emailId: "Shashi@gmail.com.com",
-      companyName: "Hitachi vantara",
-      subscriptionType: "Premium",
-      subscriptionExprirationDate: "2024-11-09T18:30:00.000+00:00",
-    },
-    {
-      employeeId: 709734,
-      name: "John Doe",
-      emailId: "john.doe@example.com",
-      companyName: "Acme Corporation",
-      subscriptionType: "Standard",
-      subscriptionExprirationDate: "2025-01-15T10:00:00.000+00:00",
-    },
-    {
-      employeeId: 709735,
-      name: "Jane Smith",
-      emailId: "jane.smith@example.com",
-      companyName: "Tech Solutions Inc.",
-      subscriptionType: "Basic",
-      subscriptionExprirationDate: "2024-10-22T14:45:00.000+00:00",
-    },
-    {
-      employeeId: 709736,
-      name: "Michael Johnson",
-      emailId: "michael.johnson@example.com",
-      companyName: "Global Technologies",
-      subscriptionType: "Premium",
-      subscriptionExprirationDate: "2024-12-30T16:20:00.000+00:00",
-    },
-    {
-      employeeId: 709737,
-      name: "Emily Wang",
-      emailId: "emily.wang@example.com",
-      companyName: "Innovative Solutions",
-      subscriptionType: "Standard",
-      subscriptionExprirationDate: "2024-09-18T09:00:00.000+00:00",
-    },
-    {
-      employeeId: 709738,
-      name: "Alexandre Dupont",
-      emailId: "alexandre.dupont@example.com",
-      companyName: "Visionary Enterprises",
-      subscriptionType: "Premium",
-      subscriptionExprirationDate: "2025-03-05T13:10:00.000+00:00",
-    },
-    {
-      employeeId: 709739,
-      name: "Aisha Khan",
-      emailId: "aisha.khan@example.com",
-      companyName: "Future Systems Ltd",
-      subscriptionType: "Basic",
-      subscriptionExprirationDate: "2024-11-22T08:30:00.000+00:00",
-    },
-    {
-      employeeId: 709740,
-      name: "Matthew Brown",
-      emailId: "matthew.brown@example.com",
-      companyName: "GlobalTech Solutions",
-      subscriptionType: "Standard",
-      subscriptionExprirationDate: "2025-02-14T11:45:00.000+00:00",
-    },
-    {
-      employeeId: 709741,
-      name: "Elena Rodriguez",
-      emailId: "elena.rodriguez@example.com",
-      companyName: "Innovatech Inc.",
-      subscriptionType: "Premium",
-      subscriptionExprirationDate: "2024-10-01T20:15:00.000+00:00",
-    },
-    {
-      employeeId: 709742,
-      name: "Chen Wei",
-      emailId: "chen.wei@example.com",
-      companyName: "Future Solutions Co.",
-      subscriptionType: "Basic",
-      subscriptionExprirationDate: "2025-01-30T17:30:00.000+00:00",
-    },
-  ]);
+  const [rows, setRows] = React.useState([]);
+  const [open,setOpen] = useState(false)
+
   const [state, setState] = useState({
     open: false,
     message: "",
@@ -239,8 +148,41 @@ export default function EmployerTable() {
   const [subscriptions, setSubscriptions] = React.useState([]);
   const [field1, setField1] = useState("");
   const [field2, setField2] = useState("");
-  const [open, setOpen] = useState(false);
 
+  const validationSchema = Yup.object().shape({
+    subscriptionType: Yup.string().required("Subscription type is required"),
+    noOfJobs: Yup.number()
+      .required("Number of jobs is required")
+      .positive("Number of jobs must be positive"),
+    duration: Yup.number()
+      .required("Duration is required")
+      .positive("Duration must be positive"),
+    price: Yup.number()
+      .required("Price is required")
+      .positive("Price must be positive"),
+  });
+
+ 
+    const formik = useFormik({
+      initialValues: {
+        subscriptionType: '',
+        noOfJobs: 0,
+        duration: 0,
+        price: 0,
+      },
+      validationSchema,
+      onSubmit: (values) => {
+        axios.put('http://localhost:8080/updateSubscriptions', values)
+          .then((response) => {
+            console.log('Subscription updated successfully', response.data);
+            onClose();
+          })
+          .catch((error) => {
+            console.error('Error updating subscription', error);
+          });
+      },
+    });
+  
   const handleField1Change = (event) => {
     setField1(event.target.value);
   };
@@ -270,7 +212,7 @@ export default function EmployerTable() {
       try {
         const response = await axios.get(`http://localhost:8080/getEmployes`);
         console.log("employers list", response.data);
-        setRows([]);
+        setRows(response.data);
 
         //   {
         //     "employeeId": 709733,
@@ -295,7 +237,9 @@ export default function EmployerTable() {
   React.useEffect(() => {
     const fetchSubs = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getSubscriptions`);
+        const response = await axios.get(
+          `http://localhost:8080/getSubscriptions`
+        );
         setSubscriptions(response.data);
       } catch (error) {
         console.log("error while fetching subs", error);
@@ -388,6 +332,58 @@ export default function EmployerTable() {
           {state.message}
         </Alert>
       </Snackbar>
+      <Modal open={open} onClose={onClose}>
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'white', boxShadow: 24, p: 4, width: 400 }}>
+        <form onSubmit={formik.handleSubmit}>
+          <TextField
+            fullWidth
+            id="subscriptionType"
+            name="subscriptionType"
+            label="Subscription Type"
+            value={formik.values.subscriptionType}
+            onChange={formik.handleChange}
+            error={formik.touched.subscriptionType && Boolean(formik.errors.subscriptionType)}
+            helperText={formik.touched.subscriptionType && formik.errors.subscriptionType}
+          />
+          <TextField
+            fullWidth
+            id="noOfJobs"
+            name="noOfJobs"
+            type="number"
+            label="Number of Jobs"
+            value={formik.values.noOfJobs}
+            onChange={formik.handleChange}
+            error={formik.touched.noOfJobs && Boolean(formik.errors.noOfJobs)}
+            helperText={formik.touched.noOfJobs && formik.errors.noOfJobs}
+          />
+          <TextField
+            fullWidth
+            id="duration"
+            name="duration"
+            type="number"
+            label="Duration"
+            value={formik.values.duration}
+            onChange={formik.handleChange}
+            error={formik.touched.duration && Boolean(formik.errors.duration)}
+            helperText={formik.touched.duration && formik.errors.duration}
+          />
+          <TextField
+            fullWidth
+            id="price"
+            name="price"
+            type="number"
+            label="Price"
+            value={formik.values.price}
+            onChange={formik.handleChange}
+            error={formik.touched.price && Boolean(formik.errors.price)}
+            helperText={formik.touched.price && formik.errors.price}
+          />
+          <Button type="submit" variant="contained" color="primary">
+            Update
+          </Button>
+        </form>
+      </div>
+    </Modal>
       <Grid container spacing={2} direction="row">
         {/* Card for Editing Subscription */}
 
@@ -401,13 +397,16 @@ export default function EmployerTable() {
                   gutterBottom
                   color="black"
                 >
-                  {sub.title}
+                  {sub.subscriptionType}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  Limit : {sub.limit} Applicants
+                  Limit : {sub.noOfJobs} Applicants
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
                   Duration : {sub.duration}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  Price : {sub.price}
                 </Typography>
               </CardContent>
             </CustomPaper>
