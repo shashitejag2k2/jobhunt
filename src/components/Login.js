@@ -106,7 +106,15 @@ const Login = () => {
               open: true,
               message: "You are not authorised",
             }); 
-          }else {
+          }
+         else if(error.response.status == 400){
+            setState({
+              severity: "error",
+              open: true,
+              message: "Invalid credentials",
+            }); 
+          }
+          else {
             setState({
               severity: "error",
               open: true,

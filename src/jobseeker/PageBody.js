@@ -22,6 +22,8 @@ import {
   Stack,
 } from "@mui/material";
 import {
+  ArrowBack,
+  ArrowForward,
   Close,
   PlayArrow,
   Search,
@@ -46,8 +48,8 @@ const Carousel = ({ items }) => {
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
+    // autoplay: true,
+    // autoplaySpeed: 2000,
   };
   const handlePauseAutoplay = () => {
     setAutoplay(false);
@@ -72,25 +74,27 @@ const Carousel = ({ items }) => {
         {items.map((item, index) => (
           <div key={index}>
             <div className="carousel-item">{item}</div>
-            {index === 10 && (
-              <div className="more-jobs-button">
-                <button onClick={handleMoreJobs}>More Jobs</button>
-              </div>
-            )}
           </div>
         ))}
       </Slider>
-      <div className="carousel-navigation">
-        <button className="prev-button" onClick={handleGoToPrevSlide}>
+      <Box className="carousel-navigation" sx={{display:'flex', justifyContent:'space-around'}}>
+        <Button 
+        variant="contained"
+        startIcon={<ArrowBack/>}
+        className="prev-button"
+        sx={{backgroundColor : 'white', borderRadius : 7, color  :'black'}}
+         onClick={handleGoToPrevSlide}>
           <i className="fas fa-chevron-left"></i>
-        </button>
-        <button className="next-button" onClick={handleGoToNextSlide}>
-          <i className="fas fa-chevron-right"></i>
-        </button>
-        <button className="pause-button" onClick={handlePauseAutoplay}>
-          <i className="fas fa-pause"></i>
-        </button>
-      </div>
+        </Button>
+      
+        <Button
+                variant="contained"
+                sx={{backgroundColor : 'white', borderRadius : 7, color  :'black'}}
+        startIcon={<ArrowForward/>}
+        className="next-button" onClick={handleGoToNextSlide}>
+      <i className="fas fa-chevron-right"></i>
+        </Button>
+      </Box>
     </div>
   );
 };
@@ -134,12 +138,13 @@ const PageBody = (props) => {
         open: true,
         message: "Applied to Job Successfully!",
       });
+      setIsOpen(false)
     } catch (error) {
       console.log("error appllying", error);
       setState({
         severity: "error",
         open: true,
-        message: "Error while applying job",
+        message: error.response.data,
       });
     }
   };
@@ -149,7 +154,7 @@ const PageBody = (props) => {
         const response = await axios.get(`http://localhost:8080/getAlljobs`);
         console.log("all jobs", response.data);
 
-        setSearchedJobs(
+        setFetchedJobs(
           response.data?.map((job) => ({
             title: job.jobTitle,
             experience: `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`,
@@ -157,6 +162,8 @@ const PageBody = (props) => {
             ...job,
           }))
         );
+
+        
       } catch (error) {
         console.log("error", error);
         setState({
@@ -169,32 +176,32 @@ const PageBody = (props) => {
     fetchJobs();
   }, []);
 
-  useEffect(() => {
-    const getHightJob = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/getHighPayingJobs`
-        );
-        console.log("hight paying jobs", response.data);
-        setFetchedHighJobs(
-          response.data?.map((job) => ({
-            title: job.jobTitle,
-            experience: `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`,
-            description: job.jobDescription,
-            ...job,
-          }))
-        );
-      } catch (error) {
-        console.log("error while fetching high paying jobs", error);
-        setState({
-          severity: "error",
-          open: true,
-          message: "Error while fetching high paying jobs",
-        });
-      }
-    };
-    getHightJob();
-  }, []);
+  // useEffect(() => {
+  //   const getHightJob = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:8080/getHighPayingJobs`
+  //       );
+  //       console.log("hight paying jobs", response.data);
+  //       setFetchedHighJobs(
+  //         response.data?.map((job) => ({
+  //           title: job.jobTitle,
+  //           experience: `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`,
+  //           description: job.jobDescription,
+  //           ...job,
+  //         }))
+  //       );
+  //     } catch (error) {
+  //       console.log("error while fetching high paying jobs", error);
+  //       setState({
+  //         severity: "error",
+  //         open: true,
+  //         message: "Error while fetching high paying jobs",
+  //       });
+  //     }
+  //   };
+  //   getHightJob();
+  // }, []);
   const searchJobs = async () => {
     try {
       console.log("key word", searchTerm)
@@ -226,7 +233,7 @@ const PageBody = (props) => {
     }
   };
   const items = fetchedJobs?.map((job) => (
-    <Card sx={{ display: "flex", m: 2, py: 6 }}>
+    <Card sx={{ display: "flex", m: 2, py: 2 }}>
       <Box
         sx={{
           display: "flex",
@@ -443,11 +450,11 @@ const PageBody = (props) => {
                     </Typography>
                     <Typography variant="body1">
                       <strong>Minimum Salary:</strong>{" "}
-                      {jobDetails.minimumSalary}
+                      {jobDetails.minimumSalary} LPA
                     </Typography>
                     <Typography variant="body1">
                       <strong>Maximum Salary:</strong>{" "}
-                      {jobDetails.maximumSalary}
+                      {jobDetails.maximumSalary} LPA
                     </Typography>
                   </Grid>
                 </Grid>
@@ -522,15 +529,18 @@ const PageBody = (props) => {
       {!isSearching && (
         <>
           <Box sx={{ backgroundColor: indigo[300] }}>
-            <Carousel items={items} />
+            <Carousel items={items.slice(0,5)} />
           </Box>
-
+          <Box sx={{ backgroundColor: indigo[300] }}>
+            <Carousel items={items.slice(5,9)} />
+          </Box>
+{/* 
           <Typography variant="h5" fontWeight={600}>
             High Paying Jobs
           </Typography>
           <Box sx={{ backgroundColor: blue[300] }}>
             <Carousel items={highItems} />
-          </Box>
+          </Box> */}
         </>
       )}
       {isSearching && (

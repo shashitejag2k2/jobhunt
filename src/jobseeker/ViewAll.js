@@ -869,11 +869,11 @@ setUniqLocations(uniqueLocations)
                     </Typography>
                     <Typography variant="body1">
                       <strong>Minimum Salary:</strong>{" "}
-                      {jobDetails.minimumSalary}
+                      {jobDetails.minimumSalary} LPA
                     </Typography>
                     <Typography variant="body1">
                       <strong>Maximum Salary:</strong>{" "}
-                      {jobDetails.maximumSalary}
+                      {jobDetails.maximumSalary} LPA
                     </Typography>
                   </Grid>
                 </Grid>

@@ -155,9 +155,9 @@ const [dummy,setDummy] = useState(false)
     numberOfJobs: Yup.number()
       .required("Number of jobs is required")
       .positive("Number of jobs must be positive"),
-    duration: Yup.number()
-      .required("Duration is required")
-      .positive("Duration must be positive"),
+    // duration: Yup.number()
+    //   .required("Duration is required")
+    //   .positive("Duration must be positive"),
     price: Yup.number()
       .required("Price is required")
       .positive("Price must be positive"),
@@ -168,7 +168,7 @@ const [dummy,setDummy] = useState(false)
       initialValues: {
         subscriptionType: '',
         numberOfJobs: 0,
-        duration: 0,
+        // duration: 0,
         price: 0,
       },
       validationSchema,
@@ -360,7 +360,7 @@ const [dummy,setDummy] = useState(false)
             error={formik.touched.numberOfJobs && Boolean(formik.errors.numberOfJobs)}
             helperText={formik.touched.numberOfJobs && formik.errors.numberOfJobs}
           />
-          <TextField
+          {/* <TextField
             fullWidth
             id="duration"
             name="duration"
@@ -370,7 +370,7 @@ const [dummy,setDummy] = useState(false)
             onChange={formik.handleChange}
             error={formik.touched.duration && Boolean(formik.errors.duration)}
             helperText={formik.touched.duration && formik.errors.duration}
-          />
+          /> */}
           <TextField
             fullWidth
             id="price"
@@ -416,9 +416,9 @@ const [dummy,setDummy] = useState(false)
                 <Typography variant="body2" color="textSecondary" component="p">
                   Limit : {sub.numberOfJobs} Applicants
                 </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
+                {/* <Typography variant="body2" color="textSecondary" component="p">
                   Duration : {sub.duration} Months
-                </Typography>
+                </Typography> */}
                 <Typography variant="body2" color="textSecondary" component="p">
                   Price : {sub.price} $
                 </Typography>
@@ -436,7 +436,7 @@ const [dummy,setDummy] = useState(false)
                 <StyledTableCell>Name</StyledTableCell>
                 <StyledTableCell>Company Name</StyledTableCell>
                 <StyledTableCell>Subscription</StyledTableCell>
-                <StyledTableCell>Expiration</StyledTableCell>
+                {/* <StyledTableCell>Expiration</StyledTableCell> */}
                 <StyledTableCell align="center">Approve</StyledTableCell>
                 <StyledTableCell align="center">Reject</StyledTableCell>
               </TableRow>
@@ -460,9 +460,9 @@ const [dummy,setDummy] = useState(false)
                   <TableCell style={{ width: 160 }}>
                     {row.subscriptionType}
                   </TableCell>
-                  <TableCell style={{ width: 160 }}>
+                  {/* <TableCell style={{ width: 160 }}>
                     {new Date(row.subscriptionExprirationDate).toLocaleString()}
-                  </TableCell>
+                  </TableCell> */}
                   {/* <TableCell align="center">
                     <Button
                       variant="contained"

@@ -692,11 +692,11 @@ export default function ActiveJobs() {
                     </Typography>
                     <Typography variant="body1">
                       <strong>Minimum Salary:</strong>{" "}
-                      {jobDetails.minimumSalary}
+                      {jobDetails.minimumSalary} LPA
                     </Typography>
                     <Typography variant="body1">
                       <strong>Maximum Salary:</strong>{" "}
-                      {jobDetails.maximumSalary}
+                      {jobDetails.maximumSalary} LPA
                     </Typography>
                   </Grid>
                 </Grid>
@@ -812,7 +812,7 @@ export default function ActiveJobs() {
                 )}
               </TableBody>}
               {rows.length <1 && <TableBody>
-                <Typography variant="h4"> No Applicants for this job</Typography>
+                <Typography  align="center"variant="h4" color="gray"sx={{backgroundColor:indigo[100], borderRadius:5, p  :4, width : '100%'}}> create jobs to view here</Typography>
                 </TableBody>}
               <TableFooter>
                 <TableRow>
@@ -956,6 +956,9 @@ export default function ActiveJobs() {
                   </TableRow>
                 )}
               </TableBody>
+              {rows.length <1 && <TableBody>
+                <Typography variant="h4" align="center" color="gray" sx={{backgroundColor:indigo[100], borderRadius:5, p  :4, width : '100%'}}> No Applicants for this job</Typography>
+                </TableBody>}
               <TableFooter>
                 <TableRow>
                   <TablePagination

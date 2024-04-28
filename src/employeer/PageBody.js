@@ -46,7 +46,10 @@ const PageBody = () => {
   const [open, setOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [totalCount, setTotalCount] = useState(0);
+  const [remainingCount, setRemainingCount] = useState(0);
   const [mySubscription, setMySubscription] = useState(false);
+  const [subList, setSubList] = useState([]);
+
   const [expriryDate, setExpiryDate] = useState('')
   const [dummy,setDummy] = useState(false)
   const [state, setState] = useState({
@@ -121,12 +124,26 @@ const PageBody = () => {
             "email"
           )}`
         );
+        const response3 = await axios.get(
+          `http://localhost:8080/getRemainingJobCount?subscriptionType=${JSON.parse(localStorage.getItem(
+            "user"
+          )).subscriptionType}`
+        );
+        const response4 = await axios.get(
+          `http://localhost:8080/getSubscriptions`
+        );
         console.log("succesfully fetched stats", response.data);
         console.log("succesfully fetched subs", response2.data);
+        console.log("succesfully fetched subs", response3.data);
+        console.log("succesfully fetched subs", response4.data);
+
+
 
         setTotalCount(response.data.jobCount);
         setMySubscription(response2.data)
         setExpiryDate(response.data.SubscriptionExprirationDate)
+        setRemainingCount(response3.data-response.data.jobCount)
+        setSubList(response4.data)
       } catch (error) {
         console.log("error fetching stats", error);
         setState({
@@ -155,16 +172,16 @@ const PageBody = () => {
             alignItems: "center",
           }}
         >
-          <Card
-            onClick={() => handleCardSelect(1)}
+          {subList?.map((sub,index)=><Card
+            onClick={() => handleCardSelect(index+1)}
             style={{
               ...cardStyle,
-              border: selectedCard === 1 ? `5px solid ${blue[600]}` : "none",
-              backgroundColor: selectedCard === 1 ? "whitesmoke" : blue[300],
+              border: selectedCard === index+1 ? `5px solid ${blue[600]}` : "none",
+              backgroundColor: selectedCard === index+1 ? "whitesmoke" : blue[300],
             }}
           >
             <CardContent>
-              {mySubscription === "Basic" && (
+              {JSON.parse(localStorage.getItem('user')).subscriptionType === sub.subscriptionType && (
                 <Typography variant="h5" component="h2">
                   Current Plan{" "}
                   <Icon>
@@ -173,19 +190,21 @@ const PageBody = () => {
                 </Typography>
               )}
               <Typography variant="h5" component="h2">
-                Basic
+                {sub.subscriptionType}
               </Typography>
-              <Typography color="textSecondary">Jobs Limit : {10}</Typography>
+              <Typography color="textSecondary">Jobs Limit : {sub.numberOfJobs}</Typography>
+              <Typography color="textSecondary">Price : {sub.price}$</Typography>
+
            
 
-              {selectedCard == 1 && mySubscription !== "Basic" && !!mySubscription && (
+              {selectedCard == index+1 && mySubscription !== sub.subscriptionType && !!mySubscription && (
                 <Button onClick={handleSubmit} variant="outlined">
                   Upgrade
                 </Button>
               )}
             </CardContent>
-          </Card>
-          <Card
+          </Card>)}
+          {/* <Card
             onClick={() => handleCardSelect(2)}
             style={{
               ...cardStyle,
@@ -242,7 +261,7 @@ const PageBody = () => {
                 </Button>
               )}
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       </Modal>
       <Snackbar
@@ -300,7 +319,7 @@ const PageBody = () => {
           </CustomPaper>
         </Grid>
 
-        {/* <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <CustomPaper gradientColor={indigo[200]}>
             <Typography
               gutterBottom
@@ -309,16 +328,16 @@ const PageBody = () => {
               color="black"
               fontWeight={600}
             >
-              No. of Ongoing{" "}
+              No. of Remaining{" "}
               <Icon>
                 <AssignmentInd />
               </Icon>
             </Typography>
             <Typography variant="h3" color="text.secondary">
-              {45}
+              {remainingCount}
             </Typography>
           </CustomPaper>
-        </Grid> */}
+        </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <CustomPaper onClick={handleOpen} gradientColor={green[400]}>
             <Typography
