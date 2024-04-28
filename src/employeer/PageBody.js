@@ -48,6 +48,7 @@ const PageBody = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [mySubscription, setMySubscription] = useState(false);
   const [expriryDate, setExpiryDate] = useState('')
+  const [dummy,setDummy] = useState(false)
   const [state, setState] = useState({
     open: false,
     message: "",
@@ -83,16 +84,21 @@ const PageBody = () => {
   }));
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(`http://localhost:8080/updateSubscription`, {
-        subscription: subs[selectedCard],
+      const response = await axios.put(`http://localhost:8080/updateEmployerSubscription`, {
+        subscriptionType: subs[selectedCard],
+        emailId : localStorage.getItem('email')
       });
       console.log("sucesfully upgraded", response);
+      const user = JSON.parse(localStorage.getItem('user'))
+      const upgraded = {...user, subscriptionType : subs[selectedCard]}
+      localStorage.setItem('user',JSON.stringify(upgraded))
       setState({
         severity: "success",
         open: true,
         message: "Sucesfully upgraded",
       });
       setOpen(false);
+      setDummy(!dummy)
     } catch (error) {
       setState({
         severity: "error",
@@ -132,7 +138,7 @@ const PageBody = () => {
     };
 
     fetchStat();
-  }, []);
+  }, [dummy]);
   return (
     <div>
       <Modal
@@ -170,14 +176,8 @@ const PageBody = () => {
                 Basic
               </Typography>
               <Typography color="textSecondary">Jobs Limit : {10}</Typography>
-              {mySubscription === "Basic" && (
-                <Typography color="textSecondary">
-                  Subscription Date : {"10-02-2024"}
-                </Typography>
-              )}
-              <Typography color="textSecondary">
-                Duration : {3} Months
-              </Typography>
+           
+
               {selectedCard == 1 && mySubscription !== "Basic" && !!mySubscription && (
                 <Button onClick={handleSubmit} variant="outlined">
                   Upgrade
@@ -206,9 +206,7 @@ const PageBody = () => {
                 Standard
               </Typography>
               <Typography color="textSecondary">Jobs Limit : {100}</Typography>
-              <Typography color="textSecondary">
-                Duration : {10} Months
-              </Typography>
+
               {selectedCard == 2 && mySubscription !== "Standard" && !!mySubscription && (
                 <Button onClick={handleSubmit} variant="outlined">
                   Upgrade
@@ -237,9 +235,7 @@ const PageBody = () => {
                 Premium
               </Typography>
               <Typography color="textSecondary">Jobs Limit : {100}</Typography>
-              <Typography color="textSecondary">
-                Duration : {20} Months
-              </Typography>
+
               {selectedCard == 3 && mySubscription !== "Premium" && !!mySubscription && (
                 <Button onClick={handleSubmit} variant="outlined">
                   Upgrade
@@ -304,7 +300,7 @@ const PageBody = () => {
           </CustomPaper>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        {/* <Grid item xs={12} sm={6} md={3}>
           <CustomPaper gradientColor={indigo[200]}>
             <Typography
               gutterBottom
@@ -322,7 +318,7 @@ const PageBody = () => {
               {45}
             </Typography>
           </CustomPaper>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} sm={6} md={3}>
           <CustomPaper onClick={handleOpen} gradientColor={green[400]}>
             <Typography
@@ -337,8 +333,8 @@ const PageBody = () => {
                 <AutoAwesome />
               </Icon>
             </Typography>
-            <Typography variant="h4">{mySubscription}</Typography>
-            <Typography variant="h6" color="black">{expriryDate}</Typography>
+            <Typography variant="h4">{JSON.parse(localStorage.getItem('user')).subscriptionType}</Typography>
+            {/* <Typography variant="h6" color="black">{expriryDate}</Typography> */}
           </CustomPaper>
         </Grid>
       </Grid>

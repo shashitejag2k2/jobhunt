@@ -12,6 +12,8 @@ import {
   Paper,
   Icon,
   Link,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Register from "../employeer/Register";
@@ -27,7 +29,11 @@ const Login = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
   const [reg, setReg] = useState(false);
-
+  const [state, setState] = useState({
+    open: false,
+    message: "",
+    severity: "error",
+  });
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -35,6 +41,13 @@ const Login = () => {
     0: "Employeer",
     1: "Job Seeker",
     2: "Admin",
+  };
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setState((prev) => ({ ...prev, message: "", open: false }));
   };
   const formik = useFormik({
     initialValues: {
@@ -57,7 +70,21 @@ const Login = () => {
           navigate("/jobseeker", { state: { email } });
         } catch (error) {
           console.log('error login', error)
-          alert("error",error)
+          // alert("error",error)
+          if(error.response.status == 401){
+            setState({
+              severity: "error",
+              open: true,
+              message: error.response.data,
+            }); 
+          }else {
+            setState({
+              severity: "error",
+              open: true,
+              message: error.code,
+            });
+          }
+      
         }
 
 
@@ -72,7 +99,20 @@ const Login = () => {
           console.log("response",response.data)
         } catch (error) {
           console.log('error login', error)
-          alert("error",error)
+          // alert("error",error)
+          if(error.response.status == 401){
+            setState({
+              severity: "error",
+              open: true,
+              message: "You are not authorised",
+            }); 
+          }else {
+            setState({
+              severity: "error",
+              open: true,
+              message: error.code,
+            });
+          }
         }
       }
       else if (roles[value] === "Admin") {
@@ -86,14 +126,38 @@ const Login = () => {
           console.log("response",response.data)
         } catch (error) {
           console.log('error login', error)
-          alert("error",error)
+          // alert("error",error)
+          if(error.response.status == 401){
+            setState({
+              severity: "error",
+              open: true,
+              message: error.response.data,
+            }); 
+          }else {
+            setState({
+              severity: "error",
+              open: true,
+              message: error.code,
+            });
+          }
         }
       }
     },
   });
 
   return (
-    <Container maxWidth="sm" sx={{ p: 4 }}>
+    <div>
+<Snackbar open={state.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={state.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {state.message}
+        </Alert>
+      </Snackbar>
+      <Container maxWidth="sm" sx={{ p: 4 }}>
       <Tabs
         value={value}
         onChange={handleChange}
@@ -195,6 +259,8 @@ const Login = () => {
         </Paper>
       </Box>
     </Container>
+    </div>
+ 
   );
 };
 

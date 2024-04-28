@@ -139,7 +139,8 @@ export default function EmployerTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [rows, setRows] = React.useState([]);
   const [open,setOpen] = useState(false)
-
+const [subId,setSubID] = useState(null)
+const [dummy,setDummy] = useState(false)
   const [state, setState] = useState({
     open: false,
     message: "",
@@ -151,7 +152,7 @@ export default function EmployerTable() {
 
   const validationSchema = Yup.object().shape({
     subscriptionType: Yup.string().required("Subscription type is required"),
-    noOfJobs: Yup.number()
+    numberOfJobs: Yup.number()
       .required("Number of jobs is required")
       .positive("Number of jobs must be positive"),
     duration: Yup.number()
@@ -166,13 +167,13 @@ export default function EmployerTable() {
     const formik = useFormik({
       initialValues: {
         subscriptionType: '',
-        noOfJobs: 0,
+        numberOfJobs: 0,
         duration: 0,
         price: 0,
       },
       validationSchema,
       onSubmit: (values) => {
-        axios.put('http://localhost:8080/updateSubscriptions', values)
+        axios.put('http://localhost:8080/updateSubscription', {id:subId,...values})
           .then((response) => {
             console.log('Subscription updated successfully', response.data);
             onClose();
@@ -233,7 +234,7 @@ export default function EmployerTable() {
       }
     };
     fetchEmployers();
-  }, []);
+  }, [dummy]);
   React.useEffect(() => {
     const fetchSubs = async () => {
       try {
@@ -251,7 +252,7 @@ export default function EmployerTable() {
       }
     };
     fetchSubs();
-  }, []);
+  }, [open]);
   const CustomPaper = styled(Paper)(({ theme, gradientColor }) => ({
     // maxWidth: 200,
     minHeight: 100, // Minimum height
@@ -278,10 +279,10 @@ export default function EmployerTable() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const handleStatus = async () => {
+  const handleStatus = async (data) => {
     try {
-      const response = await axios.post(
-        `http://localhost:8080/updateEmployerStatus`
+      const response = await axios.put(
+        `http://localhost:8080/postStatus?status=${data.status}&emailId=${data.emailId}`
       );
       console.log("Successfully updated status", response.data);
       setState({
@@ -289,6 +290,7 @@ export default function EmployerTable() {
         open: true,
         message: "Succesfully updated!",
       });
+      setDummy(!dummy)
     } catch (error) {
       console.log("error while updating", error);
       setState({
@@ -333,8 +335,10 @@ export default function EmployerTable() {
         </Alert>
       </Snackbar>
       <Modal open={open} onClose={onClose}>
-      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'white', boxShadow: 24, p: 4, width: 400 }}>
-        <form onSubmit={formik.handleSubmit}>
+      <Box style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor : "white", boxShadow: 24, p: 4, width: 400 }}>
+        <form onSubmit={formik.handleSubmit} style={{backgroundColor : "white", padding:4}}>
+          <Stack spacing={2}>
+
           <TextField
             fullWidth
             id="subscriptionType"
@@ -347,14 +351,14 @@ export default function EmployerTable() {
           />
           <TextField
             fullWidth
-            id="noOfJobs"
-            name="noOfJobs"
+            id="numberOfJobs"
+            name="numberOfJobs"
             type="number"
             label="Number of Jobs"
-            value={formik.values.noOfJobs}
+            value={formik.values.numberOfJobs}
             onChange={formik.handleChange}
-            error={formik.touched.noOfJobs && Boolean(formik.errors.noOfJobs)}
-            helperText={formik.touched.noOfJobs && formik.errors.noOfJobs}
+            error={formik.touched.numberOfJobs && Boolean(formik.errors.numberOfJobs)}
+            helperText={formik.touched.numberOfJobs && formik.errors.numberOfJobs}
           />
           <TextField
             fullWidth
@@ -378,17 +382,27 @@ export default function EmployerTable() {
             error={formik.touched.price && Boolean(formik.errors.price)}
             helperText={formik.touched.price && formik.errors.price}
           />
+          </Stack>
+        
           <Button type="submit" variant="contained" color="primary">
             Update
           </Button>
         </form>
-      </div>
+      </Box>
     </Modal>
       <Grid container spacing={2} direction="row">
         {/* Card for Editing Subscription */}
 
         {subscriptions.map((sub, index) => (
-          <Grid item xs={3} key={index}>
+          <Grid item xs={3} key={index} onClick={()=>{setOpen(true); setSubID(sub.id);
+           formik.setFieldValue('subscriptionType', sub.subscriptionType)
+           formik.setFieldValue('numberOfJobs', parseInt(sub.numberOfJobs))
+
+           formik.setFieldValue('duration', sub.duration)
+           formik.setFieldValue('price', sub.price)
+
+           
+           }}>
             <CustomPaper sx={{ backgroundColor: yellow[200] }}>
               <CardContent>
                 <Typography
@@ -400,13 +414,13 @@ export default function EmployerTable() {
                   {sub.subscriptionType}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  Limit : {sub.noOfJobs} Applicants
+                  Limit : {sub.numberOfJobs} Applicants
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  Duration : {sub.duration}
+                  Duration : {sub.duration} Months
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  Price : {sub.price}
+                  Price : {sub.price} $
                 </Typography>
               </CardContent>
             </CustomPaper>
@@ -464,8 +478,9 @@ export default function EmployerTable() {
                       sx={{ backgroundColor: "success.main" }}
                       startIcon={<CheckCircleSharp />}
                       onClick={() => {
-                        handleStatus("approve");
+                        handleStatus({ status : "approve", emailId  :row.emailId });
                       }}
+                      disabled={row.status == 'approve' || row.status == 'reject'}
                     >
                       Approve
                     </Button>
@@ -475,8 +490,11 @@ export default function EmployerTable() {
                       variant="contained"
                       sx={{ backgroundColor: "error.main" }}
                       startIcon={<Error />}
+                      disabled={row.status == 'reject'}
+
                       onClick={() => {
-                        handleStatus("reject");
+                        handleStatus({ status : "reject", emailId  :row.emailId });
+                        
                       }}
                     >
                       Reject

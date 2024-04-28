@@ -732,7 +732,7 @@ export default function ActiveJobs() {
                   <StyledTableCell align="center">Close</StyledTableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              {rows.length > 0 && <TableBody>
                 {(rowsPerPage > 0
                   ? rows.slice(
                       page * rowsPerPage,
@@ -810,7 +810,10 @@ export default function ActiveJobs() {
                     <TableCell colSpan={6} />
                   </TableRow>
                 )}
-              </TableBody>
+              </TableBody>}
+              {rows.length <1 && <TableBody>
+                <Typography variant="h4"> No Applicants for this job</Typography>
+                </TableBody>}
               <TableFooter>
                 <TableRow>
                   <TablePagination

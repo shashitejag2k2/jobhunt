@@ -1,26 +1,44 @@
 import React, { useState } from 'react'
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import { Container,Grid,Paper } from '@mui/material';
+import { Alert, Container,Grid,Paper, Snackbar } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import axios from 'axios';
+import { ArrowBack, Home } from '@mui/icons-material';
 const JobCreationPage = () => {
   const navigate = useNavigate();
+  const [state, setState] = useState({
+    open: false,
+    message: "",
+    severity: "error",
+  });
     const [formData, setFormData] = useState({
         employeeType: '',
         jobDescription: '',
         keySkills: '',
         workExperience: '',
+        minimumWorkExperience :'',
+        maximumWorkExperience : "",
+        minimumSalary : "",
+        maximumSalary : '',
         location: '',
         educationalQualification: '',
         companyName: '',
         salary: '',
-        jobTitle:''
+        jobTitle:'',
+        jobMode : ''
         
       });
+      const handleSnackbarClose = (event, reason) => {
+        if (reason === "clickaway") {
+          return;
+        }
     
+        setState((prev) => ({ ...prev, message: "", open: false }));
+      };
+      
       const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -29,16 +47,42 @@ const JobCreationPage = () => {
         e.preventDefault()
         console.log(formData);
         try {
-          const response =axios.post('http://localhost:8080/postjob', formData);
+          const response =axios.post('http://localhost:8080/postjob', {postedBy : localStorage.getItem('email'),...formData});
           console.log(response.data); // Handle response data
+          setState({
+            severity: "success",
+            open: true,
+            message: "Sucesfully Posted",
+          });
+          
+          navigate('/employeer')
       } catch (error) {
           console.error('Error:', error); // Handle error
+          setState({
+            severity: "error",
+            open: true,
+            message: error.code,
+          });
       }
         //  navigate('/employeer')
         
       }
   return (
     <div>
+      <Snackbar open={state.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={state.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {state.message}
+        </Alert>
+      </Snackbar>
+      <Button onClick={()=>{navigate('/employeer')}}
+      startIcon={<Home/>}
+      variant='contained'
+      >Home</Button>
         <Container maxWidth="md" style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
         <Paper elevation={5} sx={{p  :2, width : '80%', py : 4}}>
          <form onSubmit={handleSubmit}>
@@ -91,24 +135,28 @@ const JobCreationPage = () => {
 <Grid container spacing={2}>
                     <Grid item xs={6}>
                         <TextField
-                            name="minExperience"
+                            name="minimumWorkExperience"
                             label="Minimum Experience (years)"
                             type="number"
                             fullWidth
-                            InputProps={{ inputProps: { min: 0, max: formData.maxExperience ? formData.maxExperience : 5 } }}
-                            value={formData.minExperience}
+                            inputProps={{
+                              min: 0,
+                            }}
+                            value={formData.minimumWorkExperience}
                             onChange={handleInputChange}
                             margin="normal"
                         />
                     </Grid>
                     <Grid item xs={6}>
                         <TextField
-                            name="maxExperience"
+                            name="maximumWorkExperience"
                             label="Maximum Experience (years)"
                             type="number"
                             fullWidth
-                            InputProps={{ inputProps: { min: formData.minExperience ? formData.minExperience : 0 } }}
-                            value={formData.maxExperience}
+                            inputProps={{
+                              min: 0,
+                            }}
+                            value={formData.maximumWorkExperience}
                             onChange={handleInputChange}
                             margin="normal"
                         />
@@ -123,7 +171,14 @@ const JobCreationPage = () => {
         onChange={handleInputChange}
         margin="normal"
       />
-
+ <TextField
+        name="jobMode"
+        label="Job Mode"
+        fullWidth
+        value={formData.jobMode}
+        onChange={handleInputChange}
+        margin="normal"
+      />
       <TextField
         name="educationalQualification"
         label="Educational Qualification"
@@ -151,26 +206,32 @@ const JobCreationPage = () => {
 <Grid container spacing={2}>
                     <Grid item xs={6}>
                         <TextField
-                            name="minSalary"
+                            name="minimumSalary"
                             label="Minimum Salary"
                             type="number"
                             fullWidth
-                            InputProps={{ inputProps: { min: 5.5, max: formData.maxSalary ? formData.maxSalary : 10 } }}
-                            value={formData.minSalary}
+
+                            value={formData.minimumSalary}
                             onChange={handleInputChange}
                             margin="normal"
+                            inputProps={{
+                              min: 0,
+                            }}
                         />
                     </Grid>
                     <Grid item xs={6}>
                         <TextField
-                            name="maxSalary"
+                            name="maximumSalary"
                             label="Maximum Salary"
                             type="number"
                             fullWidth
-                            InputProps={{ inputProps: { min: formData.minSalary ? formData.minSalary : 5.5, max: 10 } }}
-                            value={formData.maxSalary}
+
+                            value={formData.maximumSalary}
                             onChange={handleInputChange}
                             margin="normal"
+                            inputProps={{
+                              min: 0,
+                            }}
                         />
                     </Grid>
                 </Grid>
