@@ -32,7 +32,7 @@ import {
   SkipPreviousOutlined,
   TrackChanges,
 } from "@mui/icons-material";
-import Slider from "react-slick";
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { blue, indigo } from "@mui/material/colors";
@@ -69,33 +69,14 @@ const Carousel = ({ items }) => {
   };
 
   return (
-    <div className="carousel-container">
-      <Slider {...settings} ref={sliderRef}>
+   
+      <Grid xs={3} >
         {items.map((item, index) => (
-          <div key={index}>
-            <div className="carousel-item">{item}</div>
-          </div>
+         
+            <div key={index}>{item}</div>
+       
         ))}
-      </Slider>
-      <Box className="carousel-navigation" sx={{display:'flex', justifyContent:'space-around'}}>
-        <Button 
-        variant="contained"
-        startIcon={<ArrowBack/>}
-        className="prev-button"
-        sx={{backgroundColor : 'white', borderRadius : 7, color  :'black'}}
-         onClick={handleGoToPrevSlide}>
-          <i className="fas fa-chevron-left"></i>
-        </Button>
-      
-        <Button
-                variant="contained"
-                sx={{backgroundColor : 'white', borderRadius : 7, color  :'black'}}
-        startIcon={<ArrowForward/>}
-        className="next-button" onClick={handleGoToNextSlide}>
-      <i className="fas fa-chevron-right"></i>
-        </Button>
-      </Box>
-    </div>
+      </Grid>
   );
 };
 
@@ -233,13 +214,13 @@ const PageBody = (props) => {
     }
   };
   const items = fetchedJobs?.map((job) => (
-    <Card sx={{ display: "flex", m: 2, py: 2 }}>
+    <Card sx={{ display: "flex", m: 2, py: 2, flexDirection: 'column' }}>
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
+        // sx={{
+        //   display: "flex",
+        //   flexDirection: "column",
+        //   justifyContent: "space-between",
+        // }}
       >
         <CardContent sx={{ flex: "1 0 auto" }}>
           <Typography component="div" variant="h5">
@@ -305,42 +286,48 @@ const PageBody = (props) => {
     </Card>
   ));
   const searchItems = searchedJobs?.map((job) => (
-    <Card sx={{ display: "flex", m: 2, py: 6 }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
-      >
-        <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography component="div" variant="h5">
-            {job.title}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            component="div"
-          >
-            Exp : {job.experience}
-          </Typography>
-          <Typography variant="body2">{job.description}</Typography>
-        </CardContent>
-      </Box>
-      <Button
-        sx={{ mx: 3, my: 5 }}
-        variant="contained"
-        size="small"
-        onClick={() => {
-          setJobDetails(job);
-          setIsOpen(true);
-        }}
-      >
-        Apply
-      </Button>
-    </Card>
+    <Card sx={{ display: "flex", m: 2, py: 6, flexDirection : "column", backgroundColor : indigo[100], borderRadius : 5 }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+      }}
+    >
+      <CardContent sx={{ flex: "1 0 auto" }}>
+        <Typography component="div" variant="h5">
+          {job.title}
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          color="text.secondary"
+          component="div"
+        >
+          Exp : {job.experience}
+        </Typography>
+        <Typography variant="body2">{job.description?.slice(0,70)}...</Typography>
+      </CardContent>
+    </Box>
+    <Button
+      sx={{ mx: 3, my: 5, p :1, width : '50%' }}
+      variant="contained"
+      size="small"
+      onClick={() => {
+        setJobDetails(job);
+        setIsOpen(true);
+      }}
+    >
+      Apply
+    </Button>
+  </Card>
   ));
-
+const handleEnter = (event)=>{
+  console.log(event)
+  if (event.key === 'Enter'){
+    searchJobs();
+  }
+ 
+}
   return (
     <div>
       <Modal
@@ -495,12 +482,14 @@ const PageBody = (props) => {
             ),
           }}
         />
-        <Stack direction={"row"} spacing={2}>
+        <Stack direction={"row"} spacing={2} sx={{py : 2, display : "flex", justifyContent : "center", alignItems : "center"}}>
           <Button
             variant="contained"
             onClick={() => {
               searchJobs();
             }}
+          sx={{height : 50}}
+          onKeyDown={handleEnter}
           >
             Search
           </Button>
@@ -509,8 +498,9 @@ const PageBody = (props) => {
             onClick={() => {
               navigate("/viewAll");
             }}
+            sx={{height : 50}}
           >
-            View All
+          <Typography variant="body2">View All</Typography>  
           </Button>
           <Button
             onClick={() => {
@@ -519,21 +509,84 @@ const PageBody = (props) => {
             startIcon={<TrackChanges />}
             variant="contained"
             size="small"
-            sx={{ py: 0 }}
+            sx={{height : 50}}
           >
-            Track Applications
+            <Typography variant="body2">Track Applications</Typography> 
           </Button>
         </Stack>
       </div>
       {/* <Typography variant="h5" fontWeight={600}>Trending Jobs</Typography> */}
       {!isSearching && (
         <>
-          <Box sx={{ backgroundColor: indigo[300] }}>
-            <Carousel items={items.slice(0,5)} />
-          </Box>
-          <Box sx={{ backgroundColor: indigo[300] }}>
-            <Carousel items={items.slice(5,9)} />
-          </Box>
+       <Grid container sx={{ backgroundColor: indigo[300] }} direction={'row'}>
+  {fetchedJobs.slice(4,8).map((item, index) => (
+    <Grid key={index} xs={3}>
+      <Card sx={{ display: "flex", m: 2, py: 2, flexDirection: 'column' }}>
+        <Box>
+          <CardContent sx={{ flex: "1 0 auto" }}>
+            <Typography component="div" variant="h5">
+              {item.title}
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              color="text.secondary"
+              component="div"
+            >
+              Exp : {item.experience}
+            </Typography>
+            <Typography variant="body2">{item.description.slice(0,70)}...</Typography>
+          </CardContent>
+        </Box>
+        <Button
+          sx={{ mx: 3, my: 5 }}
+          variant="contained"
+          size="small"
+          onClick={() => {
+            setJobDetails(item);
+            setIsOpen(true);
+            
+          }}
+        >
+          Apply
+        </Button>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
+<Grid container sx={{ backgroundColor: indigo[300] }} direction={'row'}>
+  {fetchedJobs.slice(0,4).map((item, index) => (
+    <Grid key={index} xs={3}>
+      <Card sx={{ display: "flex", m: 2, py: 2, flexDirection: 'column' }}>
+        <Box>
+          <CardContent sx={{ flex: "1 0 auto" }}>
+            <Typography component="div" variant="h5">
+              {item.title}
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              color="text.secondary"
+              component="div"
+            >
+              Exp : {item.experience}
+            </Typography>
+            <Typography variant="body2">{item.description.slice(0,70)}....</Typography>
+          </CardContent>
+        </Box>
+        <Button
+          sx={{ mx: 3, my: 5 }}
+          variant="contained"
+          size="small"
+          onClick={() => {
+            setJobDetails(item.job);
+            setIsOpen(true);
+          }}
+        >
+          Apply
+        </Button>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
 {/* 
           <Typography variant="h5" fontWeight={600}>
             High Paying Jobs
@@ -544,13 +597,16 @@ const PageBody = (props) => {
         </>
       )}
       {isSearching && (
-        <>
+        <Grid container>
           {searchItems.length > 0 ? (
-            searchItems.map((item) => item)
+            searchItems.map((item,index) => <Grid item key={index} xs={6}>
+
+{item}
+            </Grid>)
           ) : (
             <Typography variant="h2">No Data</Typography>
           )}
-        </>
+        </Grid>
       )}
     </div>
   );

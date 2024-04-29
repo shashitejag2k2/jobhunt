@@ -1,5 +1,5 @@
-import React from 'react';
-import { TextField, Button, Typography, Container } from '@mui/material';
+import React, { useState } from 'react';
+import { TextField, Button, Typography, Container, Snackbar, Alert } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -13,6 +13,11 @@ const validationSchema = Yup.object({
 });
 
 const Register = () => {
+  const [state, setState] = useState({
+    open: false,
+    message: "",
+    severity: "error",
+  });
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -23,19 +28,46 @@ const Register = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async(values) => {
-      alert(JSON.stringify(values, null, 2));
+      // alert(JSON.stringify(values, null, 2));
       try {
         const response = await axios.post(`http://localhost:8080/employeerRegister`,values)
         console.log("succesfully registered",response);
-        alert("Succesfully registered")
+        setState({
+          severity: "success",
+          open: true,
+          message: response.data,
+        }); 
+        // alert("Succesfully registered")
       } catch (error) {
         console.log('error while register', error)
+        setState({
+          severity: "error",
+          open: true,
+          message: error.response.data,
+        }); 
       }
     },
   });
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
+    setState((prev) => ({ ...prev, message: "", open: false }));
+  };
   return (
-    <Container maxWidth="sm">
+    <>
+    <Snackbar open={state.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={state.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {state.message}
+        </Alert>
+      </Snackbar>
+      <Container maxWidth="sm">
       <Typography variant="h4" gutterBottom>
         Register
       </Typography>
@@ -101,6 +133,8 @@ const Register = () => {
         </Button>
       </form>
     </Container>
+    </>
+   
   );
 };
 

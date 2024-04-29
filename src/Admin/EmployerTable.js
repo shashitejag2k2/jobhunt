@@ -25,6 +25,7 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
+  Icon,
   Modal,
   Snackbar,
   Stack,
@@ -33,10 +34,12 @@ import {
   Typography,
 } from "@mui/material";
 import {
+  Add,
   ArrowBack,
   CheckCircleSharp,
   Error,
   MailOutline,
+  PlusOneRounded,
   RemoveRedEye,
 } from "@mui/icons-material";
 import { blue, indigo, orange, yellow } from "@mui/material/colors";
@@ -176,10 +179,20 @@ const [dummy,setDummy] = useState(false)
         axios.put('http://localhost:8080/updateSubscription', {id:subId,...values})
           .then((response) => {
             console.log('Subscription updated successfully', response.data);
+            setState({
+              severity: "success",
+              open: true,
+              message: "Succesfully updated subscription!",
+            });
             onClose();
           })
           .catch((error) => {
             console.error('Error updating subscription', error);
+            setState({
+              severity: "error",
+              open: true,
+              message: error.code,
+            });
           });
       },
     });
@@ -193,6 +206,7 @@ const [dummy,setDummy] = useState(false)
   };
   const onClose = () => {
     setOpen(false);
+    setSubID(null);
   };
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -318,6 +332,26 @@ const [dummy,setDummy] = useState(false)
       border: 0,
     },
   }));
+  const handleAdd = (values)=>{
+    axios.post(`http://localhost:8080/createSubscription`,values)
+    .then((response) => {
+      console.log('Subscription updated successfully', response.data);
+      setState({
+        severity: "success",
+        open: true,
+        message: "Succesfully created subscription!",
+      });
+      onClose();
+    })
+    .catch((error) => {
+      console.error('Error adding subscription', error);
+      setState({
+        severity: "error",
+        open: true,
+        message: error.code,
+      });
+    });
+  }
   return (
     <>
       <Snackbar
@@ -384,9 +418,12 @@ const [dummy,setDummy] = useState(false)
           />
           </Stack>
         
-          <Button type="submit" variant="contained" color="primary">
+          {subId!==null && <Button type="submit" variant="contained" color="primary">
             Update
-          </Button>
+          </Button>}
+          {subId == null && <Button onClick={()=>{handleAdd(formik.values)}} variant="contained" color="primary">
+            Add Subscription
+          </Button> }
         </form>
       </Box>
     </Modal>
@@ -426,6 +463,25 @@ const [dummy,setDummy] = useState(false)
             </CustomPaper>
           </Grid>
         ))}
+        <Grid item xs={3} onClick={()=>{setOpen(true);}}>
+        <CustomPaper sx={{ backgroundColor: yellow[200] }}>
+              <CardContent>
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  gutterBottom
+                  color="black"
+                >
+                  Create New Subscription
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                 <Icon>
+                  <Add/>
+                  </Icon> Click here
+                </Typography>
+              </CardContent>
+            </CustomPaper>
+        </Grid> 
       </Grid>
       <Stack direction={"column"}>
         <TableContainer component={Paper} sx={{}}>

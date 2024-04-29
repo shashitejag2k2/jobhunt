@@ -80,7 +80,7 @@ const JobCreationPage = () => {
         onSubmit: async(values) => {
           console.log(values);
           try {
-            const response =await axios.post('http://localhost:8080/postjob', {postedBy : localStorage.getItem('email'),...values});
+            const response =await axios.post('http://localhost:8080/postjob', {postedBy : localStorage.getItem('email'),...values, companyName : JSON.parse(localStorage.getItem('user')).companyName});
             console.log(response.data); // Handle response data
             setState({
               severity: "success",

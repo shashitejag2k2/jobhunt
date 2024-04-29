@@ -651,7 +651,7 @@ export default function ActiveJobs() {
                     </Button>
                   </Stack>
                 </Grid>
-                <Grid item>
+                <Grid item sx={{display: 'flex', justifyContent : 'center', alignItems : "center",mx:7}}>
                   <Grid container direction="column" spacing={1}>
                     <Typography variant="body1">
                       <strong>Job ID:</strong> {jobDetails.jobId}
@@ -662,10 +662,24 @@ export default function ActiveJobs() {
                     <Typography variant="body1">
                       <strong>Employee Type:</strong> {jobDetails.employeeType}
                     </Typography>
+                    <Box >
+
+                    {/* <Typography variant="body1">
+                      <strong>Job Description:</strong>{" "}
+                      {jobDetails.jobDescription.slice(0,100)}
+                    </Typography>
+                    <Typography variant="body1">
+                      {jobDetails.jobDescription.slice(200,300)}
+                    </Typography>
+                    <Typography variant="body1">
+                      {jobDetails.jobDescription.slice(300,jobDetails.jobDescription.length)}
+                    </Typography> */}
                     <Typography variant="body1">
                       <strong>Job Description:</strong>{" "}
                       {jobDetails.jobDescription}
                     </Typography>
+                    </Box>
+                   
                     <Typography variant="body1">
                       <strong>Key Skills:</strong> {jobDetails.keySkills}
                     </Typography>
@@ -811,7 +825,7 @@ export default function ActiveJobs() {
                   </TableRow>
                 )}
               </TableBody>}
-              {rows.length <1 && <TableBody>
+              {rows.length == 0 && <TableBody>
                 <Typography  align="center"variant="h4" color="gray"sx={{backgroundColor:indigo[100], borderRadius:5, p  :4, width : '100%'}}> create jobs to view here</Typography>
                 </TableBody>}
               <TableFooter>
@@ -847,18 +861,27 @@ export default function ActiveJobs() {
       </Stack>
       <Stack direction={"column"}>
         {jobSeekers && (
-          <Button
+          <Grid conatainer >
+<Grid item xs={2}>
+<Button
             variant="contained"
             size="small"
             onClick={() => {
               setJobseekers(false);
               setJob(false);
             }}
-            sx={{ width: 35, m: 3 }}
+            sx={{  m: 3 ,p :2 }}
             startIcon={<ArrowBack />}
           >
             Back
           </Button>
+  </Grid>
+  <Grid item xs={10}>
+
+  </Grid>
+
+            </Grid>
+          
         )}
         {/* {
         "jobSeekerId": 1,
@@ -871,7 +894,7 @@ export default function ActiveJobs() {
     }, */}
         {jobSeekers && (
           <TableContainer component={Paper} sx={{ backgroundColor: blue[100] }}>
-            <Typography variant="h4">{jobTitle}</Typography>
+            <Typography variant="h4" sx={{backgroundColor : indigo[100], borderRadius : 5, p : 2}}>{jobTitle}</Typography>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
@@ -892,7 +915,7 @@ export default function ActiveJobs() {
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  : rows
+                  : jobseekerRow
                 ).map((row) => (
                   <TableRow key={row.name}>
                     <TableCell component="th" scope="row">
@@ -931,6 +954,7 @@ export default function ActiveJobs() {
                         onClick={() =>
                           handleMail({ status: "approve", ...row })
                         }
+                        disabled={row.status=='approve' || row.status == 'review'}
                       >
                         <Icon>
                           <DoneAllRounded />
@@ -942,6 +966,7 @@ export default function ActiveJobs() {
                         variant="contained"
                         sx={{ backgroundColor: "error.main", p: 2 }}
                         onClick={() => handleMail({ status: "reject", ...row })}
+                        disabled={row.status=='approve'}
                       >
                         <Icon>
                           <Error />
@@ -956,7 +981,7 @@ export default function ActiveJobs() {
                   </TableRow>
                 )}
               </TableBody>
-              {rows.length <1 && <TableBody>
+              {jobseekerRow.length == 0 && <TableBody >
                 <Typography variant="h4" align="center" color="gray" sx={{backgroundColor:indigo[100], borderRadius:5, p  :4, width : '100%'}}> No Applicants for this job</Typography>
                 </TableBody>}
               <TableFooter>

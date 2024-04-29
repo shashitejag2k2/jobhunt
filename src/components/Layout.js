@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   Box,
   Toolbar,
@@ -40,9 +41,25 @@ const Layout = () => {
             aria-label="menu"
             sx={{ mr: 2 }}
           ></IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 2 }}>
+    
+<Button sx={{display : 'inline-block', color : 'white', flexGrow: 2,}}>
+<Typography variant="h6" component="div" sx={{  }} 
+          
+          onClick={()=>{
+            if((localStorage.getItem('role')=='jobseeker')){
+navigate('/jobseeker')
+            }   else if((localStorage.getItem('role')=='employer')){
+              navigate('/employeer')
+                          }   else if((localStorage.getItem('role')=='admin')){
+                            navigate('/admin')
+                                        }
+          }}>
             Job Hunt
           </Typography>
+</Button>
+         
+    
+        
           {localStorage.getItem('email') && 
           <Stack direction={"row"} spacing={2}>
             <Tooltip title="Account settings">

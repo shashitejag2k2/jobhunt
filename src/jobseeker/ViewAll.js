@@ -17,6 +17,7 @@ import {
   CardContent,
   CardMedia,
   Checkbox,
+  Container,
   FormControlLabel,
   Icon,
   MenuItem,
@@ -26,6 +27,7 @@ import {
   Stack,
 } from "@mui/material";
 import {
+  ArrowBack,
   Close,
   PlayArrow,
   Refresh,
@@ -35,7 +37,7 @@ import {
   SkipPreviousOutlined,
   TrackChanges,
 } from "@mui/icons-material";
-import Slider from "react-slick";
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { blue, indigo } from "@mui/material/colors";
@@ -600,6 +602,7 @@ const ViewAll = () => {
     message: "",
     severity: "error",
   });
+
   const handleApplyFilters = (reset) => {
     let filters
     
@@ -724,12 +727,12 @@ setUniqLocations(uniqueLocations)
   }, []);
 
   const items = filteredJobs?.map((job) => (
-    <Card sx={{ display: "flex", m: 2, py: 6 }}>
+    <Card sx={{ display: "flex", m: 2, py: 6, flexDirection : "column", backgroundColor : indigo[100], borderRadius : 5 }}>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
+          justifyContent: "center",
         }}
       >
         <CardContent sx={{ flex: "1 0 auto" }}>
@@ -743,11 +746,11 @@ setUniqLocations(uniqueLocations)
           >
             Exp : {job.experience}
           </Typography>
-          <Typography variant="body2">{job.description}</Typography>
+          <Typography variant="body2">{job.description?.slice(0,70)}...</Typography>
         </CardContent>
       </Box>
       <Button
-        sx={{ mx: 3, my: 5 }}
+        sx={{ mx: 3, my: 5, p :1, width : '50%' }}
         variant="contained"
         size="small"
         onClick={() => {
@@ -841,7 +844,7 @@ setUniqLocations(uniqueLocations)
                     </Typography>
                     <Typography variant="body1">
                       <strong>Job Description:</strong>{" "}
-                      {jobDetails.jobDescription}
+                      {jobDetails.jobDescription}...
                     </Typography>
                     <Typography variant="body1">
                       <strong>Key Skills:</strong> {jobDetails.keySkills}
@@ -899,27 +902,14 @@ setUniqLocations(uniqueLocations)
           {state.message}
         </Alert>
       </Snackbar>
+     
+
       <Stack direction={"row"} spacing={2}>
         <div
           style={{ backgroundColor: blue[100], height: "100vh", width: "30%" }}
         >
-          <Button
-            variant="contained"
-            onClick={handleApplyFilters}
-            sx={{ m: 2 }}
-          >
-            Apply Filters
-          </Button>
-          <Button
-           variant="contained"
-           onClick={()=>handleApplyFilters("reset")}
-      
-          startIcon={<Refresh/>}
-          sx={{backgroundColor : 'warning.main', m: 2}}
-          >
-           Reset
-          </Button>
-          <Grid container spacing={2} direction={"column"}>
+          <Button  variant="contained" sx={{m:1}}startIcon={<ArrowBack/>} onClick={()=>{navigate('/jobseeker')}}>Back</Button>
+          <Grid container spacing={2} direction={"column"} sx={{p : 2, }}>
             {/* <Grid
               item
               xs={1}
@@ -947,12 +937,16 @@ setUniqLocations(uniqueLocations)
                 />
               </Stack>
             </Grid>*/}
-            <Grid item xs={1}>
-              <Typography sx={{ display: "inline-block" }}>
+            <Grid item xs={1} >
+            <Grid container spacing={2}>
+              <Grid xs={6} item>
+              <Typography align="center">
                 Job Type:{" "}
-              </Typography>{" "}
+              </Typography>
+              </Grid>
+              <Grid xs={6} item>
               <Select
-                sx={{ width: "50%" }}
+               fullWidth
                 multiple
                 value={employeeType}
                 onChange={(e) => setEmployeeType(e.target.value)}
@@ -962,11 +956,18 @@ setUniqLocations(uniqueLocations)
                 <MenuItem value="Part-time">Part-time</MenuItem>
                 <MenuItem value="Internship">Internship</MenuItem>
               </Select>
+              </Grid>
+
+              </Grid>
             </Grid>
             <Grid item xs={3}>
-              <Typography sx={{ display: "inline-block" }}>Skills: </Typography>{" "}
+            <Grid container spacing={2}>
+            <Grid xs={6} item>
+              <Typography align="center">Skills: </Typography>
+              </Grid>
+              <Grid xs={6} item>
               <Select
-                sx={{ width: "50%" }}
+                fullWidth
                 multiple
                 value={keySkills}
                 onChange={(e) => setKeySkills(e.target.value)}
@@ -974,14 +975,19 @@ setUniqLocations(uniqueLocations)
               >
                 {uniqueSkills.map((skill,index)=><MenuItem key={index} value={skill}>{skill}
                 </MenuItem>)}
-              </Select>
+              </Select></Grid>
+              </Grid>
             </Grid>
-            <Grid item xs={3}>
-              <Typography sx={{ display: "inline-block" }}>
+            <Grid item xs={6}>
+            <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Typography align="center">
                 Location:{" "}
               </Typography>
+              </Grid>
+              <Grid item xs={6}>
               <Select
-                sx={{ width: "60%" }}
+               fullWidth
                 multiple
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
@@ -990,6 +996,8 @@ setUniqLocations(uniqueLocations)
                 {uniqLocations.map((location,index)=><MenuItem key={index} value={location}>{location}
                 </MenuItem>)}
               </Select>
+              </Grid>
+              </Grid>
             </Grid>
             {/* <Grid item xs={1}>
               <Typography sx={{ display: "inline-block" }}>Salary: </Typography>
@@ -1011,11 +1019,15 @@ setUniqLocations(uniqueLocations)
               </Stack>
             </Grid> */}
             <Grid item xs={2}>
-              <Typography sx={{ display: "inline-block" }}>
+            <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Typography align="center">
                 Job Mode:{" "}
               </Typography>
+              </Grid>
+              <Grid item xs={6}>
               <Select
-                sx={{ width: "50%" }}
+               fullWidth
                 multiple
                 value={jobMode}
                 onChange={(e) => setJobMode(e.target.value)}
@@ -1025,7 +1037,28 @@ setUniqLocations(uniqueLocations)
                 <MenuItem value="Hybrid">Hybrid</MenuItem>
                 <MenuItem value="On-site">Onsite</MenuItem>
               </Select>
+              </Grid>
+              </Grid>
             </Grid>
+            <Stack direction={'row'}>
+            <Button
+            variant="contained"
+            onClick={handleApplyFilters}
+            sx={{ m: 2 }}
+          >
+            Apply Filters
+          </Button>
+          <Button
+           variant="contained"
+           onClick={()=>handleApplyFilters("reset")}
+      
+          startIcon={<Refresh/>}
+          sx={{backgroundColor : 'warning.main', m: 2}}
+          >
+           Reset
+          </Button>
+            </Stack>
+          
           </Grid>
         </div>
         <Box>
@@ -1036,6 +1069,8 @@ setUniqLocations(uniqueLocations)
           )}
         </Box>
       </Stack>
+
+      
     </>
   );
 };

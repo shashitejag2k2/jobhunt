@@ -110,21 +110,21 @@ const TrackApplications = () => {
 
     setState((prev) => ({ ...prev, message: "", open: false }));
   };
-  const rows = [
-    createData("Software Developer", 7, 583),
-    createData("Data Analyst", 9, 214),
-    createData("System Administrator", 5, 397),
-    createData("Network Engineer", 6, 378),
-    createData("UX Designer", 8, 141),
-    createData("Product Manager", 4, 267),
-    createData("Cybersecurity Specialist", 8, 697),
-    createData("DevOps Engineer", 6, 329),
-    createData("Quality Assurance Tester", 9, 501),
-    createData("Business Analyst", 3, 185),
-    createData("Project Manager", 2, 417),
-    createData("IT Support Specialist", 9, 365),
-    createData("Cloud Architect", 10, 278),
-  ];
+  // const rows = [
+  //   createData("Software Developer", 7, 583),
+  //   createData("Data Analyst", 9, 214),
+  //   createData("System Administrator", 5, 397),
+  //   createData("Network Engineer", 6, 378),
+  //   createData("UX Designer", 8, 141),
+  //   createData("Product Manager", 4, 267),
+  //   createData("Cybersecurity Specialist", 8, 697),
+  //   createData("DevOps Engineer", 6, 329),
+  //   createData("Quality Assurance Tester", 9, 501),
+  //   createData("Business Analyst", 3, 185),
+  //   createData("Project Manager", 2, 417),
+  //   createData("IT Support Specialist", 9, 365),
+  //   createData("Cloud Architect", 10, 278),
+  // ];
   function TablePaginationActions(props) {
     const theme = useTheme();
     const { count, page, rowsPerPage, onPageChange } = props;
