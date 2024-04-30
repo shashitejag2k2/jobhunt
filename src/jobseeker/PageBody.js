@@ -24,20 +24,24 @@ import {
 import {
   ArrowBack,
   ArrowForward,
+  Business,
   Close,
+  LocationCity,
   PlayArrow,
   Search,
   SkipNext,
   SkipPrevious,
   SkipPreviousOutlined,
   TrackChanges,
+  Work,
+  WorkOutline,
 } from "@mui/icons-material";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { blue, indigo } from "@mui/material/colors";
 import axios from "axios";
-
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 const Carousel = ({ items }) => {
   const [autoplay, setAutoplay] = useState(true);
   const sliderRef = useRef(null);
@@ -138,7 +142,7 @@ const PageBody = (props) => {
         setFetchedJobs(
           response.data?.map((job) => ({
             title: job.jobTitle,
-            experience: `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`,
+            experience: `${job.minimumWorkExperience}-${job.maximumWorkExperience} Yrs`,
             description: job.jobDescription,
             ...job,
           }))
@@ -199,7 +203,7 @@ const PageBody = (props) => {
       setSearchedJobs(
         response.data?.map((job) => ({
           title: job.jobTitle,
-          experience: `${job.minimumWorkExperience}yrs-${job.maximumWorkExperience}yrs`,
+          experience: `${job.minimumWorkExperience}-${job.maximumWorkExperience} Yrs`,
           description: job.jobDescription,
           ...job,
         }))
@@ -214,7 +218,7 @@ const PageBody = (props) => {
     }
   };
   const items = fetchedJobs?.map((job) => (
-    <Card sx={{ display: "flex", m: 2, py: 2, flexDirection: 'column' }}>
+    <Card sx={{ display: "flex", m: 2, py: 2, flexDirection: 'column',  }}>
       <Box
         // sx={{
         //   display: "flex",
@@ -286,7 +290,7 @@ const PageBody = (props) => {
     </Card>
   ));
   const searchItems = searchedJobs?.map((job) => (
-    <Card sx={{ display: "flex", m: 2, py: 6, flexDirection : "column", backgroundColor : indigo[100], borderRadius : 5 }}>
+    <Card sx={{ display: "flex", m: 2, py: 6, flexDirection : "column", backgroundColor : indigo[100], borderRadius : 5, height : 250 }}>
     <Box
       sx={{
         display: "flex",
@@ -295,21 +299,33 @@ const PageBody = (props) => {
       }}
     >
       <CardContent sx={{ flex: "1 0 auto" }}>
-        <Typography component="div" variant="h5">
-          {job.title}
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          color="text.secondary"
-          component="div"
-        >
-          Exp : {job.experience}
-        </Typography>
-        <Typography variant="body2">{job.description?.slice(0,70)}...</Typography>
+      <Typography component="div" variant="h5"  fontWeight={600} sx={{my : 1}}>
+            {job.title}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            color="text.secondary"
+            display={'flex'}
+            sx={{ alignItems : "center", my : 1 }}
+            
+            fontWeight={600}
+          >
+            
+              <WorkOutline sx={{ px : 1}}/>
+            {" "} Exp : {job.experience}
+          </Typography>
+          <Typography  variant="subtitle1"
+            
+            display={'flex'}
+            sx={{ alignItems : "center", my : 1 }}><Business sx={{ px : 1}}/> {job.employeeType}</Typography>
+        <Typography  variant="subtitle1"
+            
+            display={'flex'}
+            sx={{ alignItems : "center", my : 1 }}><LocationOnOutlinedIcon sx={{ px : 1}}/> {job.location}</Typography>
       </CardContent>
     </Box>
     <Button
-      sx={{ mx: 3, my: 5, p :1, width : '50%' }}
+      sx={{ mx: 3, my: 2, p :1, }}
       variant="contained"
       size="small"
       onClick={() => {
@@ -397,7 +413,7 @@ const handleEnter = (event)=>{
                   </Stack>
                 </Grid>
                 <Grid item>
-                  <Grid container direction="column" spacing={1}>
+                  <Grid container sx={{display:'flex',justifyContent:'center',mx:7}} direction="column" spacing={1}>
                     <Typography variant="body1">
                       <strong>Job ID:</strong> {jobDetails.jobId}
                     </Typography>
@@ -463,7 +479,11 @@ const handleEnter = (event)=>{
           {state.message}
         </Alert>
       </Snackbar>
-      <div style={{ display: "flex", alignItems: "center", marginTop: "20px" }}>
+      <div style={{ display: "flex", alignItems: "center", marginTop: "20px" , justifyContent : "space-around"}}>
+        {isSearching && <Button startIcon={<ArrowBack/>} sx={{ml : 2}}variant="contained" onClick={()=>{
+          setIsSearching(false);
+          setSearchTerm("");
+        }}>Back</Button>}
         <TextField
           variant="outlined"
           width="50%"
@@ -518,27 +538,41 @@ const handleEnter = (event)=>{
       {/* <Typography variant="h5" fontWeight={600}>Trending Jobs</Typography> */}
       {!isSearching && (
         <>
+        {fetchedJobs.length==0&&<Typography varient="h4">No Jobs Available</Typography>}
        <Grid container sx={{ backgroundColor: indigo[300] }} direction={'row'}>
-  {fetchedJobs.slice(4,8).map((item, index) => (
+  {fetchedJobs.map((item, index) => (
     <Grid key={index} xs={3}>
-      <Card sx={{ display: "flex", m: 2, py: 2, flexDirection: 'column' }}>
+      <Card sx={{ display: "flex", m: 2, py: 2, flexDirection: 'column', height : 250 }}>
         <Box>
           <CardContent sx={{ flex: "1 0 auto" }}>
-            <Typography component="div" variant="h5">
+            <Typography component="div" variant="h5"  fontWeight={600} sx={{my : 1}}>
               {item.title}
             </Typography>
             <Typography
               variant="subtitle1"
               color="text.secondary"
-              component="div"
+              display={'flex'}
+              sx={{ alignItems : "center", my : 1 }}
+              
+              fontWeight={600}
             >
-              Exp : {item.experience}
+              
+                <WorkOutline sx={{ px : 1}}/>
+              {" "} Exp : {item.experience}
             </Typography>
-            <Typography variant="body2">{item.description.slice(0,70)}...</Typography>
+            <Typography  variant="subtitle1"
+              
+              display={'flex'}
+              sx={{ alignItems : "center", my : 1 }}><Business sx={{ px : 1}}/> {item.employeeType}</Typography>
+          <Typography  variant="subtitle1"
+              
+              display={'flex'}
+              sx={{ alignItems : "center", my : 1 }}><LocationOnOutlinedIcon sx={{ px : 1}}/> {item.location}</Typography>
+          
           </CardContent>
         </Box>
         <Button
-          sx={{ mx: 3, my: 5 }}
+          sx={{ mx: 3, my: 2}}
           variant="contained"
           size="small"
           onClick={() => {
@@ -553,10 +587,10 @@ const handleEnter = (event)=>{
     </Grid>
   ))}
 </Grid>
-<Grid container sx={{ backgroundColor: indigo[300] }} direction={'row'}>
+{/* <Grid container sx={{ backgroundColor: indigo[300] }} direction={'row'}>
   {fetchedJobs.slice(0,4).map((item, index) => (
     <Grid key={index} xs={3}>
-      <Card sx={{ display: "flex", m: 2, py: 2, flexDirection: 'column' }}>
+      <Card sx={{ display: "flex", m: 2, py: 2, flexDirection: 'column', height : 250  }}>
         <Box>
           <CardContent sx={{ flex: "1 0 auto" }}>
             <Typography component="div" variant="h5">
@@ -577,7 +611,7 @@ const handleEnter = (event)=>{
           variant="contained"
           size="small"
           onClick={() => {
-            setJobDetails(item.job);
+            setJobDetails(item);
             setIsOpen(true);
           }}
         >
@@ -586,7 +620,9 @@ const handleEnter = (event)=>{
       </Card>
     </Grid>
   ))}
-</Grid>
+</Grid> */}
+
+
 {/* 
           <Typography variant="h5" fontWeight={600}>
             High Paying Jobs
@@ -599,7 +635,7 @@ const handleEnter = (event)=>{
       {isSearching && (
         <Grid container>
           {searchItems.length > 0 ? (
-            searchItems.map((item,index) => <Grid item key={index} xs={6}>
+            searchItems.map((item,index) => <Grid item key={index} xs={4}>
 
 {item}
             </Grid>)

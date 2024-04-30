@@ -3,6 +3,7 @@ import { TextField, Button, Typography, Container, Snackbar, Alert } from '@mui/
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -12,12 +13,13 @@ const validationSchema = Yup.object({
   employeeId: Yup.string().required('Employee ID is required'),
 });
 
-const Register = () => {
+const Register = (props) => {
   const [state, setState] = useState({
     open: false,
     message: "",
     severity: "error",
   });
+  const navigate = useNavigate()
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -37,6 +39,7 @@ const Register = () => {
           open: true,
           message: response.data,
         }); 
+        props.setReg(false)
         // alert("Succesfully registered")
       } catch (error) {
         console.log('error while register', error)

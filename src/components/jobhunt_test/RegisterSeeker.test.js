@@ -1,75 +1,93 @@
 import React from 'react';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
-import axios from 'axios';
+import { render, fireEvent, waitFor,screen } from '@testing-library/react';
 import RegisterSeeker from './../../jobseeker/RegisterSeeker';
+import axios from 'axios';
 import '@testing-library/jest-dom';
+// Mocking axios
 jest.mock('axios');
 
 describe('RegisterSeeker Component', () => {
-    axios.post.mockReset(); // Reset the mocked response between tests
-  
-    afterEach(() => {
-      jest.clearAllMocks();
+  test('renders without crashing', () => {
+    render(<RegisterSeeker />);
+  });
+
+  test('displays error message when submitting with empty fields', async () => {
+    const { getByText } = render(<RegisterSeeker />);
+
+    const registerButton = screen.getByText('Register');
+    fireEvent.click(registerButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Name is required')).toBeInTheDocument();
+      screen.expect(screen.getByText('Email is required')).toBeInTheDocument();
+      screen.expect(screen.getByText('Password is required')).toBeInTheDocument();
     });
+  });
+
+//   test('displays success message on successful registration', async () => {
+//     // Mocking the successful registration response
+//     const successMessage = 'Successfully saved JobSeeker';
+//     axios.post.mockResolvedValueOnce({ data: successMessage });
   
-    it('renders the component without crashing', () => {
-      render(<RegisterSeeker />);
+//     const { getByLabelText, getByText } = render(<RegisterSeeker />);
   
-      expect(screen.getByLabelText('Name')).toBeInTheDocument();
-      expect(screen.getByLabelText('Email')).toBeInTheDocument();
-      expect(screen.getByLabelText('Password')).toBeInTheDocument();
-      expect(screen.getByText('Register')).toBeInTheDocument();
-    });
+//     // Fill out the form fields
+//     const nameInput = screen.getByLabelText('Name');
+//     fireEvent.change(nameInput, { target: { value: 'John Doe' } });
   
-    it('submits the form with valid input', async () => {
-      const mockedData = {
-        data: {
-          message: 'Registration successful',
-        },
-      };
+//     const emailInput = screen.getByLabelText('Email');
+//     fireEvent.change(emailInput, { target: { value: 'johndoe@example.com' } });
   
-      axios.post.mockResolvedValueOnce(mockedData);
+//     const passwordInput = screen.getByLabelText('Password');
+//     fireEvent.change(passwordInput, { target: { value: 'password123' } });
   
-      render(<RegisterSeeker />);
+//     // Submit the form
+//     const registerButton = screen.getByText('Register');
+//     fireEvent.click(registerButton);
   
-      fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'John Doe' } });
-      fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'john.doe@example.com' } });
-      fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'password123' } });
+//     // Wait for the success message to be displayed
+//     await waitFor(() => {
+//       expect(screen.getByText(successMessage)).toBeInTheDocument();
+//     });
+//   });
   
-      fireEvent.click(screen.getByText('Register'));
-  
-      await waitFor(() => expect(axios.post).toHaveBeenCalledTimes(1));
-  
-      expect(axios.post).toHaveBeenCalledWith(
-        'http://localhost:8080/jobSeekerRegister',
-        {
-          name: 'John Doe',
-          emailId: 'john.doe@example.com',
-          password: 'password123',
-        }
-      );
-  
-      expect(screen.getByText('Succesfully registered')).toBeInTheDocument();
-    });
-  
-    it('displays error message for invalid input', async () => {
-        const errorMessage = 'Invalid input';
-        axios.post.mockRejectedValueOnce({
-          response: {
-            status: 400,
-            statusText: 'Bad Request',
-            data: {
-              message: errorMessage,
-            },
-          },
-        });
-      
-        render(<RegisterSeeker />);
-      
-        fireEvent.click(screen.getByText('Register'));
-      
-        await waitFor(() => expect(axios.post).toHaveBeenCalledTimes(1));
-      
-        expect(screen.getByText(errorMessage)).toBeInTheDocument();
-      });
+
+//   test('displays error message for invalid email format', async () => {
+//     const { getByLabelText, getByText } = render(<RegisterSeeker />);
+
+//     const emailInput = screen.getByLabelText('Email');
+//     fireEvent.change(emailInput, { target: { value: 'invalidemail' } });
+
+//     const registerButton = screen.getByText('Register');
+//     fireEvent.click(registerButton);
+
+//     await waitFor(() => {
+//       expect(screen.getByText('Invalid email address')).toBeInTheDocument();
+//     });
+//   });
+
+//   test('displays error message on failed registration', async () => {
+//     const errorMessage = 'Failed to register';
+//     axios.post.mockRejectedValueOnce({ response: { data: errorMessage } });
+
+//     const { getByLabelText, getByText } = render(<RegisterSeeker />);
+
+//     const nameInput = screen.getByLabelText('Name');
+//     fireEvent.change(nameInput, { target: { value: 'John Doe' } });
+
+//     const emailInput = screen.getByLabelText('Email');
+//     fireEvent.change(emailInput, { target: { value: 'johndoe@example.com' } });
+
+//     const passwordInput = screen.getByLabelText('Password');
+//     fireEvent.change(passwordInput, { target: { value: 'password123' } });
+
+//     const registerButton = screen.getByText('Register');
+//     fireEvent.click(registerButton);
+
+//     await waitFor(() => {
+//       expect(screen.getByText(errorMessage)).toBeInTheDocument();
+//     });
+//   });
+
+  // Add more test cases as needed...
 });

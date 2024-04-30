@@ -172,7 +172,8 @@ navigate('/jobseeker')
               color="warning"
               onClick={() => {
                 navigate("/login");
-                localStorage.removeItem('email')
+                localStorage.removeItem('email');
+                localStorage.removeItem('role')
               }}
             >
               Logout

@@ -35,6 +35,7 @@ import {
 } from "@mui/material";
 import {
   Add,
+  AddCircleOutline,
   ArrowBack,
   CheckCircleSharp,
   Error,
@@ -440,7 +441,7 @@ const [dummy,setDummy] = useState(false)
 
            
            }}>
-            <CustomPaper sx={{ backgroundColor: yellow[200] }}>
+            <CustomPaper sx={{ backgroundColor: yellow[200] , height:120 }}>
               <CardContent>
                 <Typography
                   variant="h5"
@@ -464,7 +465,7 @@ const [dummy,setDummy] = useState(false)
           </Grid>
         ))}
         <Grid item xs={3} onClick={()=>{setOpen(true);}}>
-        <CustomPaper sx={{ backgroundColor: yellow[200] }}>
+        <CustomPaper sx={{ backgroundColor: yellow[200], height:120 }}>
               <CardContent>
                 <Typography
                   variant="h5"
@@ -474,10 +475,10 @@ const [dummy,setDummy] = useState(false)
                 >
                   Create New Subscription
                 </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                 <Icon>
-                  <Add/>
-                  </Icon> Click here
+                <Typography variant="body2" color="textSecondary" component="p"  sx={{display : "flex", alignItems : 'center'}}>
+                 
+                  <AddCircleOutline/>
+                  Click here
                 </Typography>
               </CardContent>
             </CustomPaper>

@@ -279,8 +279,16 @@ const PageBody = () => {
         </Alert>
       </Snackbar>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={3}>
-          <CustomPaper onClick={handleChnage} gradientColor={blue[300]}>
+        {<Grid item xs={12} sm={6} md={3}>
+          <CustomPaper onClick={() => { if(remainingCount<=0){
+             setState({
+              severity: "error",
+              open: true,
+              message: "Your subscription limit is reached, please upgrade",
+            });
+            }else {
+              handleChnage();
+            }}} gradientColor={blue[300]}>
             <Typography
               gutterBottom
               variant="h5"
@@ -298,7 +306,7 @@ const PageBody = () => {
               Click to create
             </Typography>
           </CustomPaper>
-        </Grid>
+        </Grid>}
         <Grid item xs={12} sm={6} md={3}>
           <CustomPaper gradientColor={orange[300]}>
             <Typography

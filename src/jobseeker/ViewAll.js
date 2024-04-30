@@ -28,7 +28,9 @@ import {
 } from "@mui/material";
 import {
   ArrowBack,
+  Business,
   Close,
+  Grid3x3,
   PlayArrow,
   Refresh,
   Search,
@@ -36,8 +38,9 @@ import {
   SkipPrevious,
   SkipPreviousOutlined,
   TrackChanges,
+  WorkOutline,
 } from "@mui/icons-material";
-
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { blue, indigo } from "@mui/material/colors";
@@ -679,8 +682,18 @@ const ViewAll = () => {
         appliedBy: localStorage.getItem("email"),
       });
       console.log("applied job", response);
+      setState({
+        severity: "error",
+        open: true,
+        message: "Applied Job successfully",
+      });
     } catch (error) {
       console.log("error appllying", error);
+      setState({
+        severity: "error",
+        open: true,
+        message: error.response.data,
+      });
     }
   };
   useEffect(() => {
@@ -727,7 +740,7 @@ setUniqLocations(uniqueLocations)
   }, []);
 
   const items = filteredJobs?.map((job) => (
-    <Card sx={{ display: "flex", m: 2, py: 6, flexDirection : "column", backgroundColor : indigo[100], borderRadius : 5 }}>
+    <Card sx={{ display: "flex", m: 2, py: 6, flexDirection : "column", backgroundColor : indigo[100], borderRadius : 5, height : 250 }}>
       <Box
         sx={{
           display: "flex",
@@ -736,21 +749,33 @@ setUniqLocations(uniqueLocations)
         }}
       >
         <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography component="div" variant="h5">
-            {job.title}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            component="div"
-          >
-            Exp : {job.experience}
-          </Typography>
-          <Typography variant="body2">{job.description?.slice(0,70)}...</Typography>
+        <Typography component="div" variant="h5"  fontWeight={600} sx={{my : 1}}>
+              {job.title}
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              color="text.secondary"
+              display={'flex'}
+              sx={{ alignItems : "center", my : 1 }}
+              
+              fontWeight={600}
+            >
+              
+                <WorkOutline sx={{ px : 1}}/>
+              {" "} Exp : {job.experience}
+            </Typography>
+            <Typography  variant="subtitle1"
+              
+              display={'flex'}
+              sx={{ alignItems : "center", my : 1 }}><Business sx={{ px : 1}}/> {job.employeeType}</Typography>
+          <Typography  variant="subtitle1"
+              
+              display={'flex'}
+              sx={{ alignItems : "center", my : 1 }}><LocationOnOutlinedIcon sx={{ px : 1}}/> {job.location}</Typography>
         </CardContent>
       </Box>
       <Button
-        sx={{ mx: 3, my: 5, p :1, width : '50%' }}
+        sx={{ mx: 3, my: 2, p :1, }}
         variant="contained"
         size="small"
         onClick={() => {
@@ -832,7 +857,7 @@ setUniqLocations(uniqueLocations)
                   </Stack>
                 </Grid>
                 <Grid item>
-                  <Grid container direction="column" spacing={1}>
+                  <Grid container direction="column" spacing={1} sx={{px : 40}}>
                     <Typography variant="body1">
                       <strong>Job ID:</strong> {jobDetails.jobId}
                     </Typography>
@@ -1061,12 +1086,19 @@ setUniqLocations(uniqueLocations)
           
           </Grid>
         </div>
-        <Box>
-          {items.length > 0 ? (
-            items.map((item) => item)
+        <Box sx={{py  :2}}>
+          <Grid container spacing={2}>{items.length > 0 ? (
+            items.map((item) => 
+            <Grid xs={4}>
+
+{    item}
+            </Grid>
+        
+          
+          )
           ) : (
             <Typography variant="h2">No Data</Typography>
-          )}
+          )}</Grid>
         </Box>
       </Stack>
 

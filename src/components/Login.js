@@ -256,9 +256,9 @@ const Login = () => {
               </Icon>
             </Typography>
           )}
-          {reg && value === 0 && <Register />}
+          {reg && value === 0 && <Register setReg={setReg} />}
           {/* ////////////////////////////////// Job seeker register /////////////////////////// */}
-          {reg && value === 1 && <RegisterSeeker />}
+          {reg && value === 1 && <RegisterSeeker setReg={setReg} />}
           {reg && value === 2 && (
             <>
               <Typography align="center" variant="h6" color={'grey'}>No Registration for Admin</Typography>

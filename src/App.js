@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
 import JobseekerMainPage from "./jobseeker/JobseekerMainPage";
-import JobDescription from "./jobseeker/JobDescription";
+
 import JobCreationPage from "./employeer/JobCreationPage";
 // import { Tabs, Tab, TextField, Button, Typography, Box, Container, Paper } from '@mui/material';
 
@@ -30,7 +30,7 @@ const App = () => {
             <Route path="profile" element={<Profile />} />
             <Route path="viewAll" element={<ViewAll />} />
             <Route path="trackApplications" element={<TrackApplications />} />
-            <Route path="jobdescription" element={<JobDescription />} />
+            
             <Route path="employeer" element={<EmployeerMainPage />} />
             <Route path="jobcreate" element={<JobCreationPage />} />
             <Route path="admin" element={<EmployerTable />} />

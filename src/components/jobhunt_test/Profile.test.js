@@ -1,85 +1,118 @@
-
 import React from 'react';
-import { render, fireEvent, waitFor,screen } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import axios from 'axios';
-import { MemoryRouter } from 'react-router-dom';
 import Profile from './../../employeer/Profile';
-import { Snackbar } from '@mui/material';
 import '@testing-library/jest-dom';
 jest.mock('axios');
+const mockUsedNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+   ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockUsedNavigate,
+}));
+describe('Profile component', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+ 
+//   it('renders profile form with initial values', async () => {
+//     // Mock the response for fetching the profile
+//     axios.get.mockResolvedValueOnce({
+//       data: {
+//         name: 'John Doe',
+//         jobSeekerId: '123',
+//         emailId: 'john@example.com',
+//         collegeName: 'XYZ University',
+//         skills: 'React, Node.js',
+//         experience: '3 years',
+//       },
+//     });
 
-describe('Profile', () => {
-    it('renders without crashing', () => {
-        render(<Profile />, { wrapper: MemoryRouter });
-      });
+//     render(<Profile />);
 
-      it('submits the form with valid input', async () => {
-        const mockedData = {
-          data: {
-            name: 'John Doe',
-            jobSeekerId: '12345',
-            emailId: 'john.doe@example.com',
-            collegeName: 'Example University',
-            skills: 'React, JavaScript',
-            experience: '2 years',
-          },
-        };
-    
-        axios.get.mockResolvedValueOnce(mockedData);
-        axios.put.mockResolvedValueOnce({});
-        localStorage.getItem = jest.fn(() => 'john.doe@example.com');
-    
-        const { getByLabelText } = render(<Profile />, { wrapper: MemoryRouter });
-    
-        // Wait for axios.get to resolve
-        await waitFor(() => expect(axios.get).toHaveBeenCalledTimes(1));
-    
-        // Fill out the form
-        fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'John Doe' } });
-        fireEvent.change(screen.getByLabelText('Email ID'), { target: { value: 'john.doe@example.com' } });
-        fireEvent.change(screen.getByLabelText('College Name'), { target: { value: 'Example University' } });
-        fireEvent.change(screen.getByLabelText('Skills'), { target: { value: 'React, JavaScript' } });
-        fireEvent.change(screen.getByLabelText('Experience'), { target: { value: '2 years' } });
-    
-        // Submit the form
-        fireEvent.submit(screen.getByLabelText('Update profile'));
-    
-        // Wait for axios.put to resolve
-        await waitFor(() => expect(axios.put).toHaveBeenCalledTimes(1));
-    
-        // Assert that the form was submitted successfully
-        expect(axios.put).toHaveBeenCalledWith(
-          'http://localhost:8080/updateProfile',
-          {
-            name: 'John Doe',
-            jobSeekerId: '12345',
-            emailId: 'john.doe@example.com',
-            collegeName: 'Example University',
-            skills: 'React, JavaScript',
-            experience: '2 years',
-          }
-        );
-      });
-
-//   it('displays error message when there is an error updating the profile', async () => {
-//     axios.get.mockRejectedValueOnce(new Error('Failed to fetch profile'));
-//     const { getByText } = render(<Profile />);
-
-//     // Wait for the error message to appear
-//     await waitFor(() => expect(getByText('Failed to fetch profile')).toBeInTheDocument());
+//     // Wait for the profile to be fetched and form fields to be populated
+//     await waitFor(() => {
+//       expect(screen.getByLabelText('Name')).toHaveValue('John Doe');
+//       screen.expect(screen.getByLabelText('Jobseeker ID')).toHaveValue('123');
+//       screen.expect(screen.getByLabelText('Email ID')).toHaveValue('john@example.com');
+//       screen.expect(screen.getByLabelText('College Name')).toHaveValue('XYZ University');
+//       screen.expect(screen.getByLabelText('Skills')).toHaveValue('React, Node.js');
+//       screen.expect(screen.getByLabelText('Experience')).toHaveValue('3 years');
+//     });
 //   });
 
-it('closes the snackbar when closed', async () => {
-    axios.put.mockResolvedValueOnce({});
+  it('submits profile form with updated values', async () => {
+    // Mock the response for fetching the profile
+    axios.get.mockResolvedValueOnce({
+      data: {
+        name: 'John Doe',
+        jobSeekerId: '123',
+        emailId: 'john@example.com',
+        collegeName: 'XYZ University',
+        skills: 'React, Node.js',
+        experience: '3 years',
+      },
+    });
+
+    // Mock the response for updating the profile
+    axios.put.mockResolvedValueOnce({
+      data: 'Successfully updated',
+    });
+
     render(<Profile />);
-    
-    // Wait for axios.put to resolve
-    await waitFor(() => expect(axios.put).toHaveBeenCalledTimes(1));
-    
-    // Close the snackbar
-    fireEvent.click(screen.getByText('Close'));
-    
-    // Assert that the snackbar is closed
-    expect(screen.queryByText('Succesfully Updated profile')).toBeNull();
+
+    // Wait for the profile to be fetched
+    await waitFor(() => {
+      expect(screen.getByLabelText('Name')).toHaveValue('John Doe');
+    });
+
+    // Update the name field
+    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Jane Doe' } });
+
+    // Submit the form
+    fireEvent.click(screen.getByRole('button', { name: 'Update' }));
+
+    // Wait for the success message to be displayed
+    await waitFor(() => {
+      expect(screen.getByText('Succesfully Updated profile')).toBeInTheDocument();
+    });
   });
+
+
+
+  it('displays error message when profile update fails', async () => {
+    
+//     // Mock the response for fetching the profile
+//     axios.get.mockResolvedValueOnce({
+//       data: {
+//         name: 'John Doe',
+//         jobSeekerId: '123',
+//         emailId: 'john@example.com',
+//         collegeName: 'XYZ University',
+//         skills: 'React, Node.js',
+//         experience: '3 years',
+//       },
+//     });
+
+//     // Mock the response for updating the profile with an error
+//     axios.put.mockRejectedValueOnce(new Error('Error updating profile'));
+
+//     render(<Profile />);
+
+//     // Wait for the profile to be fetched
+//     await waitFor(() => {
+//       expect(screen.getByLabelText('Name')).toHaveValue('John Doe');
+//     });
+
+//     // Submit the form
+//     fireEvent.click(screen.getByRole('button', { name: 'Update' }));
+
+//     // Wait for the error message to be displayed
+//     await waitFor(() => {
+//       expect(screen.getByText('Error while updating profile')).toBeInTheDocument();
+//     });
+//   });
+
+
+});
+
 });

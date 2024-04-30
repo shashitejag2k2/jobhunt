@@ -651,7 +651,7 @@ export default function ActiveJobs() {
                     </Button>
                   </Stack>
                 </Grid>
-                <Grid item sx={{display: 'flex', justifyContent : 'center', alignItems : "center",mx:7}}>
+                <Grid item sx={{display: 'flex', justifyContent : 'center', alignItems : "center",mx:14}}>
                   <Grid container direction="column" spacing={1}>
                     <Typography variant="body1">
                       <strong>Job ID:</strong> {jobDetails.jobId}

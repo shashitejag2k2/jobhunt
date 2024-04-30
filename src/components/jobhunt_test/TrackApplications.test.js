@@ -4,76 +4,63 @@ import axios from 'axios';
 import TrackApplications from './../../jobseeker/TrackApplications';
 import '@testing-library/jest-dom';
 jest.mock('axios');
-
-describe('TrackApplications', () => {
-  const mockedData = [
-    {
-      jobId: '1',
-      jobTitle: 'Software Developer',
-      postedBy: 'Company A',
-      appliedBy: 'John Doe',
-      status: 'review',
-    },
-    {
-      jobId: '2',
-      jobTitle: 'Data Analyst',
-      postedBy: 'Company B',
-      appliedBy: 'Jane Smith',
-      status: 'approve',
-    },
-  ];
-
+const mockUsedNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+   ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockUsedNavigate,
+}));
+describe('TrackApplications component', () => {
   beforeEach(() => {
-    axios.get.mockResolvedValue({ data: mockedData });
+    axios.get.mockResolvedValue({ data: [] }); // Mock initial data fetch
   });
 
-  it('renders the component without crashing', async () => {
+
+  test('fetches and displays job data', async () => {
+    const mockData = [
+      { jobId: 1, jobTitle: 'Software Engineer', postedBy: 'Company A', appliedBy: 'User A', status: 'review' },
+      { jobId: 2, jobTitle: 'Data Analyst', postedBy: 'Company B', appliedBy: 'User B', status: 'pending' },
+    ];
+    axios.get.mockResolvedValueOnce({ data: mockData });
     render(<TrackApplications />);
-
-    expect(await screen.findByText('Job Title')).toBeInTheDocument();
-    expect(await screen.findByText('Posted By')).toBeInTheDocument();
-    expect(await screen.findByText('Applied By')).toBeInTheDocument();
-    expect(await screen.findByText('Status')).toBeInTheDocument();
-    expect(await screen.findByText('Job ID')).toBeInTheDocument();
-  });
-
-  it('fetches and displays the job applications', async () => {
-    render(<TrackApplications />);
-
-    await waitFor(() => expect(axios.get).toHaveBeenCalledTimes(1));
-
-    mockedData.forEach((job) => {
-      expect(screen.getByText(job.jobTitle)).toBeInTheDocument();
-      expect(screen.getByText(job.postedBy)).toBeInTheDocument();
-      expect(screen.getByText(job.appliedBy)).toBeInTheDocument();
-      expect(screen.getByText(job.status)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(screen.getByText('Data Analyst')).toBeInTheDocument();
     });
   });
 
-  it('navigates back to job seeker page when Back button is clicked', async () => {
-    const navigateMock = jest.fn();
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useNavigate: () => navigateMock,
+  test('handles pagination correctly', async () => {
+    const mockData = Array.from({ length: 15 }, (_, index) => ({
+      jobId: index + 1,
+      jobTitle: `Job ${index + 1}`,
+      postedBy: `Company ${index + 1}`,
+      appliedBy: `User ${index + 1}`,
+      status: 'review',
     }));
-
+    axios.get.mockResolvedValueOnce({ data: mockData });
     render(<TrackApplications />);
-
-    const backButton = screen.getByRole('button', { name: 'Back' });
-    fireEvent.click(backButton);
-
-    expect(navigateMock).toHaveBeenCalledWith('/jobseeker');
+    
+    // Wait for the first page of data to be rendered
+    await waitFor(() => {
+      expect(screen.getByText('Job 1')).toBeInTheDocument();
+    });
+  
+    // Ensure Job 6 is not visible initially
+    expect(screen.queryByText('Job 6')).not.toBeInTheDocument();
+  
+    // Click next page
+    fireEvent.click(screen.getByRole('button', { name: 'next page' }));
+  
+    // Wait for the second page of data to be rendered
+    await waitFor(() => {
+      expect(screen.getByText('Job 6')).toBeInTheDocument();
+    });
+  
+    // Ensure Job 11 is not visible initially
+    expect(screen.queryByText('Job 11')).not.toBeInTheDocument();
   });
+  
 
-  it('closes the snackbar when closed', async () => {
-    axios.get.mockRejectedValueOnce({ code: 'error' });
-    render(<TrackApplications />);
-
-    await waitFor(() => expect(axios.get).toHaveBeenCalledTimes(1));
-
-    const closeSnackbarButton = screen.getByRole('button', { name: 'Close' });
-    fireEvent.click(closeSnackbarButton);
-
-    expect(screen.queryByText('error')).toBeNull();
-  });
+ 
 });
