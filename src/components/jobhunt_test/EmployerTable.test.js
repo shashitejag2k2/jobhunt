@@ -11,14 +11,13 @@ describe('EmployerTable Component', () => {
     render(<EmployerTable />);
   });
 
-  // Form Submission Test
   test('submits subscription form', async () => {
-    // Mock successful form submission
+    
     axios.put.mockResolvedValueOnce({ data: 'Subscription updated successfully' });
 
     const { getByLabelText, getByText } = render(<EmployerTable />);
 
-    // Fill out the form fields
+    
     const subscriptionTypeInput = screen.getByLabelText('Subscription Type');
     fireEvent.change(subscriptionTypeInput, { target: { value: 'Premium' } });
 
@@ -28,17 +27,17 @@ describe('EmployerTable Component', () => {
     const priceInput = screen.getByLabelText('Price');
     fireEvent.change(priceInput, { target: { value: '100' } });
 
-    // Submit the form
+    
     const submitButton = screen.getByText('Update');
     fireEvent.click(submitButton);
 
-    // Wait for the success message to be displayed
+    
     await waitFor(() => {
       expect(screen.getByText('Succesfully updated subscription!')).toBeInTheDocument();
     });
   });
 
-  // API Interaction Test
+ 
  
 
     test('fetches employers and subscriptions from API', async () => {
@@ -70,12 +69,12 @@ describe('EmployerTable Component', () => {
   
       render(<EmployerTable />);
   
-      // Wait for the component to fetch and render employer data
+      
       await waitFor(() => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
       });
   
-      // Wait for the component to fetch and render subscription data
+     
       await waitFor(() => {
         expect(screen.getAllByText('Basic')).toBeInTheDocument();
       });

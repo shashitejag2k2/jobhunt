@@ -25,7 +25,7 @@ describe('TrackApplications Component', () => {
 
     const { getByText } = render(<TrackApplications />);
 
-    // Wait for API call to complete and render table
+    
     await waitFor(() => {
       mockData.forEach((data) => {
         expect(screen.getByText(data.jobTitle)).toBeInTheDocument();
@@ -33,17 +33,6 @@ describe('TrackApplications Component', () => {
     });
   });
 
-//   test('displays snackbar on API error', async () => {
-//     const errorMessage = 'Failed to fetch data';
-//     axios.get.mockRejectedValueOnce({ message: errorMessage });
-
-//     const { getByText } = render(<TrackApplications />);
-
-//     // Wait for API call to complete and display snackbar
-//     await waitFor(() => {
-//       expect(screen.getByText(errorMessage)).toBeInTheDocument();
-//     });
-//   });
 test('displays empty state when API returns no data', async () => {
     axios.get.mockResolvedValueOnce({ data: [] });
 
@@ -60,8 +49,8 @@ test('displays empty state when API returns no data', async () => {
 
     fireEvent.click(backButton);
 
-    // Add assertion for navigation if using react-router
+    
   });
 
-  // Add more test cases as needed...
+ 
 });

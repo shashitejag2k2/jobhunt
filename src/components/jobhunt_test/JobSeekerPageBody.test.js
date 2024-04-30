@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import axios from 'axios'; // Import axios for mocking API calls
-import JobSeekerPageBody from './../../jobseeker/PageBody'; // Assuming the component is in the same directory
+import axios from 'axios'; 
+import JobSeekerPageBody from './../../jobseeker/PageBody'; 
 
-// Mocking dependencies
+
 jest.mock('axios');
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('PageBody component', () => {
-  // Test case for rendering and displaying jobs
+ 
   test('renders and displays jobs', async () => {
     const jobsData = [
       {

@@ -90,7 +90,7 @@ const JobCreationPage = () => {
             
             navigate('/employeer')
         } catch (error) {
-            console.error('Error:', error); // Handle error
+            console.error('Error:', error); 
             setState({
               severity: "error",
               open: true,
@@ -116,7 +116,7 @@ const JobCreationPage = () => {
         console.log(formData);
         try {
           const response =axios.post('http://localhost:8080/postjob', {postedBy : localStorage.getItem('email'),...formData});
-          console.log(response.data); // Handle response data
+          console.log(response.data); 
           setState({
             severity: "success",
             open: true,
@@ -125,7 +125,7 @@ const JobCreationPage = () => {
           
           navigate('/employeer')
       } catch (error) {
-          console.error('Error:', error); // Handle error
+          console.error('Error:', error); 
           setState({
             severity: "error",
             open: true,

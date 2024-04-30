@@ -24,20 +24,20 @@ describe('Register Component', () => {
 
     render(<Register />);
   
-    // Fill out the form
+   
     fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'John Doe' } });
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'john.doe@example.com' } });
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'password123' } });
     fireEvent.change(screen.getByLabelText('Company Name'), { target: { value: 'Example Company' } });
     fireEvent.change(screen.getByLabelText('Employee ID'), { target: { value: '12345' } });
   
-    // Submit the form
+   
     fireEvent.click(screen.getByRole('button', { name: 'Register' }));
   
-    // Wait for axios.post to resolve
+   
     await waitFor(() => expect(axios.post).toHaveBeenCalledTimes(1));
   
-    // Assert that the form was submitted successfully
+    
     expect(axios.post).toHaveBeenCalledWith(
       'http://localhost:8080/employeerRegister',
       {
@@ -48,7 +48,7 @@ describe('Register Component', () => {
         employeeId: '12345',
       }
     );
-    // expect(window.alert).toHaveBeenCalledWith('Succesfully registered');
+   
   });
 
 });

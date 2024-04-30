@@ -11,7 +11,7 @@ jest.mock('react-router-dom', () => ({
 }));
 describe('TrackApplications component', () => {
   beforeEach(() => {
-    axios.get.mockResolvedValue({ data: [] }); // Mock initial data fetch
+    axios.get.mockResolvedValue({ data: [] }); 
   });
 
 
@@ -41,23 +41,23 @@ describe('TrackApplications component', () => {
     axios.get.mockResolvedValueOnce({ data: mockData });
     render(<TrackApplications />);
     
-    // Wait for the first page of data to be rendered
+    
     await waitFor(() => {
       expect(screen.getByText('Job 1')).toBeInTheDocument();
     });
   
-    // Ensure Job 6 is not visible initially
+    
     expect(screen.queryByText('Job 6')).not.toBeInTheDocument();
   
-    // Click next page
+   
     fireEvent.click(screen.getByRole('button', { name: 'next page' }));
   
-    // Wait for the second page of data to be rendered
+    
     await waitFor(() => {
       expect(screen.getByText('Job 6')).toBeInTheDocument();
     });
   
-    // Ensure Job 11 is not visible initially
+   
     expect(screen.queryByText('Job 11')).not.toBeInTheDocument();
   });
   
