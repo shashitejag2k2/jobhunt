@@ -538,7 +538,7 @@ const handleEnter = (event)=>{
       {/* <Typography variant="h5" fontWeight={600}>Trending Jobs</Typography> */}
       {!isSearching && (
         <>
-        {fetchedJobs.length==0&&<Typography varient="h4">No Jobs Available</Typography>}
+        {fetchedJobs.length==0&&<Typography variant="h3" align="center" sx={{backgroundColor : indigo[100], borderRadius : 10, p :2, color : 'gray'}}>No Jobs Available</Typography>}
        <Grid container sx={{ backgroundColor: indigo[300] }} direction={'row'}>
   {fetchedJobs.map((item, index) => (
     <Grid key={index} xs={3}>

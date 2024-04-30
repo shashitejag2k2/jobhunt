@@ -1089,7 +1089,7 @@ setUniqLocations(uniqueLocations)
         <Box sx={{py  :2}}>
           <Grid container spacing={2}>{items.length > 0 ? (
             items.map((item) => 
-            <Grid xs={4}>
+            <Grid xs={12}>
 
 {    item}
             </Grid>
